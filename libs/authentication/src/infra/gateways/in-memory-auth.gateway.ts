@@ -1,4 +1,4 @@
-import { AuthGateway } from '@app/inventory/write/hexagon/gateways/auth.gateway';
+import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
 
 export class InMemoryAuthGateway implements AuthGateway {
   private companyId: string;

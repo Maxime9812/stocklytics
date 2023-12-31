@@ -15,6 +15,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/inventory/tsconfig.lib.json"
       }
+    },
+    "authentication": {
+      "type": "library",
+      "root": "libs/authentication",
+      "entryFile": "index",
+      "sourceRoot": "libs/authentication/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/authentication/tsconfig.lib.json"
+      }
     }
   }
 }

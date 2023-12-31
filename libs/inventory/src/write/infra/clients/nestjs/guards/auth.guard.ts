@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthGateway } from '@app/inventory/write/hexagon/gateways/auth.gateway';
+import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
 
 export class AuthGuard implements CanActivate {
   constructor(private readonly authGateway: AuthGateway) {}

@@ -1,7 +1,7 @@
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
-import { AuthGateway } from '@app/inventory/write/hexagon/gateways/auth.gateway';
 import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/date.provider';
 import { Item } from '@app/inventory/write/hexagon/models/item';
+import { AuthGateway } from '@app/authentication';
 
 type CreateNewItemUseCasePayload = {
   id: string;

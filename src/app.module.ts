@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { InventoryModule } from '@app/inventory';
+import { AuthModule } from '@app/authentication';
 
 @Module({
-  imports: [InventoryModule],
+  imports: [AuthModule, InventoryModule],
   controllers: [],
   providers: [],
 })

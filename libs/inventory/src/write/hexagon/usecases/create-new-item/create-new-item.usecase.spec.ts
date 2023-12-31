@@ -1,7 +1,7 @@
-import { InMemoryItemsRepository } from '@app/inventory/infra/gateways/in-memory-items.repository';
-import { CreateNewItemUseCase } from '@app/inventory/hexagon/usecases/create-new-item/create-new-item.usecase';
-import { InMemoryAuthGateway } from '@app/inventory/infra/gateways/in-memory-auth.gateway';
-import { StubDateProvider } from '@app/inventory/hexagon/models/date-provider/stub-date.provider';
+import { InMemoryItemsRepository } from '@app/inventory/write/infra/gateways/in-memory-items.repository';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+import { StubDateProvider } from '@app/inventory/write/hexagon/models/date-provider/stub-date.provider';
+import { CreateNewItemUseCase } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
 
 describe('Feature: Create new item', () => {
   test('Scenario: Item is created', async () => {

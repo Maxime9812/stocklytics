@@ -23,6 +23,12 @@
       ],
       "@app/inventory/*": [
         "libs/inventory/src/*"
+      ],
+      "@app/authentication": [
+        "libs/authentication/src"
+      ],
+      "@app/authentication/*": [
+        "libs/authentication/src/*"
       ]
     }
   }
