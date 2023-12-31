@@ -1,5 +1,5 @@
-import { ItemsRepository } from '@app/inventory/hexagon/gateways/items.repository';
-import { Item, ItemSnapshot } from '@app/inventory/hexagon/models/item';
+import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
+import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
 
 export class InMemoryItemsRepository implements ItemsRepository {
   private readonly _items: Map<string, ItemSnapshot> = new Map();

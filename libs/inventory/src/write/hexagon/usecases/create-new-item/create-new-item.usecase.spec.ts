@@ -1,12 +1,12 @@
 import { InMemoryItemsRepository } from '@app/inventory/infra/gateways/in-memory-items.repository';
 import { CreateNewItemUseCase } from '@app/inventory/hexagon/usecases/create-new-item/create-new-item.usecase';
-import { StubAuthGateway } from '@app/inventory/infra/gateways/stub-auth.gateway';
-import { StubDateProvider } from '@app/inventory/hexagon/models/stub-date.provider';
+import { InMemoryAuthGateway } from '@app/inventory/infra/gateways/in-memory-auth.gateway';
+import { StubDateProvider } from '@app/inventory/hexagon/models/date-provider/stub-date.provider';
 
 describe('Feature: Create new item', () => {
   test('Scenario: Item is created', async () => {
     const itemsRepository = new InMemoryItemsRepository();
-    const authGateway = new StubAuthGateway();
+    const authGateway = new InMemoryAuthGateway();
     authGateway.givenCompanyId('company-id');
     const dateProvider = new StubDateProvider();
     dateProvider.givenNow(new Date('2023-12-23'));

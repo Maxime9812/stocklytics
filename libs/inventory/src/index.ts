@@ -1,1 +1,1 @@
-export * from './infra/clients/nestjs/inventory.module';
+export * from './inventory.module';

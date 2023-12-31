@@ -1,7 +1,7 @@
-import { ItemsRepository } from '@app/inventory/hexagon/gateways/items.repository';
-import { AuthGateway } from '@app/inventory/hexagon/gateways/auth.gateway';
-import { Item } from '@app/inventory/hexagon/models/item';
-import { DateProvider } from '@app/inventory/hexagon/models/date.provider';
+import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
+import { AuthGateway } from '@app/inventory/write/hexagon/gateways/auth.gateway';
+import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/date.provider';
+import { Item } from '@app/inventory/write/hexagon/models/item';
 
 type CreateNewItemUseCasePayload = {
   id: string;

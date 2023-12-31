@@ -1,4 +1,4 @@
-import { DateProvider } from '@app/inventory/hexagon/models/date.provider';
+import { DateProvider } from '@app/inventory/hexagon/models/date-provider/date.provider';
 
 export class StubDateProvider implements DateProvider {
   private now: Date;
