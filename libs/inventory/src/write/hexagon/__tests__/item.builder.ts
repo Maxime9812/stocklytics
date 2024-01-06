@@ -8,6 +8,7 @@ export const itemBuilder = (
     createdAt: new Date('2024-01-01'),
     quantity: 1,
     price: 100,
+    tagIds: [],
   },
 ) => {
   return {
@@ -18,6 +19,7 @@ export const itemBuilder = (
     createdAt: (createdAt: Date) => itemBuilder({ ...snapshot, createdAt }),
     withQuantity: (quantity: number) => itemBuilder({ ...snapshot, quantity }),
     withPrice: (price: number) => itemBuilder({ ...snapshot, price }),
+    whitTagIds: (...tagIds: string[]) => itemBuilder({ ...snapshot, tagIds }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };

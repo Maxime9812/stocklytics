@@ -20,7 +20,7 @@ describe('Feature: Add tag to item', () => {
     itemsFixture = createItemsFixture({ tagsRepository });
   });
 
-  test('Scenario: Tag is added to item', async () => {
+  test('Tag is added to item', async () => {
     tagsFixture.givenTags(tagBuilder().withId('tag-id').build());
     const initialItemBuilder = itemBuilder().withId('item-id');
     itemsFixture.givenItems(initialItemBuilder.build());
@@ -30,6 +30,25 @@ describe('Feature: Add tag to item', () => {
       tagId: 'tag-id',
     });
 
-    itemsFixture.thenItemsShouldBe(initialItemBuilder.build());
+    itemsFixture.thenItemsShouldBe(
+      initialItemBuilder.whitTagIds('tag-id').build(),
+    );
+  });
+
+  describe('Scenario: Item already have the tag', () => {
+    test('Tag is not added to item', async () => {
+      tagsFixture.givenTags(tagBuilder().withId('tag-id').build());
+      const initialItemBuilder = itemBuilder()
+        .withId('item-id')
+        .whitTagIds('tag-id');
+      itemsFixture.givenItems(initialItemBuilder.build());
+
+      await itemsFixture.whenAddTagToItem({
+        itemId: 'item-id',
+        tagId: 'tag-id',
+      });
+
+      itemsFixture.thenItemsShouldBe(initialItemBuilder.build());
+    });
   });
 });

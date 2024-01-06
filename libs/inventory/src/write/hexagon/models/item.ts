@@ -1,3 +1,5 @@
+import { Tag } from '@app/inventory/write/hexagon/models/tag';
+
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
 
@@ -12,8 +14,15 @@ export class Item {
       name: this.props.name,
       quantity: this.props.quantity,
       price: this.props.price,
+      tagIds: this.props.tagIds,
       createdAt: this.props.createdAt,
     };
+  }
+
+  addTag(tag: Tag) {
+    const tagAlreadyAdded = this.props.tagIds.includes(tag.id);
+    if (tagAlreadyAdded) return;
+    this.props.tagIds.push(tag.id);
   }
 
   static create(params: {
@@ -30,6 +39,7 @@ export class Item {
       name: params.name,
       quantity: params.quantity,
       price: params.price,
+      tagIds: [],
       createdAt: params.currentDate,
     });
   }
@@ -41,6 +51,7 @@ export class Item {
       name: snapshot.name,
       quantity: snapshot.quantity,
       price: snapshot.price,
+      tagIds: [...snapshot.tagIds],
       createdAt: snapshot.createdAt,
     });
   }
@@ -52,6 +63,7 @@ type ItemConstructorProps = {
   name: string;
   quantity: number;
   price: number;
+  tagIds: string[];
   createdAt: Date;
 };
 export type ItemSnapshot = {
@@ -60,5 +72,6 @@ export type ItemSnapshot = {
   name: string;
   quantity: number;
   price: number;
+  tagIds: string[];
   createdAt: Date;
 };

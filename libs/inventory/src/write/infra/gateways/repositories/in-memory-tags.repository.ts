@@ -7,6 +7,12 @@ export class InMemoryTagsRepository implements TagsRepository {
     this._tags.set(tag.id, tag.snapshot);
   }
 
+  async getById(id: string): Promise<Tag | undefined> {
+    return this._tags.has(id)
+      ? Tag.fromSnapshot(this._tags.get(id))
+      : undefined;
+  }
+
   async tagWithNameExists(name: string): Promise<boolean> {
     return [...this._tags.values()].some((tag) => tag.name === name);
   }

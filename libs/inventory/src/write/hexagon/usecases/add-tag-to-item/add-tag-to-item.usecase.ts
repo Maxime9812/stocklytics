@@ -12,5 +12,12 @@ export class AddTagToItemUseCase {
     private readonly itemsRepository: ItemsRepository,
   ) {}
 
-  async execute(payload: AddTagToItemUseCasePayload) {}
+  async execute(payload: AddTagToItemUseCasePayload) {
+    const item = await this.itemsRepository.getById(payload.itemId);
+    const tag = await this.tagsRepository.getById(payload.tagId);
+
+    item.addTag(tag);
+
+    await this.itemsRepository.save(item);
+  }
 }
