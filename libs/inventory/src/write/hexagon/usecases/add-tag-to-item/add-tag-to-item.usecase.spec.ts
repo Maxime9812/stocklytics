@@ -1,14 +1,14 @@
 import {
   createTagsFixture,
   TagsFixture,
-} from '@app/inventory/write/hexagon/__tests__/tags.fixture';
+} from '@app/inventory/write/hexagon/__tests__/fixtures/tags.fixture';
 import {
   createItemsFixture,
   ItemsFixture,
-} from '@app/inventory/write/hexagon/__tests__/items.fixture';
+} from '@app/inventory/write/hexagon/__tests__/fixtures/items.fixture';
 import { InMemoryTagsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-tags.repository';
-import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/item.builder';
-import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/tag.builder';
+import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
+import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
 
 describe('Feature: Add tag to item', () => {
   let tagsFixture: TagsFixture;

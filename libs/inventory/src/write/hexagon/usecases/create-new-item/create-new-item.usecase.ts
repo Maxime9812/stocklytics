@@ -1,4 +1,4 @@
-import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
+import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/date.provider';
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { AuthGateway } from '@app/authentication';

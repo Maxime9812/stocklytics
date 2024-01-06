@@ -1,4 +1,4 @@
-import { TagsRepository } from '@app/inventory/write/hexagon/gateways/tags.repository';
+import { TagsRepository } from '@app/inventory/write/hexagon/gateways/repositories/tags.repository';
 import { Tag, TagSnapshot } from '@app/inventory/write/hexagon/models/tag';
 
 export class InMemoryTagsRepository implements TagsRepository {

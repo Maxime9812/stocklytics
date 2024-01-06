@@ -1,5 +1,5 @@
-import { TagsRepository } from '@app/inventory/write/hexagon/gateways/tags.repository';
-import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
+import { TagsRepository } from '@app/inventory/write/hexagon/gateways/repositories/tags.repository';
+import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 
 export type AddTagToItemUseCasePayload = {
   itemId: string;

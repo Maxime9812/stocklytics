@@ -1,8 +1,8 @@
 import {
   createItemsFixture,
   ItemsFixture,
-} from '@app/inventory/write/hexagon/__tests__/items.fixture';
-import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/item.builder';
+} from '@app/inventory/write/hexagon/__tests__/fixtures/items.fixture';
+import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 
 describe('Feature: Create new item', () => {
   let itemsFixture: ItemsFixture;

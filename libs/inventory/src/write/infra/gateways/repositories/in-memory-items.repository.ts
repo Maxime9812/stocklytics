@@ -1,4 +1,4 @@
-import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/items.repository';
+import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
 
 export class InMemoryItemsRepository implements ItemsRepository {

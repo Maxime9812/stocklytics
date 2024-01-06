@@ -1,8 +1,8 @@
-import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/tag.builder';
+import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
 import {
   createTagsFixture,
   TagsFixture,
-} from '@app/inventory/write/hexagon/__tests__/tags.fixture';
+} from '@app/inventory/write/hexagon/__tests__/fixtures/tags.fixture';
 
 describe('Feature: Create new tag', () => {
   let tagsFixture: TagsFixture;
