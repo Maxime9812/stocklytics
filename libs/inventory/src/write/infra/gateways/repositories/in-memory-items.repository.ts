@@ -10,4 +10,8 @@ export class InMemoryItemsRepository implements ItemsRepository {
   async save(item: Item) {
     this._items.set(item.id, item.snapshot);
   }
+
+  givenItems(...items: Item[]) {
+    items.forEach((i) => this._items.set(i.id, i.snapshot));
+  }
 }

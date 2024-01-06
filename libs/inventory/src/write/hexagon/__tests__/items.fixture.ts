@@ -6,12 +6,20 @@ import {
   CreateNewItemUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
 import { Item } from '@app/inventory/write/hexagon/models/item';
+import { InMemoryTagsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-tags.repository';
+import {
+  AddTagToItemUseCase,
+  AddTagToItemUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/add-tag-to-item/add-tag-to-item.usecase';
 
-export const createItemsFixture = () => {
+export const createItemsFixture = ({
+  tagsRepository = new InMemoryTagsRepository(),
+}: Partial<{
+  tagsRepository: InMemoryTagsRepository;
+}> = {}) => {
   const itemsRepository = new InMemoryItemsRepository();
   const authGateway = new InMemoryAuthGateway();
   const dateProvider = new StubDateProvider();
-  let createNewItemUseCase: CreateNewItemUseCase;
 
   return {
     givenNowIs(date: Date) {
@@ -20,13 +28,20 @@ export const createItemsFixture = () => {
     givenCompanyId(companyId: string) {
       authGateway.givenCompanyId(companyId);
     },
+    givenItems(...items: Item[]) {
+      itemsRepository.givenItems(...items);
+    },
     whenCreateNewItem(payload: CreateNewItemUseCasePayload) {
-      createNewItemUseCase = new CreateNewItemUseCase(
+      return new CreateNewItemUseCase(
         itemsRepository,
         authGateway,
         dateProvider,
+      ).execute(payload);
+    },
+    whenAddTagToItem(payload: AddTagToItemUseCasePayload) {
+      return new AddTagToItemUseCase(tagsRepository, itemsRepository).execute(
+        payload,
       );
-      return createNewItemUseCase.execute(payload);
     },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(

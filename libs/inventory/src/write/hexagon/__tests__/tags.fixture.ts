@@ -7,8 +7,11 @@ import {
 } from '@app/inventory/write/hexagon/usecases/create-new-tag/create-new-tag.usecase';
 import { Tag } from '@app/inventory/write/hexagon/models/tag';
 
-export const createTagsFixture = () => {
-  const tagRepository = new InMemoryTagsRepository();
+export const createTagsFixture = ({
+  tagsRepository = new InMemoryTagsRepository(),
+}: Partial<{
+  tagsRepository: InMemoryTagsRepository;
+}> = {}) => {
   const authGateway = new InMemoryAuthGateway();
   const dateProvider = new StubDateProvider();
   let createNewTagUseCase: CreateNewTagUseCase;
@@ -21,18 +24,18 @@ export const createTagsFixture = () => {
       authGateway.givenCompanyId(companyId);
     },
     givenTags(...tags: Tag[]) {
-      tagRepository.givenTags(...tags);
+      tagsRepository.givenTags(...tags);
     },
     whenCreateNewTag(payload: CreateNewTagUseCasePayload) {
       createNewTagUseCase = new CreateNewTagUseCase(
-        tagRepository,
+        tagsRepository,
         dateProvider,
         authGateway,
       );
       return createNewTagUseCase.execute(payload);
     },
     thenTagsShouldBe(...tags: Tag[]) {
-      expect(tagRepository.tags.map((t) => t.snapshot)).toEqual(
+      expect(tagsRepository.tags.map((t) => t.snapshot)).toEqual(
         tags.map((t) => t.snapshot),
       );
     },
