@@ -9,6 +9,7 @@ export const itemBuilder = (
     quantity: 1,
     price: 100,
     tagIds: [],
+    folderId: undefined,
   },
 ) => {
   return {
@@ -20,6 +21,7 @@ export const itemBuilder = (
     withQuantity: (quantity: number) => itemBuilder({ ...snapshot, quantity }),
     withPrice: (price: number) => itemBuilder({ ...snapshot, price }),
     whitTagIds: (...tagIds: string[]) => itemBuilder({ ...snapshot, tagIds }),
+    withFolderId: (folderId: string) => itemBuilder({ ...snapshot, folderId }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };

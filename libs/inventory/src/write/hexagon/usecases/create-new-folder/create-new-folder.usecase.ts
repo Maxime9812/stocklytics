@@ -16,13 +16,13 @@ export class CreateNewFolderUseCase {
     private readonly dateProvider: DateProvider,
   ) {}
   async execute({ id, name, parentId }: CreateNewFolderUseCasePayload) {
-    const folderWithNameInParentFolderExists =
+    const folderWithSameNameInParentFolderExists =
       await this.foldersRepository.folderWIthNameInParentFolderExists(
         name,
         parentId,
       );
 
-    if (folderWithNameInParentFolderExists) return;
+    if (folderWithSameNameInParentFolderExists) return;
 
     const folder = Folder.create({
       id,

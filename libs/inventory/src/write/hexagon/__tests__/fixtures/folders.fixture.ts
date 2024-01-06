@@ -9,10 +9,11 @@ import {
 
 export const createFoldersFixture = ({
   authGateway = new InMemoryAuthGateway(),
+  foldersRepository = new InMemoryFoldersRepository(),
 }: Partial<{
   authGateway: InMemoryAuthGateway;
+  foldersRepository: InMemoryFoldersRepository;
 }> = {}) => {
-  const foldersRepository = new InMemoryFoldersRepository();
   const dateProvider = new StubDateProvider();
 
   return {

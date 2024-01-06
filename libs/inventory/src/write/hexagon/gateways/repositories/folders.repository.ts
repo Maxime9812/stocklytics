@@ -6,4 +6,5 @@ export interface FoldersRepository {
     name: string,
     parentId?: string,
   ): Promise<boolean>;
+  getById(id: string): Promise<Folder | undefined>;
 }

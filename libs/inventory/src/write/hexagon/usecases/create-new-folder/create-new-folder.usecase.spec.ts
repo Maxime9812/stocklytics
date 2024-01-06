@@ -57,7 +57,7 @@ describe('Feature: Create new folder', () => {
     );
   });
 
-  describe('Scenario: Folder with same name in same parent already exists', () => {
+  describe('Scenario: Folder with same name and in same parent already exists', () => {
     test('Folder is not created', async () => {
       const alreadyCreatedFolderBuilder = folderBuilder()
         .withId('folder-id')
