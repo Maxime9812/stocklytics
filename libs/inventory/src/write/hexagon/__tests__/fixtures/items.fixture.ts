@@ -16,6 +16,10 @@ import {
   MoveItemIntoFolderUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { InMemoryFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-folders.repository';
+import {
+  RemoveItemTagUseCase,
+  RemoveItemTagUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -55,6 +59,9 @@ export const createItemsFixture = ({
         itemsRepository,
         foldersRepository,
       ).execute(payload);
+    },
+    whenRemoveItemTag(payload: RemoveItemTagUseCasePayload) {
+      return new RemoveItemTagUseCase(itemsRepository).execute(payload);
     },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(

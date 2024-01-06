@@ -27,6 +27,10 @@ export class Item {
     this.props.tagIds.push(tag.id);
   }
 
+  removeTag(tagId: string) {
+    this.props.tagIds = this.props.tagIds.filter((id) => id !== tagId);
+  }
+
   moveIntoFolder(folder: Folder) {
     this.props.folderId = folder.id;
   }
