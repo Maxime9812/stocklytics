@@ -19,6 +19,8 @@
     "<rootDir>/libs/"
   ],
   "moduleNameMapper": {
-    "^@app/inventory(|/.*)$": "<rootDir>/libs/inventory/src/$1"
+    "^@app/inventory(|/.*)$": "<rootDir>/libs/inventory/src/$1",
+    "^@app/authentication(|/.*)$": "<rootDir>/libs/authentication/src/$1",
+    "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
   }
 }

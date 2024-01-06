@@ -1,17 +1,19 @@
-type ItemConstructorProps = {
-  id: string;
-  companyId: string;
-  name: string;
-  quantity: number;
-  price: number;
-  createdAt: Date;
-};
-
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
 
   get id() {
     return this.props.id;
+  }
+
+  get snapshot(): ItemSnapshot {
+    return {
+      id: this.props.id,
+      companyId: this.props.companyId,
+      name: this.props.name,
+      quantity: this.props.quantity,
+      price: this.props.price,
+      createdAt: this.props.createdAt,
+    };
   }
 
   static create(params: {
@@ -32,17 +34,6 @@ export class Item {
     });
   }
 
-  get snapshot(): ItemSnapshot {
-    return {
-      id: this.props.id,
-      companyId: this.props.companyId,
-      name: this.props.name,
-      quantity: this.props.quantity,
-      price: this.props.price,
-      createdAt: this.props.createdAt,
-    };
-  }
-
   static fromSnapshot(snapshot: ItemSnapshot) {
     return new Item({
       id: snapshot.id,
@@ -55,6 +46,14 @@ export class Item {
   }
 }
 
+type ItemConstructorProps = {
+  id: string;
+  companyId: string;
+  name: string;
+  quantity: number;
+  price: number;
+  createdAt: Date;
+};
 export type ItemSnapshot = {
   id: string;
   companyId: string;

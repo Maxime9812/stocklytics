@@ -29,6 +29,12 @@
       ],
       "@app/authentication/*": [
         "libs/authentication/src/*"
+      ],
+      "@app/shared": [
+        "libs/shared/src"
+      ],
+      "@app/shared/*": [
+        "libs/shared/src/*"
       ]
     }
   }

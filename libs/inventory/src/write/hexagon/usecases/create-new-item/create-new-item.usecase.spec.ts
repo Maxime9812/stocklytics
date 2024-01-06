@@ -1,4 +1,4 @@
-import { InMemoryItemsRepository } from '@app/inventory/write/infra/gateways/in-memory-items.repository';
+import { InMemoryItemsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-items.repository';
 import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
 import { StubDateProvider } from '@app/inventory/write/hexagon/models/date-provider/stub-date.provider';
 import { CreateNewItemUseCase } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
