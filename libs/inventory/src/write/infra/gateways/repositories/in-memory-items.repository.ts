@@ -4,7 +4,7 @@ import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
 export class InMemoryItemsRepository implements ItemsRepository {
   private readonly _items: Map<string, ItemSnapshot> = new Map();
   get items() {
-    return Array.from(this._items.values());
+    return [...this._items.values()].map((item) => Item.fromSnapshot(item));
   }
 
   async save(item: Item) {

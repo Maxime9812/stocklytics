@@ -3,7 +3,7 @@ import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { AuthGateway } from '@app/authentication';
 
-type CreateNewItemUseCasePayload = {
+export type CreateNewItemUseCasePayload = {
   id: string;
   name: string;
   quantity: number;
