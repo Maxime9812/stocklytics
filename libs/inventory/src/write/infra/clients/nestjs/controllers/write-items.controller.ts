@@ -6,6 +6,7 @@ import { AddTagToItemParams } from '@app/inventory/write/infra/clients/nestjs/pa
 import { RemoveTagFromItemParams } from '@app/inventory/write/infra/clients/nestjs/params/remove-tag-from-item.params';
 import { MoveItemIntoFolderParams } from '@app/inventory/write/infra/clients/nestjs/params/move-item-into-folder.params';
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
+import { MoveItemIntoFolderDto } from '@app/inventory/write/infra/clients/nestjs/dtos/move-item-into-folder.dto';
 
 @Controller('items')
 export class WriteItemsController {
@@ -39,9 +40,13 @@ export class WriteItemsController {
     await this.removeItemTagUseCase.execute({ itemId, tagId });
   }
 
-  @Post(':itemId/folder/:folderId')
-  async moveItemIntoFolder(@Param() params: MoveItemIntoFolderParams) {
-    const { itemId, folderId } = params;
+  @Post(':itemId/move')
+  async moveItemIntoFolder(
+    @Param() params: MoveItemIntoFolderParams,
+    @Body() body: MoveItemIntoFolderDto,
+  ) {
+    const { itemId } = params;
+    const { folderId } = body;
     await this.moveItemIntoFolderUseCase.execute({ itemId, folderId });
   }
 }

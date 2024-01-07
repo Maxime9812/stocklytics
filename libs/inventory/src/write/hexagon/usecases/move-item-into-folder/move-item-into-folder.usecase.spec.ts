@@ -34,4 +34,18 @@ describe('Feature: Move item into folder', () => {
       initialItemBuilder.withFolderId('folder-id').build(),
     );
   });
+
+  test('Item is moved to root', async () => {
+    const initialItemBuilder = itemBuilder().withId('item-id');
+    itemsFixture.givenItems(initialItemBuilder.build());
+    foldersFixture.givenFolders(folderBuilder().withId('folder-id').build());
+
+    await itemsFixture.whenMoveItemToFolder({
+      itemId: 'item-id',
+    });
+
+    itemsFixture.thenItemsShouldBe(
+      initialItemBuilder.withFolderId(undefined).build(),
+    );
+  });
 });

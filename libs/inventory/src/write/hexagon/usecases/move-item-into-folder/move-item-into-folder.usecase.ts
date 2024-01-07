@@ -3,7 +3,7 @@ import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/reposit
 
 export type MoveItemIntoFolderUseCasePayload = {
   itemId: string;
-  folderId: string;
+  folderId?: string;
 };
 
 export class MoveItemIntoFolderUseCase {
@@ -14,9 +14,8 @@ export class MoveItemIntoFolderUseCase {
 
   async execute({ itemId, folderId }: MoveItemIntoFolderUseCasePayload) {
     const item = await this.itemsRepository.getById(itemId);
-    const folder = await this.foldersRepository.getById(folderId);
 
-    item.moveIntoFolder(folder);
+    item.moveIntoFolder(folderId);
 
     await this.itemsRepository.save(item);
   }

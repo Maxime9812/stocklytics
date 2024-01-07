@@ -1,5 +1,4 @@
 import { Tag } from '@app/inventory/write/hexagon/models/tag';
-import { Folder } from '@app/inventory/write/hexagon/models/folder';
 
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
@@ -31,8 +30,8 @@ export class Item {
     this.props.tagIds = this.props.tagIds.filter((id) => id !== tagId);
   }
 
-  moveIntoFolder(folder: Folder) {
-    this.props.folderId = folder.id;
+  moveIntoFolder(folderId: string) {
+    this.props.folderId = folderId;
   }
 
   static create(params: {
