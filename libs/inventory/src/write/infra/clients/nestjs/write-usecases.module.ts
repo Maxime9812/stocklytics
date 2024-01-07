@@ -13,6 +13,7 @@ import { CreateNewFolderUseCase } from '@app/inventory/write/hexagon/usecases/cr
 import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/repositories/folders.repository';
 import { CreateNewTagUseCase } from '@app/inventory/write/hexagon/usecases/create-new-tag/create-new-tag.usecase';
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
+import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule],
@@ -93,6 +94,13 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
         );
       },
     },
+    {
+      provide: MoveFolderUseCase,
+      inject: ['FoldersRepository'],
+      useFactory: (foldersRepository: FoldersRepository) => {
+        return new MoveFolderUseCase(foldersRepository);
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -101,6 +109,7 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
     CreateNewFolderUseCase,
     CreateNewTagUseCase,
     MoveItemIntoFolderUseCase,
+    MoveFolderUseCase,
   ],
 })
 export class WriteUseCasesModule {}

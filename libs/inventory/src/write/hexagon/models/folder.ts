@@ -15,6 +15,10 @@ export class Folder {
     };
   }
 
+  moveToFolder(parentId: string) {
+    this.props.parentId = parentId;
+  }
+
   static create({
     id,
     name,

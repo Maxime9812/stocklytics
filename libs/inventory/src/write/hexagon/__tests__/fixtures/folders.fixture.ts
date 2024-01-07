@@ -6,6 +6,10 @@ import {
   CreateNewFolderUseCase,
   CreateNewFolderUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/create-new-folder/create-new-folder.usecase';
+import {
+  MoveFolderUseCase,
+  MoveFolderUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 
 export const createFoldersFixture = ({
   authGateway = new InMemoryAuthGateway(),
@@ -29,6 +33,9 @@ export const createFoldersFixture = ({
         authGateway,
         dateProvider,
       ).execute(payload);
+    },
+    whenMoveFolder(payload: MoveFolderUseCasePayload) {
+      return new MoveFolderUseCase(foldersRepository).execute(payload);
     },
     thenFoldersShouldBe(...folders: Folder[]) {
       expect(foldersRepository.folders.map((t) => t.snapshot)).toEqual(
