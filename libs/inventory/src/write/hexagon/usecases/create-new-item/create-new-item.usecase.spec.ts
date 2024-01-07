@@ -19,7 +19,6 @@ describe('Feature: Create new item', () => {
       id: 'item-id',
       name: 'Iphone 13 pro max',
       quantity: 1,
-      price: 1400,
     });
     itemsFixture.thenItemsShouldBe(
       itemBuilder()
@@ -28,7 +27,6 @@ describe('Feature: Create new item', () => {
         .withName('Iphone 13 pro max')
         .createdAt(new Date('2023-12-23'))
         .withQuantity(1)
-        .withPrice(1400)
         .build(),
     );
   });

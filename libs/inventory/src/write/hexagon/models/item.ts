@@ -13,7 +13,6 @@ export class Item {
       companyId: this.props.companyId,
       name: this.props.name,
       quantity: this.props.quantity,
-      price: this.props.price,
       tagIds: this.props.tagIds,
       folderId: this.props.folderId,
       createdAt: this.props.createdAt,
@@ -39,7 +38,6 @@ export class Item {
     companyId: string;
     name: string;
     quantity: number;
-    price: number;
     currentDate: Date;
   }) {
     return new Item({
@@ -47,7 +45,6 @@ export class Item {
       companyId: params.companyId,
       name: params.name,
       quantity: params.quantity,
-      price: params.price,
       tagIds: [],
       folderId: undefined,
       createdAt: params.currentDate,
@@ -60,7 +57,6 @@ export class Item {
       companyId: snapshot.companyId,
       name: snapshot.name,
       quantity: snapshot.quantity,
-      price: snapshot.price,
       tagIds: [...snapshot.tagIds],
       folderId: snapshot.folderId,
       createdAt: snapshot.createdAt,
@@ -73,7 +69,6 @@ type ItemConstructorProps = {
   companyId: string;
   name: string;
   quantity: number;
-  price: number;
   tagIds: string[];
   folderId?: string;
   createdAt: Date;
@@ -83,7 +78,6 @@ export type ItemSnapshot = {
   companyId: string;
   name: string;
   quantity: number;
-  price: number;
   tagIds: string[];
   folderId?: string;
   createdAt: Date;

@@ -7,7 +7,6 @@ export type CreateNewItemUseCasePayload = {
   id: string;
   name: string;
   quantity: number;
-  price: number;
 };
 
 export class CreateNewItemUseCase {
@@ -23,7 +22,6 @@ export class CreateNewItemUseCase {
       companyId: this.authGateway.getCompanyId(),
       name: payload.name,
       quantity: payload.quantity,
-      price: payload.price,
       currentDate: this.dateProvider.getNow(),
     });
     await this.itemsRepository.save(item);

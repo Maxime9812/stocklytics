@@ -19,12 +19,11 @@ export class WriteItemsController {
 
   @Post()
   async createNewItem(@Body() body: CreateNewItemDto) {
-    const { id, name, quantity, price } = body;
+    const { id, name, quantity } = body;
     await this.createNewItemUseCase.execute({
       id,
       name,
       quantity,
-      price,
     });
   }
 

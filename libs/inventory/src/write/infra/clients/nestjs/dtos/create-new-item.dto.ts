@@ -7,6 +7,4 @@ export class CreateNewItemDto {
   name: string;
   @Min(0)
   quantity: number;
-  @Min(0)
-  price: number;
 }
