@@ -14,6 +14,7 @@ import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/reposit
 import { CreateNewTagUseCase } from '@app/inventory/write/hexagon/usecases/create-new-tag/create-new-tag.usecase';
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
+import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule],
@@ -21,34 +22,49 @@ import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-fo
   providers: [
     {
       provide: CreateNewItemUseCase,
-      inject: ['ItemsRepository', 'AuthGateway', 'DateProvider'],
+      inject: [
+        'ItemsRepository',
+        'AuthGateway',
+        'DateProvider',
+        'TransactionPerformer',
+      ],
       useFactory: (
         itemsRepository: ItemsRepository,
         authGateway: AuthGateway,
         dateProvider: DateProvider,
+        transactionPerformer: TransactionPerformer,
       ) => {
         return new CreateNewItemUseCase(
           itemsRepository,
           authGateway,
           dateProvider,
+          transactionPerformer,
         );
       },
     },
     {
       provide: AddTagToItemUseCase,
-      inject: ['ItemsRepository', 'TagsRepository'],
+      inject: ['ItemsRepository', 'TagsRepository', 'TransactionPerformer'],
       useFactory: (
         itemsRepository: ItemsRepository,
         tagsRepository: TagsRepository,
+        transactionPerformer: TransactionPerformer,
       ) => {
-        return new AddTagToItemUseCase(tagsRepository, itemsRepository);
+        return new AddTagToItemUseCase(
+          tagsRepository,
+          itemsRepository,
+          transactionPerformer,
+        );
       },
     },
     {
       provide: RemoveItemTagUseCase,
-      inject: ['ItemsRepository'],
-      useFactory: (itemsRepository: ItemsRepository) => {
-        return new RemoveItemTagUseCase(itemsRepository);
+      inject: ['ItemsRepository', 'TransactionPerformer'],
+      useFactory: (
+        itemsRepository: ItemsRepository,
+        transactionPerformer: TransactionPerformer,
+      ) => {
+        return new RemoveItemTagUseCase(itemsRepository, transactionPerformer);
       },
     },
     {
@@ -83,14 +99,16 @@ import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-fo
     },
     {
       provide: MoveItemIntoFolderUseCase,
-      inject: ['ItemsRepository', 'FoldersRepository'],
+      inject: ['ItemsRepository', 'FoldersRepository', 'TransactionPerformer'],
       useFactory: (
         itemsRepository: ItemsRepository,
         foldersRepository: FoldersRepository,
+        transactionPerformer: TransactionPerformer,
       ) => {
         return new MoveItemIntoFolderUseCase(
           itemsRepository,
           foldersRepository,
+          transactionPerformer,
         );
       },
     },
