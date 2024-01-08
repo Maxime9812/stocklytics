@@ -8,8 +8,6 @@ export async function up(knex: Knex): Promise<void> {
       table.string('companyId').notNullable();
       table.uuid('parentId').nullable();
       table.datetime('createdAt').notNullable();
-
-      table.foreign('parentId').references('id').inTable('folders');
     })
     .createTable('items', (table) => {
       table.uuid('id').primary();
@@ -18,8 +16,6 @@ export async function up(knex: Knex): Promise<void> {
       table.string('companyId').notNullable();
       table.uuid('folderId').nullable();
       table.datetime('createdAt').notNullable();
-
-      table.foreign('folderId').references('id').inTable('folders');
     })
     .createTable('tags', (table) => {
       table.uuid('id').primary();
@@ -32,8 +28,6 @@ export async function up(knex: Knex): Promise<void> {
       table.uuid('tagId').notNullable();
 
       table.primary(['itemId', 'tagId']);
-      table.foreign('itemId').references('id').inTable('items');
-      table.foreign('tagId').references('id').inTable('tags');
     });
 }
 

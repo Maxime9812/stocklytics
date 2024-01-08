@@ -1,0 +1,27 @@
+{
+  "globalSetup": "<rootDir>/test/setup-integration-test.ts",
+  "globalTeardown": "<rootDir>/test/teardown-integration-test.ts",
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": "../",
+  "testRegex": [
+    ".*\\.it-spec\\.ts$",
+    ".*\\.spec\\.ts$"
+  ],
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/src/",
+    "<rootDir>/libs/"
+  ],
+  "moduleNameMapper": {
+    "^@app/inventory(|/.*)$": "<rootDir>/libs/inventory/src/$1",
+    "^@app/authentication(|/.*)$": "<rootDir>/libs/authentication/src/$1",
+    "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
+  }
+}

@@ -4,9 +4,7 @@ import { resetDB } from '../../../../../../../../test/docker-manager';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-items.repository';
-import { folderBuilder } from '@app/inventory/write/hexagon/__tests__/builders/folder.builder';
 import { Item } from '@app/inventory/write/hexagon/models/item';
-import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
 
 describe('KnexItemsRepository', () => {
   let sqlConnection: Knex;
@@ -25,7 +23,6 @@ describe('KnexItemsRepository', () => {
 
   describe('save', () => {
     it('should save an item', async () => {
-      await createFolder('349b8b68-109a-486f-bdc2-daedc31a6beb');
       const item = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -76,8 +73,6 @@ describe('KnexItemsRepository', () => {
     });
 
     it('should save an item with tags', async () => {
-      await createTag('f262a4be-f09d-4370-a2a7-698df42f135f');
-      await createTag('3320b243-836b-4629-8b36-44d088c62e00');
       const item = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -105,8 +100,6 @@ describe('KnexItemsRepository', () => {
     });
 
     it('should update item tags instead of create a new one if item already exists', async () => {
-      await createTag('f262a4be-f09d-4370-a2a7-698df42f135f');
-      await createTag('3320b243-836b-4629-8b36-44d088c62e00');
       const initialItemBuilder = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -137,7 +130,6 @@ describe('KnexItemsRepository', () => {
 
   describe('getById', () => {
     it('should return a simple item by id', async () => {
-      await createFolder('349b8b68-109a-486f-bdc2-daedc31a6beb');
       const item = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -156,8 +148,6 @@ describe('KnexItemsRepository', () => {
     });
 
     it('should return a id with tags', async () => {
-      await createFolder('349b8b68-109a-486f-bdc2-daedc31a6beb');
-      await createTag('f262a4be-f09d-4370-a2a7-698df42f135f');
       const item = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -176,17 +166,6 @@ describe('KnexItemsRepository', () => {
       expect(result?.snapshot).toEqual(item.snapshot);
     });
   });
-
-  const createTag = async (tagId: string) => {
-    const tag = tagBuilder().withId(tagId).build();
-    const tagSnapshot = tag.snapshot;
-    await sqlConnection('tags').insert({
-      id: tagSnapshot.id,
-      name: tagSnapshot.name,
-      companyId: tagSnapshot.companyId,
-      createdAt: tagSnapshot.createdAt,
-    });
-  };
 
   const findExistingItems = async () => {
     return sqlConnection('items').select<ItemPm[]>('*');
@@ -212,16 +191,5 @@ describe('KnexItemsRepository', () => {
     await sqlConnection('items_tags').insert(
       tagIds.map((tagId) => ({ itemId: id, tagId })),
     );
-  };
-
-  const createFolder = async (folderId: string) => {
-    const folder = folderBuilder().withId(folderId).build();
-    const folderSnapshot = folder.snapshot;
-    await sqlConnection('folders').insert({
-      id: folderSnapshot.id,
-      name: folderSnapshot.name,
-      companyId: folderSnapshot.companyId,
-      createdAt: folderSnapshot.createdAt,
-    });
   };
 });
