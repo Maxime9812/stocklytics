@@ -8,7 +8,7 @@ const knexConfig: Record<'development' | 'production' | 'test', Knex.Config> = {
       database: 'stocklytics',
       user: 'postgres',
       password: 'secret',
-      port: 5433,
+      port: 5432,
     },
     pool: {
       min: 2,
@@ -26,7 +26,7 @@ const knexConfig: Record<'development' | 'production' | 'test', Knex.Config> = {
       database: 'stocklytics',
       user: 'postgres',
       password: 'secret',
-      port: 5433,
+      port: 5432,
     },
     pool: {
       min: 2,

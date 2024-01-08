@@ -4,7 +4,7 @@ export const tagBuilder = (
   snapshot: TagSnapshot = {
     id: 'c4d39ca6-6420-4c5d-9604-d7313d549745',
     name: 'tag-name',
-    companyId: 'company-id',
+    companyId: '1c7bbeee-8f25-43da-93db-e1f025645257',
     createdAt: new Date('2024-01-01'),
   },
 ) => {

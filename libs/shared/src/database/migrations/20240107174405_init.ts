@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     .createTable('folders', (table) => {
       table.uuid('id').primary();
       table.string('name').notNullable();
-      table.string('companyId').notNullable();
+      table.uuid('companyId').notNullable();
       table.uuid('parentId').nullable();
       table.datetime('createdAt').notNullable();
     })
@@ -13,14 +13,14 @@ export async function up(knex: Knex): Promise<void> {
       table.uuid('id').primary();
       table.string('name').notNullable();
       table.integer('quantity').notNullable();
-      table.string('companyId').notNullable();
+      table.uuid('companyId').notNullable();
       table.uuid('folderId').nullable();
       table.datetime('createdAt').notNullable();
     })
     .createTable('tags', (table) => {
       table.uuid('id').primary();
       table.string('name').notNullable();
-      table.string('companyId').notNullable();
+      table.uuid('companyId').notNullable();
       table.datetime('createdAt').notNullable();
     })
     .createTable('items_tags', (table) => {

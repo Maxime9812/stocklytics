@@ -2,8 +2,8 @@ import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
 
 export const itemBuilder = (
   snapshot: ItemSnapshot = {
-    id: 'item-id',
-    companyId: 'company-id',
+    id: '0f8a84e4-c2ce-4999-bada-0f7a394626e8',
+    companyId: '1c7bbeee-8f25-43da-93db-e1f025645257',
     name: 'item-name',
     createdAt: new Date('2024-01-01'),
     quantity: 1,

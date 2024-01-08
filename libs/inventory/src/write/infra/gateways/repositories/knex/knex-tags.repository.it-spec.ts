@@ -3,7 +3,6 @@ import { knexConfig } from '@app/shared';
 import { resetDB } from '../../../../../../../../test/docker-manager';
 import { KnexTagsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-tags.repository';
 import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
-import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { TagPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/tag.pm';
 import { Tag } from '@app/inventory/write/hexagon/models/tag';
 

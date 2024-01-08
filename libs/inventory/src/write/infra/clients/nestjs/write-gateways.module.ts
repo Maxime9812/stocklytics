@@ -1,22 +1,31 @@
 import { Module } from '@nestjs/common';
-import { InMemoryItemsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-items.repository';
 import { RealDateProvider } from '@app/inventory/write/hexagon/models/date-provider/real-date.provider';
-import { InMemoryFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-folders.repository';
+import { DatabaseModule } from '@app/shared';
+import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-items.repository';
+import { Knex } from 'knex';
+import { KnexTagsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-tags.repository';
+import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-folders.repository';
 
 @Module({
-  imports: [],
+  imports: [DatabaseModule],
   providers: [
     {
       provide: 'ItemsRepository',
-      useClass: InMemoryItemsRepository,
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexItemsRepository(sqlConnection),
     },
     {
       provide: 'TagsRepository',
-      useClass: InMemoryItemsRepository,
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexTagsRepository(sqlConnection),
     },
     {
       provide: 'FoldersRepository',
-      useClass: InMemoryFoldersRepository,
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexFoldersRepository(sqlConnection),
     },
     {
       provide: 'DateProvider',
