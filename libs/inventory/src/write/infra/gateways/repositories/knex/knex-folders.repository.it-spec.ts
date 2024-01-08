@@ -97,10 +97,11 @@ describe('KnexFoldersRepository', () => {
     it('should return false if folder does not exist', async () => {
       const folderExists = await new KnexFoldersRepository(
         sqlConnection,
-      ).folderWithNameInParentFolderExists(
-        'Electronics',
-        'b33adf7e-3ae7-4f17-9560-3388251c266f',
-      );
+      ).folderWithNameInParentFolderExists({
+        name: 'Electronics',
+        companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
+        parentId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+      });
       expect(folderExists).toBe(false);
     });
 
@@ -116,10 +117,11 @@ describe('KnexFoldersRepository', () => {
 
       const folderExists = await new KnexFoldersRepository(
         sqlConnection,
-      ).folderWithNameInParentFolderExists(
-        'Electronics',
-        'b33adf7e-3ae7-4f17-9560-3388251c266f',
-      );
+      ).folderWithNameInParentFolderExists({
+        name: 'Electronics',
+        companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
+        parentId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+      });
       expect(folderExists).toBe(true);
     });
   });

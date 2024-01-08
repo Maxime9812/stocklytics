@@ -17,10 +17,11 @@ export class CreateNewFolderUseCase {
   ) {}
   async execute({ id, name, parentId }: CreateNewFolderUseCasePayload) {
     const folderWithSameNameInParentFolderExists =
-      await this.foldersRepository.folderWithNameInParentFolderExists(
+      await this.foldersRepository.folderWithNameInParentFolderExists({
         name,
         parentId,
-      );
+        companyId: this.authGateway.getCompanyId(),
+      });
 
     if (folderWithSameNameInParentFolderExists) return;
 

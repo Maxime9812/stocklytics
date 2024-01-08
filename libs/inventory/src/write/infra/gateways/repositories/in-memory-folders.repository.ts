@@ -1,4 +1,7 @@
-import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/repositories/folders.repository';
+import {
+  FolderExistParams,
+  FoldersRepository,
+} from '@app/inventory/write/hexagon/gateways/repositories/folders.repository';
 import {
   Folder,
   FolderSnapshot,
@@ -11,11 +14,14 @@ export class InMemoryFoldersRepository implements FoldersRepository {
   }
 
   async folderWithNameInParentFolderExists(
-    name: string,
-    parentId?: string,
+    params: FolderExistParams,
   ): Promise<boolean> {
+    const { name, parentId, companyId } = params;
     return [...this._folders.values()].some(
-      (folder) => folder.name === name && folder.parentId === parentId,
+      (folder) =>
+        folder.name === name &&
+        folder.parentId === parentId &&
+        folder.companyId === companyId,
     );
   }
 
