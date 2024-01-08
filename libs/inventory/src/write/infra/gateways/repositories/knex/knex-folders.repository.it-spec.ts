@@ -97,7 +97,7 @@ describe('KnexFoldersRepository', () => {
     it('should return false if folder does not exist', async () => {
       const folderExists = await new KnexFoldersRepository(
         sqlConnection,
-      ).folderWIthNameInParentFolderExists(
+      ).folderWithNameInParentFolderExists(
         'Electronics',
         'b33adf7e-3ae7-4f17-9560-3388251c266f',
       );
@@ -116,7 +116,7 @@ describe('KnexFoldersRepository', () => {
 
       const folderExists = await new KnexFoldersRepository(
         sqlConnection,
-      ).folderWIthNameInParentFolderExists(
+      ).folderWithNameInParentFolderExists(
         'Electronics',
         'b33adf7e-3ae7-4f17-9560-3388251c266f',
       );

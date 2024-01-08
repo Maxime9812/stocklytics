@@ -10,7 +10,7 @@ export class InMemoryFoldersRepository implements FoldersRepository {
     this._folders.set(folder.id, folder.snapshot);
   }
 
-  async folderWIthNameInParentFolderExists(
+  async folderWithNameInParentFolderExists(
     name: string,
     parentId?: string,
   ): Promise<boolean> {

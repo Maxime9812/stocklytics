@@ -17,7 +17,7 @@ export class CreateNewFolderUseCase {
   ) {}
   async execute({ id, name, parentId }: CreateNewFolderUseCasePayload) {
     const folderWithSameNameInParentFolderExists =
-      await this.foldersRepository.folderWIthNameInParentFolderExists(
+      await this.foldersRepository.folderWithNameInParentFolderExists(
         name,
         parentId,
       );

@@ -35,7 +35,7 @@ export class KnexFoldersRepository implements FoldersRepository {
     });
   }
 
-  async folderWIthNameInParentFolderExists(
+  async folderWithNameInParentFolderExists(
     name: string,
     parentId?: string,
   ): Promise<boolean> {
