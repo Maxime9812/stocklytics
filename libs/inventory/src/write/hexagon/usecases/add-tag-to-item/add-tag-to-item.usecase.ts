@@ -1,5 +1,6 @@
 import { TagsRepository } from '@app/inventory/write/hexagon/gateways/repositories/tags.repository';
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
+import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 export type AddTagToItemUseCasePayload = {
   itemId: string;
@@ -10,14 +11,17 @@ export class AddTagToItemUseCase {
   constructor(
     private readonly tagsRepository: TagsRepository,
     private readonly itemsRepository: ItemsRepository,
+    private readonly transactionPerformer: TransactionPerformer,
   ) {}
 
   async execute(payload: AddTagToItemUseCasePayload) {
-    const item = await this.itemsRepository.getById(payload.itemId);
-    const tag = await this.tagsRepository.getById(payload.tagId);
+    await this.transactionPerformer.perform(async (trx) => {
+      const item = await this.itemsRepository.getById(payload.itemId);
+      const tag = await this.tagsRepository.getById(payload.tagId);
 
-    item.addTag(tag);
+      item.addTag(tag);
 
-    await this.itemsRepository.save(item);
+      await this.itemsRepository.save(item)(trx);
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/repositories/folders.repository';
+import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 export type MoveItemIntoFolderUseCasePayload = {
   itemId: string;
@@ -10,13 +11,16 @@ export class MoveItemIntoFolderUseCase {
   constructor(
     private readonly itemsRepository: ItemsRepository,
     private readonly foldersRepository: FoldersRepository,
+    private readonly transactionPerformer: TransactionPerformer,
   ) {}
 
   async execute({ itemId, folderId }: MoveItemIntoFolderUseCasePayload) {
-    const item = await this.itemsRepository.getById(itemId);
+    await this.transactionPerformer.perform(async (trx) => {
+      const item = await this.itemsRepository.getById(itemId);
 
-    item.moveIntoFolder(folderId);
+      item.moveIntoFolder(folderId);
 
-    await this.itemsRepository.save(item);
+      await this.itemsRepository.save(item)(trx);
+    });
   }
 }

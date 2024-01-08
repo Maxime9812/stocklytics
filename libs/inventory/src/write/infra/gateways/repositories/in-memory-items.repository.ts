@@ -1,5 +1,6 @@
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
+import { TransactionalAsync } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 export class InMemoryItemsRepository implements ItemsRepository {
   private readonly _items: Map<string, ItemSnapshot> = new Map();
@@ -7,8 +8,10 @@ export class InMemoryItemsRepository implements ItemsRepository {
     return [...this._items.values()].map((item) => Item.fromSnapshot(item));
   }
 
-  async save(item: Item) {
-    this._items.set(item.id, item.snapshot);
+  save(item: Item): TransactionalAsync {
+    return async () => {
+      this._items.set(item.id, item.snapshot);
+    };
   }
 
   async getById(id: string) {

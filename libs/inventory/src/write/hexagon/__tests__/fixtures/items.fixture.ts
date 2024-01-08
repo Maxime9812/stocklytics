@@ -20,6 +20,8 @@ import {
   RemoveItemTagUseCase,
   RemoveItemTagUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
+import { NullTransformationPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/null-transaction-performer';
+import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -31,6 +33,8 @@ export const createItemsFixture = ({
   const itemsRepository = new InMemoryItemsRepository();
   const authGateway = new InMemoryAuthGateway();
   const dateProvider = new StubDateProvider();
+  let transactionPerformer: TransactionPerformer =
+    new NullTransformationPerformer();
 
   return {
     givenNowIs(date: Date) {
@@ -42,31 +46,44 @@ export const createItemsFixture = ({
     givenItems(...items: Item[]) {
       itemsRepository.givenItems(...items);
     },
+    givenTransactionPerformer(_transactionPerformer: TransactionPerformer) {
+      transactionPerformer = _transactionPerformer;
+    },
     whenCreateNewItem(payload: CreateNewItemUseCasePayload) {
       return new CreateNewItemUseCase(
         itemsRepository,
         authGateway,
         dateProvider,
+        transactionPerformer,
       ).execute(payload);
     },
     whenAddTagToItem(payload: AddTagToItemUseCasePayload) {
-      return new AddTagToItemUseCase(tagsRepository, itemsRepository).execute(
-        payload,
-      );
+      return new AddTagToItemUseCase(
+        tagsRepository,
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
     },
     whenMoveItemToFolder(payload: MoveItemIntoFolderUseCasePayload) {
       return new MoveItemIntoFolderUseCase(
         itemsRepository,
         foldersRepository,
+        transactionPerformer,
       ).execute(payload);
     },
     whenRemoveItemTag(payload: RemoveItemTagUseCasePayload) {
-      return new RemoveItemTagUseCase(itemsRepository).execute(payload);
+      return new RemoveItemTagUseCase(
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
     },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(
         items.map((t) => t.snapshot),
       );
+    },
+    thenItemsShouldBeEmpty() {
+      expect(itemsRepository.items).toEqual([]);
     },
   };
 };

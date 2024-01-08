@@ -5,9 +5,12 @@ import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/pe
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-items.repository';
 import { Item } from '@app/inventory/write/hexagon/models/item';
+import { KnexTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/knex-transacrion-performer';
 
 describe('KnexItemsRepository', () => {
   let sqlConnection: Knex;
+  let transactionPerformer: KnexTransactionPerformer;
+  let itemsRepository: KnexItemsRepository;
 
   beforeAll(async () => {
     sqlConnection = knex(knexConfig.test);
@@ -19,6 +22,8 @@ describe('KnexItemsRepository', () => {
 
   beforeEach(async () => {
     await resetDB(sqlConnection);
+    transactionPerformer = new KnexTransactionPerformer(sqlConnection);
+    itemsRepository = new KnexItemsRepository(sqlConnection);
   });
 
   describe('save', () => {
@@ -32,7 +37,9 @@ describe('KnexItemsRepository', () => {
         .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
         .build();
 
-      await new KnexItemsRepository(sqlConnection).save(item);
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.save(item)(trx);
+      });
 
       expect(await findExistingItems()).toEqual<ItemPm[]>([
         {
@@ -58,7 +65,9 @@ describe('KnexItemsRepository', () => {
 
       const item = initialItemBuilder.withQuantity(2).build();
 
-      await new KnexItemsRepository(sqlConnection).save(item);
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.save(item)(trx);
+      });
 
       expect(await findExistingItems()).toEqual<ItemPm[]>([
         {
@@ -85,7 +94,9 @@ describe('KnexItemsRepository', () => {
         )
         .build();
 
-      await new KnexItemsRepository(sqlConnection).save(item);
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.save(item)(trx);
+      });
 
       expect(await findExistingItemsTag()).toEqual([
         {
@@ -117,7 +128,9 @@ describe('KnexItemsRepository', () => {
         .whitTagIds('f262a4be-f09d-4370-a2a7-698df42f135f')
         .build();
 
-      await new KnexItemsRepository(sqlConnection).save(item);
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.save(item)(trx);
+      });
 
       expect(await findExistingItemsTag()).toEqual([
         {
@@ -143,7 +156,9 @@ describe('KnexItemsRepository', () => {
 
       const item = initialItemBuilder.whitTagIds().build();
 
-      await new KnexItemsRepository(sqlConnection).save(item);
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.save(item)(trx);
+      });
 
       expect(await findExistingItemsTag()).toEqual([]);
     });
@@ -161,7 +176,7 @@ describe('KnexItemsRepository', () => {
         .build();
       await insertItem(item);
 
-      const result = await new KnexItemsRepository(sqlConnection).getById(
+      const result = await itemsRepository.getById(
         'b33adf7e-3ae7-4f17-9560-3388251c266f',
       );
 
@@ -180,7 +195,7 @@ describe('KnexItemsRepository', () => {
         .build();
       await insertItem(item);
 
-      const result = await new KnexItemsRepository(sqlConnection).getById(
+      const result = await itemsRepository.getById(
         'b33adf7e-3ae7-4f17-9560-3388251c266f',
       );
 

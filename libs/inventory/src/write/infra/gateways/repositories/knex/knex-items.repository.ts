@@ -2,26 +2,30 @@ import { Knex } from 'knex';
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
+import { TransactionalAsync } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
 
 export class KnexItemsRepository implements ItemsRepository {
   constructor(private readonly knex: Knex) {}
 
-  async save(item: Item): Promise<void> {
-    const { id, name, quantity, companyId, createdAt, folderId, tagIds } =
-      item.snapshot;
-    await this.knex('items')
-      .insert({
-        id,
-        name,
-        quantity,
-        companyId,
-        folderId,
-        createdAt,
-      })
-      .onConflict('id')
-      .merge();
+  save(item: Item): TransactionalAsync {
+    return async (trx) => {
+      const { id, name, quantity, companyId, createdAt, folderId } =
+        item.snapshot;
+      await this.knex('items')
+        .transacting(trx as Knex.Transaction)
+        .insert({
+          id,
+          name,
+          quantity,
+          companyId,
+          folderId,
+          createdAt,
+        })
+        .onConflict('id')
+        .merge();
 
-    await this.saveItemTags(item);
+      await this.saveItemTags(item)(trx);
+    };
   }
 
   async getById(id: string): Promise<Item | undefined> {
@@ -45,17 +49,21 @@ export class KnexItemsRepository implements ItemsRepository {
     });
   }
 
-  private async saveItemTags(item: Item) {
-    const { tagIds } = item.snapshot;
-    await this.knex('items_tags').where({ itemId: item.id }).del();
+  private saveItemTags(item: Item): TransactionalAsync {
+    return async (trx) => {
+      const { tagIds } = item.snapshot;
+      await this.knex('items_tags').where({ itemId: item.id }).del();
 
-    if (!tagIds.length) return;
+      if (!tagIds.length) return;
 
-    await this.knex('items_tags').insert(
-      tagIds.map((tagId) => ({
-        tagId,
-        itemId: item.id,
-      })),
-    );
+      await this.knex('items_tags')
+        .transacting(trx as Knex.Transaction)
+        .insert(
+          tagIds.map((tagId) => ({
+            tagId,
+            itemId: item.id,
+          })),
+        );
+    };
   }
 }

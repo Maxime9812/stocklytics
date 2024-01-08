@@ -9,6 +9,7 @@ import {
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { folderBuilder } from '@app/inventory/write/hexagon/__tests__/builders/folder.builder';
 import { InMemoryFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-folders.repository';
+import { DroppingTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Move item into folder', () => {
   let itemsFixture: ItemsFixture;
@@ -47,5 +48,24 @@ describe('Feature: Move item into folder', () => {
     itemsFixture.thenItemsShouldBe(
       initialItemBuilder.withFolderId(undefined).build(),
     );
+  });
+
+  it('should make transactional the process of moving item into folder', async () => {
+    const initialItem = itemBuilder()
+      .withId('item-id')
+      .withFolderId('folder-id')
+      .build();
+    itemsFixture.givenItems(initialItem);
+    foldersFixture.givenFolders(
+      folderBuilder().withId('new-folder-id').build(),
+    );
+    itemsFixture.givenTransactionPerformer(new DroppingTransactionPerformer());
+
+    await itemsFixture.whenMoveItemToFolder({
+      itemId: 'item-id',
+      folderId: 'new-folder-id',
+    });
+
+    itemsFixture.thenItemsShouldBe(initialItem);
   });
 });

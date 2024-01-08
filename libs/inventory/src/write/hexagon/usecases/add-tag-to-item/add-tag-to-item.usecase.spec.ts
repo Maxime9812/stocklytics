@@ -9,6 +9,7 @@ import {
 import { InMemoryTagsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-tags.repository';
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
+import { DroppingTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Add tag to item', () => {
   let tagsFixture: TagsFixture;
@@ -50,5 +51,20 @@ describe('Feature: Add tag to item', () => {
 
       itemsFixture.thenItemsShouldBe(initialItemBuilder.build());
     });
+  });
+
+  it('should make transactional the process of adding tag to item', async () => {
+    tagsFixture.givenTags(tagBuilder().withId('tag-id').build());
+    const initialItemBuilder = itemBuilder().withId('item-id');
+
+    itemsFixture.givenItems(initialItemBuilder.build());
+    itemsFixture.givenTransactionPerformer(new DroppingTransactionPerformer());
+
+    await itemsFixture.whenAddTagToItem({
+      itemId: 'item-id',
+      tagId: 'tag-id',
+    });
+
+    itemsFixture.thenItemsShouldBe(initialItemBuilder.build());
   });
 });
