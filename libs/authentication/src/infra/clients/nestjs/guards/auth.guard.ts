@@ -1,20 +1,31 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
+import { IS_PUBLIC_KEY } from '@app/authentication/infra/clients/nestjs/metadata/public.metadata';
+import { Reflector } from '@nestjs/core';
 
 export class AuthGuard implements CanActivate {
-  constructor(private readonly authGateway: AuthGateway) {}
+  constructor(
+    private readonly authGateway: AuthGateway,
+    private readonly reflector: Reflector,
+  ) {}
   canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
-    if (!token) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
+    const session: { userId: string } = context
+      .switchToHttp()
+      .getRequest().session;
+
+    if (!session || !session.userId) {
       return false;
     }
-    this.authGateway.setCompanyId(token);
-    return true;
-  }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers['authorization']?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    this.authGateway.setCompanyId(session.userId);
+    return true;
   }
 }

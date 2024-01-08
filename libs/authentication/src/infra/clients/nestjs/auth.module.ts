@@ -1,9 +1,12 @@
-import { Module, Scope } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Scope } from '@nestjs/common';
 import { AuthController } from '@app/authentication/infra/clients/nestjs/controllers/auth.controller';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, Reflector } from '@nestjs/core';
 import { AuthGuard } from '@app/authentication/infra/clients/nestjs/guards/auth.guard';
 import { AuthGatewaysModule } from '@app/authentication/infra/clients/nestjs/auth-gateways.module';
 import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
+import * as session from 'express-session';
+import RedisStore from 'connect-redis';
+import { default as Redis } from 'ioredis';
 
 @Module({
   imports: [AuthGatewaysModule],
@@ -11,10 +14,29 @@ import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
   providers: [
     {
       provide: APP_GUARD,
-      inject: ['AuthGateway'],
-      useFactory: (authGateway: AuthGateway) => new AuthGuard(authGateway),
+      inject: ['AuthGateway', Reflector],
+      useFactory: (authGateway: AuthGateway, reflector: Reflector) =>
+        new AuthGuard(authGateway, reflector),
       scope: Scope.REQUEST,
     },
   ],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    const redisClient = new Redis();
+    consumer
+      .apply(
+        session({
+          store: new (RedisStore as any)({ client: redisClient }),
+          secret: 'keyboard cat',
+          resave: false,
+          saveUninitialized: true,
+          name: 'session',
+          cookie: {
+            httpOnly: true,
+          },
+        }),
+      )
+      .forRoutes('*');
+  }
+}
