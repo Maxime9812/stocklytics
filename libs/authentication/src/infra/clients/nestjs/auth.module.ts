@@ -13,6 +13,7 @@ import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
 import * as session from 'express-session';
 import RedisStore from 'connect-redis';
 import { default as Redis } from 'ioredis';
+import { redisConfig } from '@app/authentication/infra/redis-config/redis.config';
 
 @Module({
   imports: [AuthGatewaysModule],
@@ -28,7 +29,11 @@ import { default as Redis } from 'ioredis';
     {
       provide: 'RedisStore',
       useFactory: () => {
-        const redisClient = new Redis();
+        const redisClient = new Redis(
+          process.env.NODE_ENV == 'production'
+            ? redisConfig.production
+            : redisConfig.development,
+        );
         return new (RedisStore as any)({ client: redisClient });
       },
     },
