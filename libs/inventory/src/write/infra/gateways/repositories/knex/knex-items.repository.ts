@@ -30,7 +30,7 @@ export class KnexItemsRepository implements ItemsRepository {
     const itemPm = await this.knex<ItemPm>('items').where({ id }).first();
 
     const tagIds = await this.knex('items_tags')
-      .select('tagId')
+      .select<{ tagId: string }[]>('tagId')
       .where({ itemId: id });
 
     if (!itemPm) return;
