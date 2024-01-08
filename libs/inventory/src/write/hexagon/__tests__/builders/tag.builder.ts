@@ -2,7 +2,7 @@ import { Tag, TagSnapshot } from '@app/inventory/write/hexagon/models/tag';
 
 export const tagBuilder = (
   snapshot: TagSnapshot = {
-    id: 'tag-id',
+    id: 'c4d39ca6-6420-4c5d-9604-d7313d549745',
     name: 'tag-name',
     companyId: 'company-id',
     createdAt: new Date('2024-01-01'),
