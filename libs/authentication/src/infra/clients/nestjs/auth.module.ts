@@ -1,4 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule, Scope } from '@nestjs/common';
+import {
+  Inject,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  Scope,
+} from '@nestjs/common';
 import { AuthController } from '@app/authentication/infra/clients/nestjs/controllers/auth.controller';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { AuthGuard } from '@app/authentication/infra/clients/nestjs/guards/auth.guard';
@@ -19,15 +25,24 @@ import { default as Redis } from 'ioredis';
         new AuthGuard(authGateway, reflector),
       scope: Scope.REQUEST,
     },
+    {
+      provide: 'RedisStore',
+      useFactory: () => {
+        const redisClient = new Redis();
+        return new (RedisStore as any)({ client: redisClient });
+      },
+    },
   ],
 })
 export class AuthModule implements NestModule {
+  constructor(
+    @Inject('RedisStore') private readonly redisStore: RedisStore.RedisStore,
+  ) {}
   configure(consumer: MiddlewareConsumer): any {
-    const redisClient = new Redis();
     consumer
       .apply(
         session({
-          store: new (RedisStore as any)({ client: redisClient }),
+          store: this.redisStore,
           secret: 'keyboard cat',
           resave: false,
           saveUninitialized: true,

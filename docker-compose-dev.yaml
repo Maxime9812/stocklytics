@@ -18,8 +18,6 @@ services:
       - "6379:6379"
     networks:
       - app_net
-    volumes:
-      - ./docker-redis-data-for-dev:/data
 
 networks:
   app_net:
