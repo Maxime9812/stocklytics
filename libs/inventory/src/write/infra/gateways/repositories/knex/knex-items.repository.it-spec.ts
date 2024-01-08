@@ -126,6 +126,27 @@ describe('KnexItemsRepository', () => {
         },
       ]);
     });
+
+    it('should remove item tags if item has no tags', async () => {
+      const initialItemBuilder = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .withName('Iphone 13 pro max')
+        .withQuantity(1)
+        .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
+        .createdAt(new Date('2024-01-01T00:00:00.000Z'))
+        .whitTagIds(
+          'f262a4be-f09d-4370-a2a7-698df42f135f',
+          '3320b243-836b-4629-8b36-44d088c62e00',
+        );
+      const initialItem = initialItemBuilder.build();
+      await insertItem(initialItem);
+
+      const item = initialItemBuilder.whitTagIds().build();
+
+      await new KnexItemsRepository(sqlConnection).save(item);
+
+      expect(await findExistingItemsTag()).toEqual([]);
+    });
   });
 
   describe('getById', () => {

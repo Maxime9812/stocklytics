@@ -21,8 +21,6 @@ export class KnexItemsRepository implements ItemsRepository {
       .onConflict('id')
       .merge();
 
-    if (!tagIds.length) return;
-
     await this.saveItemTags(item);
   }
 
@@ -50,6 +48,8 @@ export class KnexItemsRepository implements ItemsRepository {
   private async saveItemTags(item: Item) {
     const { tagIds } = item.snapshot;
     await this.knex('items_tags').where({ itemId: item.id }).del();
+
+    if (!tagIds.length) return;
 
     await this.knex('items_tags').insert(
       tagIds.map((tagId) => ({

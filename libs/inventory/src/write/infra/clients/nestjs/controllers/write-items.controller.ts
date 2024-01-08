@@ -7,13 +7,14 @@ import { RemoveTagFromItemParams } from '@app/inventory/write/infra/clients/nest
 import { MoveItemIntoFolderParams } from '@app/inventory/write/infra/clients/nestjs/params/move-item-into-folder.params';
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { MoveItemIntoFolderDto } from '@app/inventory/write/infra/clients/nestjs/dtos/move-item-into-folder.dto';
+import { RemoveItemTagUseCase } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
 
 @Controller('items')
 export class WriteItemsController {
   constructor(
     private readonly createNewItemUseCase: CreateNewItemUseCase,
     private readonly addTagToItemUseCase: AddTagToItemUseCase,
-    private readonly removeItemTagUseCase: AddTagToItemUseCase,
+    private readonly removeItemTagUseCase: RemoveItemTagUseCase,
     private readonly moveItemIntoFolderUseCase: MoveItemIntoFolderUseCase,
   ) {}
 
