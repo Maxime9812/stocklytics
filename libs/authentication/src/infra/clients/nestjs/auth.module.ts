@@ -14,9 +14,10 @@ import * as session from 'express-session';
 import RedisStore from 'connect-redis';
 import { default as Redis } from 'ioredis';
 import { redisConfig } from '@app/authentication/infra/redis-config/redis.config';
+import { AuthUseCasesModule } from '@app/authentication/infra/clients/nestjs/auth-usecases.module';
 
 @Module({
-  imports: [AuthGatewaysModule],
+  imports: [AuthGatewaysModule, AuthUseCasesModule],
   controllers: [AuthController],
   providers: [
     {
