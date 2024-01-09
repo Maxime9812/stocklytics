@@ -1,8 +1,12 @@
 import { AuthGateway } from '@app/authentication';
+import { Store } from 'express-session';
 
-export class RedisStoreAuthGateway implements AuthGateway {
+export class RequestSessionAuthGateway implements AuthGateway {
   private readonly session: { userId: string; id: string };
-  constructor(request: Request) {
+  constructor(
+    request: Request,
+    private readonly redisStore: Store,
+  ) {
     this.session = (request as any).session as { userId: string; id: string };
   }
 
@@ -21,4 +25,8 @@ export class RedisStoreAuthGateway implements AuthGateway {
   setCompanyId(companyId: string): void {}
 
   setCurrentUserId(userId: string): void {}
+
+  async logout(): Promise<void> {
+    this.redisStore.destroy(this.session.id);
+  }
 }

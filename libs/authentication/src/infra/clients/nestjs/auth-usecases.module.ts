@@ -7,6 +7,7 @@ import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-ha
 import { UuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/uuid-generator';
 import { AuthGateway } from '@app/authentication';
 import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.usecase';
+import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logout.usecase';
 
 @Module({
   imports: [AuthGatewaysModule],
@@ -45,7 +46,13 @@ import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.u
         authGateway: AuthGateway,
       ) => new LoginUseCase(usersRepository, authGateway, passwordHasher),
     },
+
+    {
+      provide: LogoutUseCase,
+      inject: ['AuthGateway'],
+      useFactory: (authGateway: AuthGateway) => new LogoutUseCase(authGateway),
+    },
   ],
-  exports: [RegisterUserUseCase, LoginUseCase],
+  exports: [RegisterUserUseCase, LoginUseCase, LogoutUseCase],
 })
 export class AuthUseCasesModule {}

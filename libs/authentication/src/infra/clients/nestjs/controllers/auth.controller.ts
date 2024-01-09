@@ -4,12 +4,14 @@ import { RegisterUserDto } from '@app/authentication/infra/clients/nestjs/dtos/r
 import { RegisterUserUseCase } from '@app/authentication/hexagon/usecases/register-user/register-user.usecase';
 import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.usecase';
 import { LoginDto } from '@app/authentication/infra/clients/nestjs/dtos/login.dto';
+import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logout.usecase';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly loginUseCase: LoginUseCase,
+    private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
   @Public()
@@ -30,5 +32,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout() {}
+  async logout() {
+    await this.logoutUseCase.execute();
+  }
 }
