@@ -1,7 +1,6 @@
 import knex, { Knex } from 'knex';
 import { knexConfig } from '@app/shared';
 import { resetDB } from '../../../../../../../../test/docker-manager';
-import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { FolderPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/folder.pm';
 import { folderBuilder } from '@app/inventory/write/hexagon/__tests__/builders/folder.builder';
 import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-folders.repository';

@@ -4,8 +4,12 @@ import { InMemoryUsersRepository } from '@app/authentication/infra/gateways/repo
 import { RealDateProvider } from '@app/authentication/hexagon/models/date-provider/real-date.provider';
 import { CryptoUuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/crypto-uuid-generator';
 import { BcryptPasswordHasher } from '@app/authentication/infra/gateways/password-hashing/bcrypt-password-hasher';
+import { DatabaseModule } from '@app/shared';
+import { KnexUsersRepository } from '@app/authentication/infra/gateways/repositories/knex/knex-users.repository';
+import { Knex } from 'knex';
 
 @Module({
+  imports: [DatabaseModule],
   providers: [
     {
       provide: 'AuthGateway',
@@ -14,7 +18,9 @@ import { BcryptPasswordHasher } from '@app/authentication/infra/gateways/passwor
     },
     {
       provide: 'UsersRepository',
-      useClass: InMemoryUsersRepository,
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexUsersRepository(sqlConnection),
     },
     {
       provide: 'DateProvider',

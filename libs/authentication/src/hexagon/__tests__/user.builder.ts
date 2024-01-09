@@ -2,7 +2,7 @@ import { User, UserSnapshot } from '@app/authentication/hexagon/models/user';
 
 export const userBuilder = (
   snapshot: UserSnapshot = {
-    id: '1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a',
+    id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
     email: 'john.doe@gmail.com',
     password: 'encrypted-password',
     salt: 'salt',
