@@ -1,8 +1,9 @@
 import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
+import { User } from '@app/authentication/hexagon/models/user';
 
 export class InMemoryAuthGateway implements AuthGateway {
   private companyId: string;
-  private userId: string;
+  private _userId: string;
 
   constructor() {}
   getCompanyId() {
@@ -18,10 +19,18 @@ export class InMemoryAuthGateway implements AuthGateway {
   }
 
   currentUserId(): string {
-    return this.userId;
+    return this._userId;
   }
 
   setCurrentUserId(userId: string): void {
-    this.userId = userId;
+    this._userId = userId;
+  }
+
+  get userId(): string {
+    return this._userId;
+  }
+
+  async login(userId: string): Promise<void> {
+    this._userId = userId;
   }
 }

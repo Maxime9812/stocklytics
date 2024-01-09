@@ -3,6 +3,7 @@ import { DateProvider } from '@app/authentication/hexagon/models/date-provider/d
 import { User } from '@app/authentication/hexagon/models/user';
 import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-hasher';
 import { UuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/uuid-generator';
+import { AuthGateway } from '@app/authentication';
 
 export type RegisterUserUseCasePayload = {
   email: string;
@@ -15,12 +16,10 @@ export class RegisterUserUseCase {
     private readonly dateProvide: DateProvider,
     private readonly passwordHasher: PasswordHasher,
     private readonly uuidGenerator: UuidGenerator,
+    private readonly authGateway: AuthGateway,
   ) {}
 
-  async execute({
-    email,
-    password,
-  }: RegisterUserUseCasePayload): Promise<string> {
+  async execute({ email, password }: RegisterUserUseCasePayload) {
     const userWithSameEmail = await this.usersRepository.getByEmail(email);
     const userAlreadyExists = !!userWithSameEmail;
     if (userAlreadyExists) return;
@@ -34,6 +33,6 @@ export class RegisterUserUseCase {
 
     await this.usersRepository.save(user);
 
-    return user.id;
+    await this.authGateway.login(user.id);
   }
 }

@@ -7,9 +7,15 @@ import {
 } from '@app/authentication/hexagon/usecases/register-user/register-user.usecase';
 import { StubPasswordHasher } from '@app/authentication/infra/gateways/password-hashing/stub-password-hasher';
 import { StubUuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/stub-uuid-generator';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
 
-export const createUsersFixture = () => {
-  const usersRepository = new InMemoryUsersRepository();
+export const createUsersFixture = ({
+  usersRepository = new InMemoryUsersRepository(),
+  authGateway = new InMemoryAuthGateway(),
+}: Partial<{
+  usersRepository: InMemoryUsersRepository;
+  authGateway: InMemoryAuthGateway;
+}> = {}) => {
   const dateProvider = new StubDateProvider();
   const passwordHasher = new StubPasswordHasher();
   const uuidGenerator = new StubUuidGenerator();
@@ -33,6 +39,7 @@ export const createUsersFixture = () => {
         dateProvider,
         passwordHasher,
         uuidGenerator,
+        authGateway,
       ).execute(payload);
     },
     thenUsersShouldBe(users: User[]) {

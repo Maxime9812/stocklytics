@@ -5,6 +5,14 @@ export class User {
     return this.props.id;
   }
 
+  get email() {
+    return this.props.email;
+  }
+
+  get password() {
+    return this.props.password;
+  }
+
   get snapshot(): UserSnapshot {
     return {
       id: this.props.id,

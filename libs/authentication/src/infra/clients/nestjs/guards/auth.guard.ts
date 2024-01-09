@@ -21,11 +21,6 @@ export class AuthGuard implements CanActivate {
       .switchToHttp()
       .getRequest().session;
 
-    if (!session || !session.userId) {
-      return false;
-    }
-
-    this.authGateway.setCompanyId(session.userId);
-    return true;
+    return !(!session || !session.userId);
   }
 }

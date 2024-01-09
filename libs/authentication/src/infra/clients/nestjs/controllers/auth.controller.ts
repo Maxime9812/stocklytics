@@ -20,13 +20,10 @@ export class AuthController {
     @Body() body: RegisterUserDto,
   ) {
     const { email, password } = body;
-    const id = await this.registerUserUseCase.execute({
+    await this.registerUserUseCase.execute({
       email,
       password,
     });
-
-    if (!id) return;
-    sess.userId = id;
   }
 
   @Post('logout')

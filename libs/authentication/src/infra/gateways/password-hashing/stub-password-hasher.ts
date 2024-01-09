@@ -2,13 +2,21 @@ import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-ha
 
 export class StubPasswordHasher implements PasswordHasher {
   private hashedPasswords: Map<string, string> = new Map();
+  private compareResults: Map<string, boolean> = new Map();
 
   hash(password: string): string {
     return this.hashedPasswords.get(password);
   }
 
   compare(password: string, hash: string): boolean {
-    return false;
+    return this.compareResults.get(`${password}-${hash}`);
+  }
+
+  givenCompareResult(
+    params: { password: string; hash: string },
+    result: boolean,
+  ) {
+    this.compareResults.set(`${params.password}-${params.hash}`, result);
   }
 
   givenHashedPassword(password: string, hashedPassword: string) {
