@@ -13,12 +13,7 @@ describe('Feature: Register User', () => {
 
   test('User is registered', async () => {
     authFixture.givenNowIs(new Date('2024-01-01'));
-    authFixture.givenSalt('salt');
-    authFixture.givenHashedPassword({
-      password: 'password',
-      salt: 'salt',
-      hashedPassword: 'encrypted-password',
-    });
+    authFixture.givenHashedPassword('password', 'encrypted-password');
     authFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
 
     await authFixture.whenRegisterUser({
@@ -32,7 +27,6 @@ describe('Feature: Register User', () => {
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
         .createdAt(new Date('2024-01-01'))
-        .whitSalt('salt')
         .build(),
     ]);
   });

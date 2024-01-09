@@ -30,7 +30,6 @@ describe('KnexUsersRepository', () => {
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
         .createdAt(new Date('2024-01-01'))
-        .whitSalt('salt')
         .build();
 
       await usersRepository.save(user);
@@ -40,7 +39,6 @@ describe('KnexUsersRepository', () => {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'john.doe@gmail.com',
           password: 'encrypted-password',
-          salt: 'salt',
           createdAt: new Date('2024-01-01'),
         },
       ]);
@@ -51,8 +49,7 @@ describe('KnexUsersRepository', () => {
         .withId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
-        .createdAt(new Date('2024-01-01'))
-        .whitSalt('salt');
+        .createdAt(new Date('2024-01-01'));
       await insertUser(initialUserBuilder.build());
 
       const user = initialUserBuilder
@@ -66,7 +63,6 @@ describe('KnexUsersRepository', () => {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'changed-email@gmail.com',
           password: 'encrypted-password',
-          salt: 'salt',
           createdAt: new Date('2024-01-01'),
         },
       ]);
@@ -89,12 +85,11 @@ describe('KnexUsersRepository', () => {
   });
 
   const insertUser = async (user: User) => {
-    const { id, email, password, salt, createdAt } = user.snapshot;
+    const { id, email, password, createdAt } = user.snapshot;
     await sqlConnection('users').insert({
       id,
       email,
       password,
-      salt,
       createdAt,
     });
   };

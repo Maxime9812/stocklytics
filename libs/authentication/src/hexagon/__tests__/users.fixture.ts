@@ -21,23 +21,8 @@ export const createUsersFixture = () => {
     givenUuid(uuid: string) {
       uuidGenerator.givenUuid(uuid);
     },
-    givenSalt(salt: string) {
-      passwordHasher.givenSalt(salt);
-    },
-    givenHashedPassword({
-      password,
-      hashedPassword,
-      salt,
-    }: {
-      password: string;
-      hashedPassword: string;
-      salt: string;
-    }) {
-      passwordHasher.givenHashedPassword({
-        password,
-        hashedPassword,
-        salt,
-      });
+    givenHashedPassword(password: string, hashedPassword: string) {
+      passwordHasher.givenHashedPassword(password, hashedPassword);
     },
     givenUsers(users: User[]) {
       usersRepository.givenUsers(users);

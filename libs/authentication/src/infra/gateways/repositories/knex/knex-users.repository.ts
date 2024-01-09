@@ -6,13 +6,12 @@ export class KnexUsersRepository implements UsersRepository {
   constructor(private readonly knex: Knex) {}
 
   async save(user: User): Promise<void> {
-    const { id, email, password, salt, createdAt } = user.snapshot;
+    const { id, email, password, createdAt } = user.snapshot;
     await this.knex('users')
       .insert({
         id,
         email,
         password,
-        salt,
         createdAt,
       })
       .onConflict('id')

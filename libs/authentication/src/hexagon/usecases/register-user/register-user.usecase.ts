@@ -25,12 +25,10 @@ export class RegisterUserUseCase {
     const userAlreadyExists = !!userWithSameEmail;
     if (userAlreadyExists) return;
 
-    const salt = this.passwordHasher.generateSalt();
     const user = User.create({
       id: this.uuidGenerator.generate(),
       email,
-      salt,
-      password: this.passwordHasher.hash(password, salt),
+      password: this.passwordHasher.hash(password),
       currentDate: this.dateProvide.getNow(),
     });
 
