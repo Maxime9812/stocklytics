@@ -6,6 +6,7 @@ import { DateProvider } from '@app/authentication/hexagon/models/date-provider/d
 import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-hasher';
 import { UuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/uuid-generator';
 import { AuthGateway } from '@app/authentication';
+import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.usecase';
 
 @Module({
   imports: [AuthGatewaysModule],
@@ -34,7 +35,17 @@ import { AuthGateway } from '@app/authentication';
           authGateway,
         ),
     },
+
+    {
+      provide: LoginUseCase,
+      inject: ['UsersRepository', 'PasswordHasher', 'AuthGateway'],
+      useFactory: (
+        usersRepository: UsersRepository,
+        passwordHasher: PasswordHasher,
+        authGateway: AuthGateway,
+      ) => new LoginUseCase(usersRepository, authGateway, passwordHasher),
+    },
   ],
-  exports: [RegisterUserUseCase],
+  exports: [RegisterUserUseCase, LoginUseCase],
 })
 export class AuthUseCasesModule {}

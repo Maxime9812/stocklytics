@@ -1,24 +1,27 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { Public } from '@app/authentication/infra/clients/nestjs/metadata/public.metadata';
 import { RegisterUserDto } from '@app/authentication/infra/clients/nestjs/dtos/register-user.dto';
 import { RegisterUserUseCase } from '@app/authentication/hexagon/usecases/register-user/register-user.usecase';
+import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.usecase';
+import { LoginDto } from '@app/authentication/infra/clients/nestjs/dtos/login.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly loginUseCase: LoginUseCase,
+  ) {}
 
   @Public()
   @Post('login')
-  login(@Session() sess: Record<string, any>) {
-    sess.userId = 'f86a8562-8d11-429b-9dd0-0dbb0e69bc7a';
+  async login(@Body() body: LoginDto) {
+    const { email, password } = body;
+    await this.loginUseCase.execute({ email, password });
   }
 
   @Public()
   @Post('register')
-  async register(
-    @Session() sess: Record<string, any>,
-    @Body() body: RegisterUserDto,
-  ) {
+  async register(@Body() body: RegisterUserDto) {
     const { email, password } = body;
     await this.registerUserUseCase.execute({
       email,
@@ -27,7 +30,5 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout(@Session() sess: Record<string, any>) {
-    sess.userId = null;
-  }
+  logout() {}
 }
