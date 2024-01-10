@@ -16,11 +16,13 @@ export class CreateNewFolderUseCase {
     private readonly dateProvider: DateProvider,
   ) {}
   async execute({ id, name, parentId }: CreateNewFolderUseCasePayload) {
+    const currentUser = this.authGateway.currentUser();
+
     const folderWithSameNameInParentFolderExists =
       await this.foldersRepository.folderWithNameInParentFolderExists({
         name,
         parentId,
-        companyId: this.authGateway.getCompanyId(),
+        companyId: currentUser.companyId,
       });
 
     if (folderWithSameNameInParentFolderExists) return;
@@ -29,7 +31,7 @@ export class CreateNewFolderUseCase {
       id,
       name,
       parentId,
-      companyId: this.authGateway.getCompanyId(),
+      companyId: currentUser.companyId,
       currentDate: this.dateProvider.getNow(),
     });
 

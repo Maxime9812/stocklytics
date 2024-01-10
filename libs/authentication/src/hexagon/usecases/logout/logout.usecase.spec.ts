@@ -11,7 +11,10 @@ describe('Feature: logout', () => {
   });
 
   test('User is logout', async () => {
-    authFixture.givenUserIsLoggedInAs('c5b235db-d6d1-4191-8fa7-a33cf301e20e');
+    authFixture.givenUserIsLoggedInAs({
+      id: 'c5b235db-d6d1-4191-8fa7-a33cf301e20e',
+      companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
+    });
 
     await authFixture.whenLogout();
 

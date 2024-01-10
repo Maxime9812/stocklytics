@@ -46,7 +46,10 @@ export class RegisterUserUseCase {
       await this.usersRepository.save(user)(trx);
       await this.companiesRepository.save(company)(trx);
 
-      await this.authGateway.login(user.id);
+      await this.authGateway.login({
+        id: user.id,
+        companyId: user.companyId,
+      });
     });
   }
 }

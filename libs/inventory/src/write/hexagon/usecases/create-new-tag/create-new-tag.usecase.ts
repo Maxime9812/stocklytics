@@ -14,6 +14,8 @@ export class CreateNewTagUseCase {
     private readonly authGateway: AuthGateway,
   ) {}
   async execute({ id, name }: CreateNewTagUseCasePayload) {
+    const currentUser = this.authGateway.currentUser();
+
     const tagWithSameNameExists =
       await this.tagsRepository.tagWithNameExists(name);
 
@@ -22,7 +24,7 @@ export class CreateNewTagUseCase {
     const tag = Tag.create({
       id,
       name,
-      companyId: this.authGateway.getCompanyId(),
+      companyId: currentUser.companyId,
       currentDate: this.dateProvider.getNow(),
     });
 

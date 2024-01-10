@@ -3,16 +3,27 @@ import {
   createTagsFixture,
   TagsFixture,
 } from '@app/inventory/write/hexagon/__tests__/fixtures/tags.fixture';
+import {
+  AuthFixture,
+  createAuthFixture,
+} from '@app/inventory/write/hexagon/__tests__/fixtures/auth.fixture';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 
 describe('Feature: Create new tag', () => {
   let tagsFixture: TagsFixture;
+  let authFixture: AuthFixture;
 
   beforeEach(() => {
-    tagsFixture = createTagsFixture();
+    const authGateway = new InMemoryAuthGateway();
+    tagsFixture = createTagsFixture({ authGateway });
+    authFixture = createAuthFixture({ authGateway });
   });
 
   test('Tag is created', async () => {
-    tagsFixture.givenCompanyId('company-id');
+    authFixture.givenAuthUser({
+      id: 'user-id',
+      companyId: 'company-id',
+    });
     tagsFixture.givenNowIs(new Date('2024-01-01'));
 
     await tagsFixture.whenCreateNewTag({
@@ -34,7 +45,10 @@ describe('Feature: Create new tag', () => {
     test('Tag is not created', async () => {
       const initialTag = tagBuilder().withName('Phone').build();
       tagsFixture.givenTags(initialTag);
-      tagsFixture.givenCompanyId('company-id');
+      authFixture.givenAuthUser({
+        id: 'user-id',
+        companyId: 'company-id',
+      });
       tagsFixture.givenNowIs(new Date('2024-01-01'));
       await tagsFixture.whenCreateNewTag({
         id: '123456',

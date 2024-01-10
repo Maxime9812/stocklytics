@@ -26,12 +26,13 @@ import { TransactionPerformer } from '@app/shared/transaction-performing/transac
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
   foldersRepository = new InMemoryFoldersRepository(),
+  authGateway = new InMemoryAuthGateway(),
 }: Partial<{
   tagsRepository: InMemoryTagsRepository;
   foldersRepository: InMemoryFoldersRepository;
+  authGateway: InMemoryAuthGateway;
 }> = {}) => {
   const itemsRepository = new InMemoryItemsRepository();
-  const authGateway = new InMemoryAuthGateway();
   const dateProvider = new StubDateProvider();
   let transactionPerformer: TransactionPerformer =
     new NullTransformationPerformer();
@@ -39,9 +40,6 @@ export const createItemsFixture = ({
   return {
     givenNowIs(date: Date) {
       dateProvider.givenNow(date);
-    },
-    givenCompanyId(companyId: string) {
-      authGateway.givenCompanyId(companyId);
     },
     givenItems(...items: Item[]) {
       itemsRepository.givenItems(...items);

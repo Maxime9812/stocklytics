@@ -24,6 +24,7 @@ describe('Feature: Login', () => {
       .withId('c5b235db-d6d1-4191-8fa7-a33cf301e20e')
       .withEmail('john.doe@gmail.com')
       .withPassword('hashed-password')
+      .withCompanyId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
       .build();
 
     authFixture.givenPasswordCompareResult(
@@ -38,7 +39,10 @@ describe('Feature: Login', () => {
       password: 'password',
     });
 
-    authFixture.thenUserIsLoggedInAs('c5b235db-d6d1-4191-8fa7-a33cf301e20e');
+    authFixture.thenUserIsLoggedInAs({
+      id: 'c5b235db-d6d1-4191-8fa7-a33cf301e20e',
+      companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
+    });
   });
 
   test('User cannot login with wrong password', async () => {

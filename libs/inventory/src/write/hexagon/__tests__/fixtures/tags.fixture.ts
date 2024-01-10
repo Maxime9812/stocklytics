@@ -9,19 +9,17 @@ import { Tag } from '@app/inventory/write/hexagon/models/tag';
 
 export const createTagsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
+  authGateway = new InMemoryAuthGateway(),
 }: Partial<{
   tagsRepository: InMemoryTagsRepository;
+  authGateway: InMemoryAuthGateway;
 }> = {}) => {
-  const authGateway = new InMemoryAuthGateway();
   const dateProvider = new StubDateProvider();
   let createNewTagUseCase: CreateNewTagUseCase;
 
   return {
     givenNowIs(date: Date) {
       dateProvider.givenNow(date);
-    },
-    givenCompanyId(companyId: string) {
-      authGateway.givenCompanyId(companyId);
     },
     givenTags(...tags: Tag[]) {
       tagsRepository.givenTags(...tags);

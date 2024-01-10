@@ -1,43 +1,28 @@
-import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
+import {
+  AuthGateway,
+  AuthUser,
+} from '@app/authentication/hexagon/gateways/auth.gateway';
 
 export class InMemoryAuthGateway implements AuthGateway {
-  private companyId: string;
-  private _userId: string;
+  private _authUser: AuthUser;
 
-  constructor() {}
-  getCompanyId() {
-    return this.companyId;
+  givenAuthUser(authUser: AuthUser) {
+    this._authUser = authUser;
   }
 
-  givenCompanyId(companyId: string) {
-    this.companyId = companyId;
+  get authUser() {
+    return this._authUser;
   }
 
-  setCompanyId(companyId: string): void {
-    this.companyId = companyId;
-  }
-
-  currentUserId(): string {
-    return this._userId;
-  }
-
-  setCurrentUserId(userId: string): void {
-    this._userId = userId;
-  }
-
-  get userId(): string {
-    return this._userId;
-  }
-
-  async login(userId: string): Promise<void> {
-    this._userId = userId;
-  }
-
-  givenUserId(userId: string) {
-    this._userId = userId;
+  async login(authUser: AuthUser): Promise<void> {
+    this._authUser = authUser;
   }
 
   async logout(): Promise<void> {
-    this._userId = undefined;
+    this._authUser = undefined;
+  }
+
+  currentUser(): AuthUser {
+    return this._authUser;
   }
 }

@@ -20,9 +20,11 @@ export class CreateNewItemUseCase {
 
   async execute(payload: CreateNewItemUseCasePayload) {
     await this.transactionPerformer.perform(async (trx) => {
+      const currentUser = this.authGateway.currentUser();
+
       const item = Item.create({
         id: payload.id,
-        companyId: this.authGateway.getCompanyId(),
+        companyId: currentUser.companyId,
         name: payload.name,
         quantity: payload.quantity,
         currentDate: this.dateProvider.getNow(),

@@ -21,7 +21,10 @@ describe('Feature: Create new folder', () => {
 
   test('Folder is created', async () => {
     foldersFixture.givenNowIs(new Date('2024-01-01'));
-    authFixture.givenCompanyId('company-id');
+    authFixture.givenAuthUser({
+      id: 'user-id',
+      companyId: 'company-id',
+    });
     await foldersFixture.whenCreateNewFolder({
       id: 'folder-id',
       name: 'Electronics',
@@ -39,7 +42,10 @@ describe('Feature: Create new folder', () => {
 
   test('Folder is created and attached to parent', async () => {
     foldersFixture.givenNowIs(new Date('2024-01-01'));
-    authFixture.givenCompanyId('company-id');
+    authFixture.givenAuthUser({
+      id: 'user-id',
+      companyId: 'company-id',
+    });
     await foldersFixture.whenCreateNewFolder({
       id: 'folder-id',
       name: 'Electronics',
@@ -68,7 +74,10 @@ describe('Feature: Create new folder', () => {
 
       foldersFixture.givenFolders(alreadyCreatedFolderBuilder.build());
       foldersFixture.givenNowIs(new Date('2024-01-01'));
-      authFixture.givenCompanyId('company-id');
+      authFixture.givenAuthUser({
+        id: 'user-id',
+        companyId: 'company-id',
+      });
       await foldersFixture.whenCreateNewFolder({
         id: 'folder-id-2',
         name: 'Electronics',

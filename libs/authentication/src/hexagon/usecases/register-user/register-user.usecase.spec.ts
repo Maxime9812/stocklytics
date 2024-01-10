@@ -96,7 +96,10 @@ describe('Feature: Register User', () => {
         password: 'password',
       });
 
-      authFixture.thenUserIsLoggedInAs('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
+      authFixture.thenUserIsLoggedInAs({
+        id: '1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a',
+        companyId: '1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a',
+      });
     });
   });
 

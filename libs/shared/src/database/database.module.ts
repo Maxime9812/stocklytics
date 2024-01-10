@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import knex, { Knex } from 'knex';
 import knexConfig from './knexfile';
-import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
+import { KnexTransactionPerformer } from '../transaction-performing/knex-transacrion-performer';
 
 @Module({
   providers: [

@@ -4,16 +4,27 @@ import {
 } from '@app/inventory/write/hexagon/__tests__/fixtures/items.fixture';
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
+import {
+  AuthFixture,
+  createAuthFixture,
+} from '@app/inventory/write/hexagon/__tests__/fixtures/auth.fixture';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 
 describe('Feature: Create new item', () => {
   let itemsFixture: ItemsFixture;
+  let authFixture: AuthFixture;
 
   beforeEach(() => {
-    itemsFixture = createItemsFixture();
+    const authGateway = new InMemoryAuthGateway();
+    itemsFixture = createItemsFixture({ authGateway });
+    authFixture = createAuthFixture({ authGateway });
   });
 
   test('Scenario: Item is created', async () => {
-    itemsFixture.givenCompanyId('company-id');
+    authFixture.givenAuthUser({
+      id: 'user-id',
+      companyId: 'company-id',
+    });
     itemsFixture.givenNowIs(new Date('2023-12-23'));
 
     await itemsFixture.whenCreateNewItem({
@@ -33,7 +44,10 @@ describe('Feature: Create new item', () => {
   });
 
   test('Create item is transactional', async () => {
-    itemsFixture.givenCompanyId('company-id');
+    authFixture.givenAuthUser({
+      id: 'user-id',
+      companyId: 'company-id',
+    });
     itemsFixture.givenNowIs(new Date('2023-12-23'));
     itemsFixture.givenTransactionPerformer(new DroppingTransactionPerformer());
 

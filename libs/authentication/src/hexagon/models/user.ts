@@ -13,6 +13,10 @@ export class User {
     return this.props.password;
   }
 
+  get companyId() {
+    return this.props.companyId;
+  }
+
   get snapshot(): UserSnapshot {
     return {
       id: this.props.id,

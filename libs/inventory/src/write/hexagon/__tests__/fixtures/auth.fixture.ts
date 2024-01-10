@@ -1,4 +1,5 @@
 import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
+import { AuthUser } from '@app/authentication';
 
 export const createAuthFixture = ({
   authGateway = new InMemoryAuthGateway(),
@@ -6,8 +7,8 @@ export const createAuthFixture = ({
   authGateway: InMemoryAuthGateway;
 }> = {}) => {
   return {
-    givenCompanyId: (companyId: string) => {
-      authGateway.givenCompanyId(companyId);
+    givenAuthUser: (authUser: AuthUser) => {
+      authGateway.givenAuthUser(authUser);
     },
   };
 };

@@ -26,6 +26,9 @@ export class LoginUseCase {
 
     if (passwordIsInvalid) return;
 
-    await this.authGateway.login(user.id);
+    await this.authGateway.login({
+      id: user.id,
+      companyId: user.companyId,
+    });
   }
 }
