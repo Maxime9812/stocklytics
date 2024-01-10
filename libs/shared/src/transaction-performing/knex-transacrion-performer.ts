@@ -1,7 +1,7 @@
 import {
   GenericTransaction,
   TransactionPerformer,
-} from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+} from '@app/shared/transaction-performing/transaction-performer';
 import { Knex } from 'knex';
 
 export class KnexTransactionPerformer implements TransactionPerformer {

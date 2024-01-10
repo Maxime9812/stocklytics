@@ -5,7 +5,7 @@ import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/pe
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-items.repository';
 import { Item } from '@app/inventory/write/hexagon/models/item';
-import { KnexTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/knex-transacrion-performer';
+import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
 
 describe('KnexItemsRepository', () => {
   let sqlConnection: Knex;

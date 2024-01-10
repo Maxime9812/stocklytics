@@ -1,22 +1,32 @@
 import {
   UsersFixture,
   createUsersFixture,
-} from '@app/authentication/hexagon/__tests__/users.fixture';
-import { userBuilder } from '@app/authentication/hexagon/__tests__/user.builder';
+} from '@app/authentication/hexagon/__tests__/fixtures/users.fixture';
+import { userBuilder } from '@app/authentication/hexagon/__tests__/builders/user.builder';
 import {
   AuthFixture,
   createAuthFixture,
-} from '@app/authentication/hexagon/__tests__/auth.fixture';
-import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+} from '@app/authentication/hexagon/__tests__/fixtures/auth.fixture';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
+import {
+  CompaniesFixture,
+  createCompaniesFixture,
+} from '@app/authentication/hexagon/__tests__/fixtures/companies.fixture';
+import { InMemoryCompaniesRepository } from '@app/authentication/infra/gateways/repositories/in-memory-companies.repository';
+import { companyBuilder } from '@app/authentication/hexagon/__tests__/builders/company.builder';
+import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Register User', () => {
   let usersFixture: UsersFixture;
   let authFixture: AuthFixture;
+  let companiesFixture: CompaniesFixture;
 
   beforeEach(() => {
     const authGateway = new InMemoryAuthGateway();
-    usersFixture = createUsersFixture({ authGateway });
+    const companiesRepository = new InMemoryCompaniesRepository();
+    usersFixture = createUsersFixture({ authGateway, companiesRepository });
     authFixture = createAuthFixture({ authGateway });
+    companiesFixture = createCompaniesFixture({ companiesRepository });
   });
 
   test('User is registered', async () => {
@@ -34,6 +44,26 @@ describe('Feature: Register User', () => {
         .withId('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a')
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
+        .createdAt(new Date('2024-01-01'))
+        .withCompanyId('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a')
+        .build(),
+    ]);
+  });
+
+  test('Company is created for the user', async () => {
+    usersFixture.givenNowIs(new Date('2024-01-01'));
+    usersFixture.givenHashedPassword('password', 'encrypted-password');
+    usersFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
+
+    await usersFixture.whenRegisterUser({
+      email: 'john.doe@gmail.com',
+      password: 'password',
+    });
+
+    companiesFixture.thenCompaniesShouldBe([
+      companyBuilder()
+        .withId('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a')
+        .withName('')
         .createdAt(new Date('2024-01-01'))
         .build(),
     ]);
@@ -68,5 +98,19 @@ describe('Feature: Register User', () => {
 
       authFixture.thenUserIsLoggedInAs('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
     });
+  });
+
+  it('Should make transactional the process of registering a user', async () => {
+    usersFixture.givenNowIs(new Date('2024-01-01'));
+    usersFixture.givenHashedPassword('password', 'encrypted-password');
+    usersFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
+    usersFixture.givenTransactionPerformer(new DroppingTransactionPerformer());
+
+    await usersFixture.whenRegisterUser({
+      email: 'john.doe@gmail.com',
+      password: 'password',
+    });
+
+    usersFixture.thenUsersShouldBe([]);
   });
 });

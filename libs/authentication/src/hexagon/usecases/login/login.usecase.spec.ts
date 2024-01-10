@@ -1,12 +1,12 @@
 import {
   createUsersFixture,
   UsersFixture,
-} from '@app/authentication/hexagon/__tests__/users.fixture';
+} from '@app/authentication/hexagon/__tests__/fixtures/users.fixture';
 import {
   AuthFixture,
   createAuthFixture,
-} from '@app/authentication/hexagon/__tests__/auth.fixture';
-import { userBuilder } from '@app/authentication/hexagon/__tests__/user.builder';
+} from '@app/authentication/hexagon/__tests__/fixtures/auth.fixture';
+import { userBuilder } from '@app/authentication/hexagon/__tests__/builders/user.builder';
 import { InMemoryUsersRepository } from '@app/authentication/infra/gateways/repositories/in-memory-users.repository';
 
 describe('Feature: Login', () => {

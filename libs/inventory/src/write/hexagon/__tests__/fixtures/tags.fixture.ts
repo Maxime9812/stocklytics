@@ -1,5 +1,5 @@
 import { InMemoryTagsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-tags.repository';
-import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 import { StubDateProvider } from '@app/inventory/write/hexagon/models/date-provider/stub-date.provider';
 import {
   CreateNewTagUseCase,

@@ -1,6 +1,6 @@
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/repositories/folders.repository';
-import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 export type MoveItemIntoFolderUseCasePayload = {
   itemId: string;

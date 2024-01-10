@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthGatewaysModule } from '@app/authentication/infra/clients/nestjs/auth-gateways.module';
 import { RegisterUserUseCase } from '@app/authentication/hexagon/usecases/register-user/register-user.usecase';
-import { UsersRepository } from '@app/authentication/hexagon/gateways/users.repository';
+import { UsersRepository } from '@app/authentication/hexagon/gateways/repositories/users.repository';
 import { DateProvider } from '@app/authentication/hexagon/models/date-provider/date.provider';
 import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-hasher';
 import { UuidGenerator } from '@app/authentication/hexagon/models/uuid-generator/uuid-generator';

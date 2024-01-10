@@ -1,5 +1,5 @@
 import { InMemoryItemsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-items.repository';
-import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 import { StubDateProvider } from '@app/inventory/write/hexagon/models/date-provider/stub-date.provider';
 import {
   CreateNewItemUseCase,
@@ -20,8 +20,8 @@ import {
   RemoveItemTagUseCase,
   RemoveItemTagUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
-import { NullTransformationPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/null-transaction-performer';
-import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { NullTransformationPerformer } from '@app/shared/transaction-performing/null-transaction-performer';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),

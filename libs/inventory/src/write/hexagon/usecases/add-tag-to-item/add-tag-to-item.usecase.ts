@@ -1,6 +1,6 @@
 import { TagsRepository } from '@app/inventory/write/hexagon/gateways/repositories/tags.repository';
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
-import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 export type AddTagToItemUseCasePayload = {
   itemId: string;

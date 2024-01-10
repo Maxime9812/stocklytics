@@ -1,10 +1,13 @@
-import { UsersRepository } from '@app/authentication/hexagon/gateways/users.repository';
+import { UsersRepository } from '@app/authentication/hexagon/gateways/repositories/users.repository';
 import { User, UserSnapshot } from '@app/authentication/hexagon/models/user';
+import { TransactionalAsync } from '@app/shared/transaction-performing/transaction-performer';
 
 export class InMemoryUsersRepository implements UsersRepository {
   private _users: Map<string, UserSnapshot> = new Map();
-  async save(user: User): Promise<void> {
-    this._users.set(user.id, user.snapshot);
+  save(user: User): TransactionalAsync {
+    return async () => {
+      this._users.set(user.id, user.snapshot);
+    };
   }
 
   get users(): User[] {

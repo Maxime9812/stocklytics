@@ -2,7 +2,7 @@ import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositor
 import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/date.provider';
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { AuthGateway } from '@app/authentication';
-import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 export type CreateNewItemUseCasePayload = {
   id: string;

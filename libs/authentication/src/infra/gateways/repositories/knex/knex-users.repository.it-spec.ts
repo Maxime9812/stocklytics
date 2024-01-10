@@ -3,12 +3,14 @@ import { knexConfig } from '@app/shared';
 import { resetDB } from '../../../../../../../test/docker-manager';
 import { User } from '@app/authentication/hexagon/models/user';
 import { UserPm } from '@app/authentication/infra/gateways/repositories/knex/persistent-models/user.pm';
-import { userBuilder } from '@app/authentication/hexagon/__tests__/user.builder';
+import { userBuilder } from '@app/authentication/hexagon/__tests__/builders/user.builder';
 import { KnexUsersRepository } from '@app/authentication/infra/gateways/repositories/knex/knex-users.repository';
+import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
 
 describe('KnexUsersRepository', () => {
   let sqlConnection: Knex;
   let usersRepository: KnexUsersRepository;
+  let transactionPerformer: KnexTransactionPerformer;
 
   beforeAll(async () => {
     sqlConnection = knex(knexConfig.test);
@@ -21,6 +23,7 @@ describe('KnexUsersRepository', () => {
   beforeEach(async () => {
     await resetDB(sqlConnection);
     usersRepository = new KnexUsersRepository(sqlConnection);
+    transactionPerformer = new KnexTransactionPerformer(sqlConnection);
   });
 
   describe('save', () => {
@@ -30,15 +33,19 @@ describe('KnexUsersRepository', () => {
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
         .createdAt(new Date('2024-01-01'))
+        .withCompanyId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .build();
 
-      await usersRepository.save(user);
+      await transactionPerformer.perform(async (trx) => {
+        await usersRepository.save(user)(trx);
+      });
 
       expect(await findExistingUsers()).toEqual<UserPm[]>([
         {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'john.doe@gmail.com',
           password: 'encrypted-password',
+          companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           createdAt: new Date('2024-01-01'),
         },
       ]);
@@ -49,6 +56,7 @@ describe('KnexUsersRepository', () => {
         .withId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
+        .withCompanyId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .createdAt(new Date('2024-01-01'));
       await insertUser(initialUserBuilder.build());
 
@@ -56,12 +64,15 @@ describe('KnexUsersRepository', () => {
         .withEmail('changed-email@gmail.com')
         .build();
 
-      await usersRepository.save(user);
+      await transactionPerformer.perform(async (trx) => {
+        await usersRepository.save(user)(trx);
+      });
 
       expect(await findExistingUsers()).toEqual<UserPm[]>([
         {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'changed-email@gmail.com',
+          companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           password: 'encrypted-password',
           createdAt: new Date('2024-01-01'),
         },
@@ -85,11 +96,12 @@ describe('KnexUsersRepository', () => {
   });
 
   const insertUser = async (user: User) => {
-    const { id, email, password, createdAt } = user.snapshot;
+    const { id, email, password, createdAt, companyId } = user.snapshot;
     await sqlConnection('users').insert({
       id,
       email,
       password,
+      companyId,
       createdAt,
     });
   };

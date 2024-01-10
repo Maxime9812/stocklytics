@@ -14,7 +14,7 @@ import { FoldersRepository } from '@app/inventory/write/hexagon/gateways/reposit
 import { CreateNewTagUseCase } from '@app/inventory/write/hexagon/usecases/create-new-tag/create-new-tag.usecase';
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
-import { TransactionPerformer } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule],

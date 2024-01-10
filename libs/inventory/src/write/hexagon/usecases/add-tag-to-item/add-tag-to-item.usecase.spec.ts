@@ -9,7 +9,7 @@ import {
 import { InMemoryTagsRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-tags.repository';
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { tagBuilder } from '@app/inventory/write/hexagon/__tests__/builders/tag.builder';
-import { DroppingTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/dropping-transaction-performer';
+import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Add tag to item', () => {
   let tagsFixture: TagsFixture;

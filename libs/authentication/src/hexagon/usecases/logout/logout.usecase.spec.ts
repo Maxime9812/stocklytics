@@ -1,7 +1,7 @@
 import {
   AuthFixture,
   createAuthFixture,
-} from '@app/authentication/hexagon/__tests__/auth.fixture';
+} from '@app/authentication/hexagon/__tests__/fixtures/auth.fixture';
 
 describe('Feature: logout', () => {
   let authFixture: AuthFixture;

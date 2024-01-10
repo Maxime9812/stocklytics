@@ -5,7 +5,7 @@ import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/reposit
 import { Knex } from 'knex';
 import { KnexTagsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-tags.repository';
 import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-folders.repository';
-import { KnexTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/knex-transacrion-performer';
+import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
 
 @Module({
   imports: [DatabaseModule],

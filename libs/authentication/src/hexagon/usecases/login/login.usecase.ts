@@ -1,4 +1,4 @@
-import { UsersRepository } from '@app/authentication/hexagon/gateways/users.repository';
+import { UsersRepository } from '@app/authentication/hexagon/gateways/repositories/users.repository';
 import { AuthGateway } from '@app/authentication';
 import { PasswordHasher } from '@app/authentication/hexagon/gateways/password-hasher';
 

@@ -5,7 +5,7 @@ import { BcryptPasswordHasher } from '@app/authentication/infra/gateways/passwor
 import { DatabaseModule } from '@app/shared';
 import { KnexUsersRepository } from '@app/authentication/infra/gateways/repositories/knex/knex-users.repository';
 import { Knex } from 'knex';
-import { RequestSessionAuthGateway } from '@app/authentication/infra/gateways/request-session-auth.gateway';
+import { RequestSessionAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/request-session-auth.gateway';
 import { REQUEST } from '@nestjs/core';
 import { default as Redis } from 'ioredis/built/Redis';
 import { redisConfig } from '@app/authentication/infra/redis-config/redis.config';

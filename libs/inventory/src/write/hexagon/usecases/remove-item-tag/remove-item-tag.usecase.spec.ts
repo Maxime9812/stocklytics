@@ -3,7 +3,7 @@ import {
   ItemsFixture,
 } from '@app/inventory/write/hexagon/__tests__/fixtures/items.fixture';
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
-import { DroppingTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/dropping-transaction-performer';
+import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Remove item tag', () => {
   let itemsFixture: ItemsFixture;

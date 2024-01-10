@@ -9,7 +9,7 @@ import {
 import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/item.builder';
 import { folderBuilder } from '@app/inventory/write/hexagon/__tests__/builders/folder.builder';
 import { InMemoryFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-folders.repository';
-import { DroppingTransactionPerformer } from '@app/inventory/write/infra/gateways/transaction-performing/dropping-transaction-performer';
+import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
 
 describe('Feature: Move item into folder', () => {
   let itemsFixture: ItemsFixture;

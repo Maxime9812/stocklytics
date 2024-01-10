@@ -7,7 +7,7 @@ import {
   AuthFixture,
   createAuthFixture,
 } from '@app/inventory/write/hexagon/__tests__/fixtures/auth.fixture';
-import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 
 describe('Feature: Create new folder', () => {
   let foldersFixture: FoldersFixture;

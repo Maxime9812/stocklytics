@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
-import { TransactionalAsync } from '@app/inventory/write/hexagon/gateways/transaction-performing/transaction-performer';
+import { TransactionalAsync } from '@app/shared/transaction-performing/transaction-performer';
 
 export class KnexItemsRepository implements ItemsRepository {
   constructor(private readonly knex: Knex) {}

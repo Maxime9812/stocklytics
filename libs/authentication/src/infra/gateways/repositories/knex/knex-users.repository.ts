@@ -1,26 +1,38 @@
-import { UsersRepository } from '@app/authentication/hexagon/gateways/users.repository';
+import { UsersRepository } from '@app/authentication/hexagon/gateways/repositories/users.repository';
 import { Knex } from 'knex';
 import { User } from '@app/authentication/hexagon/models/user';
+import { TransactionalAsync } from '@app/shared/transaction-performing/transaction-performer';
+import { UserPm } from '@app/authentication/infra/gateways/repositories/knex/persistent-models/user.pm';
 
 export class KnexUsersRepository implements UsersRepository {
   constructor(private readonly knex: Knex) {}
 
-  async save(user: User): Promise<void> {
-    const { id, email, password, createdAt } = user.snapshot;
-    await this.knex('users')
-      .insert({
-        id,
-        email,
-        password,
-        createdAt,
-      })
-      .onConflict('id')
-      .merge();
+  save(user: User): TransactionalAsync {
+    return async (trx) => {
+      const { id, email, password, createdAt, companyId } = user.snapshot;
+      await this.knex('users')
+        .transacting(trx as Knex.Transaction)
+        .insert({
+          id,
+          email,
+          password,
+          companyId,
+          createdAt,
+        })
+        .onConflict('id')
+        .merge();
+    };
   }
 
   async getByEmail(email: string): Promise<User | undefined> {
-    const user = await this.knex('users').where({ email }).first();
+    const user = await this.knex<UserPm>('users').where({ email }).first();
     if (!user) return;
-    return User.fromSnapshot(user);
+    return User.fromSnapshot({
+      id: user.id,
+      email: user.email,
+      password: user.password,
+      companyId: user.companyId,
+      createdAt: user.createdAt,
+    });
   }
 }

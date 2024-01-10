@@ -1,4 +1,4 @@
-import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/in-memory-auth.gateway';
+import { InMemoryAuthGateway } from '@app/authentication/infra/gateways/auth-gateways/in-memory-auth.gateway';
 import { StubDateProvider } from '@app/inventory/write/hexagon/models/date-provider/stub-date.provider';
 import { Folder } from '@app/inventory/write/hexagon/models/folder';
 import { InMemoryFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/in-memory-folders.repository';
