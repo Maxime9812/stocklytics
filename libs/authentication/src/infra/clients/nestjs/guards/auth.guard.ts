@@ -1,5 +1,8 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthGateway } from '@app/authentication/hexagon/gateways/auth.gateway';
+import {
+  AuthGateway,
+  AuthUser,
+} from '@app/authentication/hexagon/gateways/auth.gateway';
 import { IS_PUBLIC_KEY } from '@app/authentication/infra/clients/nestjs/metadata/public.metadata';
 import { Reflector } from '@nestjs/core';
 
@@ -17,10 +20,10 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const session: { userId: string } = context
+    const session: { user: AuthUser } = context
       .switchToHttp()
       .getRequest().session;
 
-    return !(!session || !session.userId);
+    return !(!session || !session.user);
   }
 }
