@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import knex from 'knex';
+import knex, { Knex } from 'knex';
 import knexConfig from './knexfile';
+import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
 
 @Module({
   providers: [
@@ -12,7 +13,13 @@ import knexConfig from './knexfile';
           : knexConfig.development,
       ),
     },
+    {
+      provide: 'TransactionPerformer',
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexTransactionPerformer(sqlConnection),
+    },
   ],
-  exports: ['SqlConnection'],
+  exports: ['SqlConnection', 'TransactionPerformer'],
 })
 export class DatabaseModule {}

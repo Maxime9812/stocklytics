@@ -8,9 +8,12 @@ import { UuidGenerator } from '@app/authentication/hexagon/models/uuid-generator
 import { AuthGateway } from '@app/authentication';
 import { LoginUseCase } from '@app/authentication/hexagon/usecases/login/login.usecase';
 import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logout.usecase';
+import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
+import { CompaniesRepository } from '@app/authentication/hexagon/gateways/repositories/companies.repository';
+import { DatabaseModule } from '@app/shared';
 
 @Module({
-  imports: [AuthGatewaysModule],
+  imports: [AuthGatewaysModule, DatabaseModule],
   providers: [
     {
       provide: RegisterUserUseCase,
@@ -20,6 +23,8 @@ import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logou
         'PasswordHasher',
         'UuidGenerator',
         'AuthGateway',
+        'CompaniesRepository',
+        'TransactionPerformer',
       ],
       useFactory: (
         usersRepository: UsersRepository,
@@ -27,6 +32,8 @@ import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logou
         passwordHasher: PasswordHasher,
         uuidGenerator: UuidGenerator,
         authGateway: AuthGateway,
+        companiesRepository: CompaniesRepository,
+        transactionPerformer: TransactionPerformer,
       ) =>
         new RegisterUserUseCase(
           usersRepository,
@@ -34,6 +41,8 @@ import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logou
           passwordHasher,
           uuidGenerator,
           authGateway,
+          companiesRepository,
+          transactionPerformer,
         ),
     },
 

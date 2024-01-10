@@ -15,9 +15,10 @@ import { CreateNewTagUseCase } from '@app/inventory/write/hexagon/usecases/creat
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
+import { DatabaseModule } from '@app/shared';
 
 @Module({
-  imports: [WriteGatewaysModule, AuthGatewaysModule],
+  imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
   controllers: [WriteItemsController],
   providers: [
     {

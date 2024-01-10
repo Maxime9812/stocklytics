@@ -11,6 +11,7 @@ import { default as Redis } from 'ioredis/built/Redis';
 import { redisConfig } from '@app/authentication/infra/redis-config/redis.config';
 import RedisStore from 'connect-redis';
 import { Store } from 'express-session';
+import { KnexCompaniesRepository } from '@app/authentication/infra/gateways/repositories/knex/knex-companies.repository';
 
 @Module({
   imports: [DatabaseModule],
@@ -40,6 +41,12 @@ import { Store } from 'express-session';
         new KnexUsersRepository(sqlConnection),
     },
     {
+      provide: 'CompaniesRepository',
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexCompaniesRepository(sqlConnection),
+    },
+    {
       provide: 'DateProvider',
       useClass: RealDateProvider,
     },
@@ -59,6 +66,7 @@ import { Store } from 'express-session';
     'PasswordHasher',
     'UuidGenerator',
     'SessionStore',
+    'CompaniesRepository',
   ],
 })
 export class AuthGatewaysModule {}

@@ -5,7 +5,6 @@ import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/reposit
 import { Knex } from 'knex';
 import { KnexTagsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-tags.repository';
 import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-folders.repository';
-import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
 
 @Module({
   imports: [DatabaseModule],
@@ -32,19 +31,12 @@ import { KnexTransactionPerformer } from '@app/shared/transaction-performing/kne
       provide: 'DateProvider',
       useClass: RealDateProvider,
     },
-    {
-      provide: 'TransactionPerformer',
-      inject: ['SqlConnection'],
-      useFactory: (sqlConnection: Knex) =>
-        new KnexTransactionPerformer(sqlConnection),
-    },
   ],
   exports: [
     'ItemsRepository',
     'DateProvider',
     'TagsRepository',
     'FoldersRepository',
-    'TransactionPerformer',
   ],
 })
 export class WriteGatewaysModule {}
