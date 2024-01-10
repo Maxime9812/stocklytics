@@ -14,10 +14,10 @@ export class AddTagToItemUseCase {
     private readonly transactionPerformer: TransactionPerformer,
   ) {}
 
-  async execute(payload: AddTagToItemUseCasePayload) {
+  async execute({ itemId, tagId }: AddTagToItemUseCasePayload) {
     await this.transactionPerformer.perform(async (trx) => {
-      const item = await this.itemsRepository.getById(payload.itemId);
-      const tag = await this.tagsRepository.getById(payload.tagId);
+      const item = await this.itemsRepository.getById(itemId);
+      const tag = await this.tagsRepository.getById(tagId);
 
       item.addTag(tag);
 

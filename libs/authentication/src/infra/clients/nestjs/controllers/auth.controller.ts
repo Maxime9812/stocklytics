@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@app/authentication/infra/clients/nestjs/metadata/public.metadata';
 import { RegisterUserDto } from '@app/authentication/infra/clients/nestjs/dtos/register-user.dto';
 import { RegisterUserUseCase } from '@app/authentication/hexagon/usecases/register-user/register-user.usecase';
@@ -32,7 +32,9 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout() {
+  async logout(@Res() response: Response) {
     await this.logoutUseCase.execute();
+    (response as any).clearCookie('session');
+    await response.json();
   }
 }

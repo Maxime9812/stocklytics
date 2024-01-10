@@ -36,10 +36,12 @@ export class AuthModule implements NestModule {
           store: this.store,
           secret: 'keyboard cat',
           resave: false,
-          saveUninitialized: true,
+          saveUninitialized: false,
           name: 'session',
+          unset: 'destroy',
           cookie: {
             httpOnly: true,
+            domain: 'localhost',
           },
         }),
       )
