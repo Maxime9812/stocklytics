@@ -38,7 +38,6 @@ export class AuthModule implements NestModule {
           resave: false,
           saveUninitialized: false,
           name: 'session',
-          unset: 'destroy',
           cookie: {
             httpOnly: true,
             domain: 'localhost',
