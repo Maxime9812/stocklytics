@@ -13,8 +13,7 @@ export class GetItemByIdUseCase {
     const authUser = this.authGateway.currentUser();
 
     const item = await this.getItemByIdQuery.execute(id);
-    if (!item) return;
 
-    return authUser.companyId == item.companyId ? item : undefined;
+    return authUser.companyId == item?.companyId ? item : undefined;
   }
 }
