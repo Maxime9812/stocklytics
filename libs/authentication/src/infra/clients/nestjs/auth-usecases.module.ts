@@ -11,6 +11,7 @@ import { LogoutUseCase } from '@app/authentication/hexagon/usecases/logout/logou
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 import { CompaniesRepository } from '@app/authentication/hexagon/gateways/repositories/companies.repository';
 import { DatabaseModule } from '@app/shared';
+import { GetCurrentUserUseCase } from '@app/authentication/hexagon/usecases/get-current-user/get-current-user.usecase';
 
 @Module({
   imports: [AuthGatewaysModule, DatabaseModule],
@@ -61,7 +62,21 @@ import { DatabaseModule } from '@app/shared';
       inject: ['AuthGateway'],
       useFactory: (authGateway: AuthGateway) => new LogoutUseCase(authGateway),
     },
+
+    {
+      provide: GetCurrentUserUseCase,
+      inject: ['AuthGateway', 'GetCurrentUserQuery'],
+      useFactory: (
+        authGateway: AuthGateway,
+        getCurrentUserQuery: GetCurrentUserUseCase,
+      ) => new GetCurrentUserUseCase(authGateway, getCurrentUserQuery),
+    },
   ],
-  exports: [RegisterUserUseCase, LoginUseCase, LogoutUseCase],
+  exports: [
+    RegisterUserUseCase,
+    LoginUseCase,
+    LogoutUseCase,
+    GetCurrentUserUseCase,
+  ],
 })
 export class AuthUseCasesModule {}

@@ -12,6 +12,8 @@ import { redisConfig } from '@app/authentication/infra/redis-config/redis.config
 import RedisStore from 'connect-redis';
 import { Store } from 'express-session';
 import { KnexCompaniesRepository } from '@app/authentication/infra/gateways/repositories/knex/knex-companies.repository';
+import { StubGetCurrentUserQuery } from '@app/authentication/infra/queries/stub-get-current-user.query';
+import { KnexGetCurrentUserQuery } from '@app/authentication/infra/queries/knex-get-current-user.query';
 
 @Module({
   imports: [DatabaseModule],
@@ -58,6 +60,12 @@ import { KnexCompaniesRepository } from '@app/authentication/infra/gateways/repo
       provide: 'UuidGenerator',
       useClass: CryptoUuidGenerator,
     },
+    {
+      provide: 'GetCurrentUserQuery',
+      inject: ['SqlConnection'],
+      useFactory: (sqlConnection: Knex) =>
+        new KnexGetCurrentUserQuery(sqlConnection),
+    },
   ],
   exports: [
     'AuthGateway',
@@ -67,6 +75,7 @@ import { KnexCompaniesRepository } from '@app/authentication/infra/gateways/repo
     'UuidGenerator',
     'SessionStore',
     'CompaniesRepository',
+    'GetCurrentUserQuery',
   ],
 })
 export class AuthGatewaysModule {}
