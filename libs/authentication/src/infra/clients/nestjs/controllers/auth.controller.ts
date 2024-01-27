@@ -27,10 +27,11 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() body: RegisterUserDto) {
-    const { email, password } = body;
+    const { email, password, fullName } = body;
     await this.registerUserUseCase.execute({
       email,
       password,
+      fullName,
     });
     return await this.getCurrentUserUseCase.execute();
   }

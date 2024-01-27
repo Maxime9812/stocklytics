@@ -9,13 +9,15 @@ export class KnexUsersRepository implements UsersRepository {
 
   save(user: User): TransactionalAsync {
     return async (trx) => {
-      const { id, email, password, createdAt, companyId } = user.snapshot;
+      const { id, email, password, createdAt, companyId, fullName } =
+        user.snapshot;
       await this.knex('users')
         .transacting(trx as Knex.Transaction)
         .insert({
           id,
           email,
           password,
+          fullName,
           companyId,
           createdAt,
         })
@@ -30,6 +32,7 @@ export class KnexUsersRepository implements UsersRepository {
     return User.fromSnapshot({
       id: user.id,
       email: user.email,
+      fullName: user.fullName,
       password: user.password,
       companyId: user.companyId,
       createdAt: user.createdAt,

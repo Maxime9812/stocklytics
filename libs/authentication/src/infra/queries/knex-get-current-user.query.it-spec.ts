@@ -25,6 +25,7 @@ describe('KnexGetCurrentUserQuery', () => {
     await sqlConnection<UserPm>('users').insert({
       id: 'ec8142a6-5de5-45d5-95a5-d0e70b683482',
       email: 'john.doe@gmail.com',
+      fullName: 'John Doe',
       companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
       password: '123456',
       createdAt: new Date('2024-01-01'),
@@ -34,6 +35,7 @@ describe('KnexGetCurrentUserQuery', () => {
     );
     expect(user).toEqual({
       id: 'ec8142a6-5de5-45d5-95a5-d0e70b683482',
+      fullName: 'John Doe',
       email: 'john.doe@gmail.com',
     });
   });

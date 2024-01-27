@@ -35,6 +35,7 @@ describe('Feature: Register User', () => {
     usersFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
 
     await usersFixture.whenRegisterUser({
+      fullName: 'John Doe',
       email: 'john.doe@gmail.com',
       password: 'password',
     });
@@ -45,6 +46,7 @@ describe('Feature: Register User', () => {
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
         .createdAt(new Date('2024-01-01'))
+        .withFullName('John Doe')
         .withCompanyId('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a')
         .build(),
     ]);
@@ -56,6 +58,7 @@ describe('Feature: Register User', () => {
     usersFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
 
     await usersFixture.whenRegisterUser({
+      fullName: 'John Doe',
       email: 'john.doe@gmail.com',
       password: 'password',
     });
@@ -77,6 +80,7 @@ describe('Feature: Register User', () => {
       usersFixture.givenUsers([initialUser]);
 
       await usersFixture.whenRegisterUser({
+        fullName: 'John Doe',
         email: 'used-email@gmail.com',
         password: 'password',
       });
@@ -92,6 +96,7 @@ describe('Feature: Register User', () => {
       usersFixture.givenUuid('1f86a8562-8d11-429b-9dd0-0dbb0e69bc7a');
 
       await usersFixture.whenRegisterUser({
+        fullName: 'John Doe',
         email: 'used-email@gmail.com',
         password: 'password',
       });
@@ -110,6 +115,7 @@ describe('Feature: Register User', () => {
     usersFixture.givenTransactionPerformer(new DroppingTransactionPerformer());
 
     await usersFixture.whenRegisterUser({
+      fullName: 'John Doe',
       email: 'john.doe@gmail.com',
       password: 'password',
     });

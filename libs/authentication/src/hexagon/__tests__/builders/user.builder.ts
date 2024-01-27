@@ -5,6 +5,7 @@ export const userBuilder = (
     id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
     email: 'john.doe@gmail.com',
     password: 'encrypted-password',
+    fullName: 'John Doe',
     createdAt: new Date('2024-01-01'),
     companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
   },
@@ -14,6 +15,7 @@ export const userBuilder = (
     withEmail: (email: string) => userBuilder({ ...snapshot, email }),
     withPassword: (password: string) => userBuilder({ ...snapshot, password }),
     createdAt: (createdAt: Date) => userBuilder({ ...snapshot, createdAt }),
+    withFullName: (fullName: string) => userBuilder({ ...snapshot, fullName }),
     withCompanyId: (companyId: string) =>
       userBuilder({ ...snapshot, companyId }),
     build: () => User.fromSnapshot(snapshot),

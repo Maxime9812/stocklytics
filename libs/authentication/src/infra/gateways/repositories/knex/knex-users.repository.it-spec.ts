@@ -32,6 +32,7 @@ describe('KnexUsersRepository', () => {
         .withId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .withEmail('john.doe@gmail.com')
         .withPassword('encrypted-password')
+        .withFullName('John Doe')
         .createdAt(new Date('2024-01-01'))
         .withCompanyId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .build();
@@ -45,6 +46,7 @@ describe('KnexUsersRepository', () => {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'john.doe@gmail.com',
           password: 'encrypted-password',
+          fullName: 'John Doe',
           companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           createdAt: new Date('2024-01-01'),
         },
@@ -55,6 +57,7 @@ describe('KnexUsersRepository', () => {
       const initialUserBuilder = userBuilder()
         .withId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .withEmail('john.doe@gmail.com')
+        .withFullName('John Doe')
         .withPassword('encrypted-password')
         .withCompanyId('ec8142a6-5de5-45d5-95a5-d0e70b683481')
         .createdAt(new Date('2024-01-01'));
@@ -73,6 +76,7 @@ describe('KnexUsersRepository', () => {
           id: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
           email: 'changed-email@gmail.com',
           companyId: 'ec8142a6-5de5-45d5-95a5-d0e70b683481',
+          fullName: 'John Doe',
           password: 'encrypted-password',
           createdAt: new Date('2024-01-01'),
         },
@@ -96,12 +100,14 @@ describe('KnexUsersRepository', () => {
   });
 
   const insertUser = async (user: User) => {
-    const { id, email, password, createdAt, companyId } = user.snapshot;
+    const { id, email, password, createdAt, companyId, fullName } =
+      user.snapshot;
     await sqlConnection('users').insert({
       id,
       email,
       password,
       companyId,
+      fullName,
       createdAt,
     });
   };

@@ -9,6 +9,7 @@ import { Company } from '@app/authentication/hexagon/models/company';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 
 export type RegisterUserUseCasePayload = {
+  fullName: string;
   email: string;
   password: string;
 };
@@ -24,7 +25,7 @@ export class RegisterUserUseCase {
     private readonly transactionPerformer: TransactionPerformer,
   ) {}
 
-  async execute({ email, password }: RegisterUserUseCasePayload) {
+  async execute({ email, password, fullName }: RegisterUserUseCasePayload) {
     await this.transactionPerformer.perform(async (trx) => {
       const userWithSameEmail = await this.usersRepository.getByEmail(email);
       const userAlreadyExists = !!userWithSameEmail;
@@ -37,6 +38,7 @@ export class RegisterUserUseCase {
 
       const user = User.create({
         id: this.uuidGenerator.generate(),
+        fullName,
         email,
         companyId: company.id,
         password: this.passwordHasher.hash(password),

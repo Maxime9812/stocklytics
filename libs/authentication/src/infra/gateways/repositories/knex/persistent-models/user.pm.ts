@@ -3,5 +3,6 @@ export type UserPm = {
   email: string;
   companyId: string;
   password: string;
+  fullName: string;
   createdAt: Date;
 };

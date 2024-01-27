@@ -22,6 +22,7 @@ export class User {
       id: this.props.id,
       email: this.props.email,
       password: this.props.password,
+      fullName: this.props.fullName,
       createdAt: this.props.createdAt,
       companyId: this.props.companyId,
     };
@@ -30,6 +31,7 @@ export class User {
   static create({
     id,
     email,
+    fullName,
     password,
     currentDate,
     companyId,
@@ -37,10 +39,18 @@ export class User {
     id: string;
     email: string;
     password: string;
+    fullName: string;
     currentDate: Date;
     companyId: string;
   }) {
-    return new User({ id, email, password, createdAt: currentDate, companyId });
+    return new User({
+      id,
+      email,
+      fullName,
+      password,
+      createdAt: currentDate,
+      companyId,
+    });
   }
 
   static fromSnapshot(snapshot: UserSnapshot) {
@@ -48,6 +58,7 @@ export class User {
       id: snapshot.id,
       email: snapshot.email,
       password: snapshot.password,
+      fullName: snapshot.fullName,
       companyId: snapshot.companyId,
       createdAt: snapshot.createdAt,
     });
@@ -59,6 +70,7 @@ type UserConstructorProps = {
   email: string;
   password: string;
   companyId: string;
+  fullName: string;
   createdAt: Date;
 };
 
@@ -67,5 +79,6 @@ export type UserSnapshot = {
   email: string;
   password: string;
   companyId: string;
+  fullName: string;
   createdAt: Date;
 };
