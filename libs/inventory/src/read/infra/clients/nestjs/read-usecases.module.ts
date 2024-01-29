@@ -4,6 +4,8 @@ import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-ite
 import { GetItemByIdQuery } from '@app/inventory/read/hexagon/queries/get-item-by-id.query';
 import { AuthGateway } from '@app/authentication';
 import { AuthGatewaysModule } from '@app/authentication/infra/clients/nestjs/auth-gateways.module';
+import { GetItemsInFolderUseCase } from '@app/inventory/read/hexagon/usecases/get-items-in-folder/get-items-in-folder.usecase';
+import { GetItemsInFolderQuery } from '@app/inventory/read/hexagon/queries/get-items-in-folder.query';
 
 @Module({
   imports: [ReadGatewaysModule, AuthGatewaysModule],
@@ -16,7 +18,15 @@ import { AuthGatewaysModule } from '@app/authentication/infra/clients/nestjs/aut
         authGateway: AuthGateway,
       ) => new GetItemByIdUseCase(getItemByIdQuery, authGateway),
     },
+    {
+      provide: GetItemsInFolderUseCase,
+      inject: ['GetItemsInFolderQuery', 'AuthGateway'],
+      useFactory: (
+        getItemsInFolderQuery: GetItemsInFolderQuery,
+        authGateway: AuthGateway,
+      ) => new GetItemsInFolderUseCase(authGateway, getItemsInFolderQuery),
+    },
   ],
-  exports: [GetItemByIdUseCase],
+  exports: [GetItemByIdUseCase, GetItemsInFolderUseCase],
 })
 export class ReadUseCasesModule {}

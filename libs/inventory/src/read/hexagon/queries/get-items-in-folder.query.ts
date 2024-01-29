@@ -1,15 +1,15 @@
 export type GetItemsInFolderResponse = {
   id: string;
   name: string;
+  folderId?: string;
+  createdAt: Date;
   quantity: number;
 }[];
 
 export type GetItemsInFolderPayload = {
-  folderId: string;
+  folderId?: string;
   companyId: string;
 };
 export interface GetItemsInFolderQuery {
-  execute(
-    payload: GetItemsInFolderPayload,
-  ): Promise<GetItemsInFolderResponse | undefined>;
+  execute(payload: GetItemsInFolderPayload): Promise<GetItemsInFolderResponse>;
 }

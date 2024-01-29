@@ -22,75 +22,155 @@ describe('KnexGetItemsInFolder', () => {
     knexGetItemsInFolder = new KnexGetItemsInFolderQuery(sqlConnection);
   });
 
-  test('Folder does NOT exist', async () => {
-    const items = await knexGetItemsInFolder.execute({
-      folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
-      companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+  describe('Folder is not hold by same company', () => {
+    test('Folder contain items', async () => {
+      await sqlConnection<FolderPm>('folders').insert({
+        id: '6634d3ab-478a-4681-88cf-add760278f8f',
+        name: 'Electronics',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+        createdAt: new Date('2024-01-01'),
+      });
+
+      await sqlConnection<ItemPm>('items').insert([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          quantity: 10,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf2',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          createdAt: new Date('2024-01-01'),
+        },
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
+          name: 'Macbook Pro M3',
+          quantity: 2,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf2',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          createdAt: new Date('2024-01-01'),
+        },
+      ]);
+
+      const items = await knexGetItemsInFolder.execute({
+        folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+      });
+
+      expect(items).toEqual([]);
     });
-    expect(items).toBeUndefined();
   });
 
-  describe('Folder exist', () => {
-    describe('Folder is hold by same company', () => {
-      test('Folder is empty', async () => {
-        await sqlConnection<FolderPm>('folders').insert({
-          id: '6634d3ab-478a-4681-88cf-add760278f8f',
-          name: 'Electronics',
-          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-          createdAt: new Date('2024-01-01'),
-        });
-        const items = await knexGetItemsInFolder.execute({
-          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
-          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-        });
-
-        expect(items).toEqual([]);
+  describe('Folder is hold by same company', () => {
+    test('Folder is empty', async () => {
+      await sqlConnection<FolderPm>('folders').insert({
+        id: '6634d3ab-478a-4681-88cf-add760278f8f',
+        name: 'Electronics',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+        createdAt: new Date('2024-01-01'),
       });
-      test('Folder contain items', async () => {
-        await sqlConnection<FolderPm>('folders').insert({
-          id: '6634d3ab-478a-4681-88cf-add760278f8f',
-          name: 'Electronics',
-          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-          createdAt: new Date('2024-01-01'),
-        });
-
-        await sqlConnection<ItemPm>('items').insert([
-          {
-            id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
-            name: 'Iphone 13',
-            quantity: 10,
-            companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-            folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
-            createdAt: new Date('2024-01-01'),
-          },
-          {
-            id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
-            name: 'Macbook Pro M3',
-            quantity: 2,
-            companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-            folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
-            createdAt: new Date('2024-01-01'),
-          },
-        ]);
-
-        const items = await knexGetItemsInFolder.execute({
-          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
-          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
-        });
-
-        expect(items).toEqual([
-          {
-            id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
-            name: 'Iphone 13',
-            quantity: 10,
-          },
-          {
-            id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
-            name: 'Macbook Pro M3',
-            quantity: 2,
-          },
-        ]);
+      const items = await knexGetItemsInFolder.execute({
+        folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
       });
+
+      expect(items).toEqual([]);
+    });
+    test('Folder contain items', async () => {
+      await sqlConnection<FolderPm>('folders').insert({
+        id: '6634d3ab-478a-4681-88cf-add760278f8f',
+        name: 'Electronics',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+        createdAt: new Date('2024-01-01'),
+      });
+
+      await sqlConnection<ItemPm>('items').insert([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          quantity: 10,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          createdAt: new Date('2024-01-01'),
+        },
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
+          name: 'Macbook Pro M3',
+          quantity: 2,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          createdAt: new Date('2024-01-01'),
+        },
+      ]);
+
+      const items = await knexGetItemsInFolder.execute({
+        folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+      });
+
+      expect(items).toEqual([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          createdAt: new Date('2024-01-01'),
+          quantity: 10,
+        },
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
+          name: 'Macbook Pro M3',
+          createdAt: new Date('2024-01-01'),
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          quantity: 2,
+        },
+      ]);
+    });
+
+    test('Folder is root', async () => {
+      await sqlConnection<FolderPm>('folders').insert({
+        id: '6634d3ab-478a-4681-88cf-add760278f8f',
+        name: 'Electronics',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+        createdAt: new Date('2024-01-01'),
+      });
+
+      await sqlConnection<ItemPm>('items').insert([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          quantity: 10,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+          folderId: null,
+          createdAt: new Date('2024-01-01'),
+        },
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
+          name: 'Macbook Pro M3',
+          quantity: 2,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+          folderId: null,
+          createdAt: new Date('2024-01-01'),
+        },
+      ]);
+
+      const items = await knexGetItemsInFolder.execute({
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+      });
+
+      expect(items).toEqual([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          folderId: null,
+          createdAt: new Date('2024-01-01'),
+          quantity: 10,
+        },
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
+          name: 'Macbook Pro M3',
+          createdAt: new Date('2024-01-01'),
+          folderId: null,
+          quantity: 2,
+        },
+      ]);
     });
   });
 });

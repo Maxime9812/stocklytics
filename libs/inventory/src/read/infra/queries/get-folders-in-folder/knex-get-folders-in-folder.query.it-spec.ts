@@ -1,5 +1,4 @@
 import knex, { Knex } from 'knex';
-import { KnexGetItemsInFolderQuery } from '@app/inventory/read/infra/queries/get-items-in-folder/knex-get-items-in-folder.query';
 import { knexConfig } from '@app/shared';
 import { resetDB } from '../../../../../../../test/docker-manager';
 import { KnexGetFoldersInFolderQuery } from '@app/inventory/read/infra/queries/get-folders-in-folder/knex-get-folders-in-folder.query';
