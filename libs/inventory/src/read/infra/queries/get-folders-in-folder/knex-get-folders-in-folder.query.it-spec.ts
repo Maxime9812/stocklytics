@@ -3,7 +3,6 @@ import { knexConfig } from '@app/shared';
 import { resetDB } from '../../../../../../../test/docker-manager';
 import { KnexGetFoldersInFolderQuery } from '@app/inventory/read/infra/queries/get-folders-in-folder/knex-get-folders-in-folder.query';
 import { GetFoldersInFolderResponse } from '@app/inventory/read/hexagon/queries/get-folders-in-folder.query';
-import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 
 describe('KnexGetFoldersInFolder', () => {
   let sqlConnection: Knex;
