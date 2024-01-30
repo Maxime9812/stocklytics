@@ -9,15 +9,19 @@ export class KnexGetFoldersInFolderQuery implements GetFoldersInFolderQuery {
   constructor(private readonly knex: Knex) {}
   async execute(
     payload: GetFoldersInFolderPayload,
-  ): Promise<GetFoldersInFolderResponse | undefined> {
-    const folder = await this.knex('folders')
-      .first()
-      .where({ id: payload.folderId, companyId: payload.companyId });
-
-    if (!folder) return;
-
-    return this.knex('folders')
-      .where({ parentId: payload.folderId })
-      .select('id', 'name');
+  ): Promise<GetFoldersInFolderResponse> {
+    const values = await this.knex('folders')
+      .select('id', 'name', 'parentId', 'createdAt')
+      .where({
+        parentId: payload.folderId ?? null,
+        companyId: payload.companyId,
+      });
+    return values.map((v) => ({
+      id: v.id,
+      name: v.name,
+      parentId: v.parentId,
+      createdAt: v.createdAt,
+      itemQuantity: 0,
+    }));
   }
 }

@@ -1,6 +1,6 @@
 import { IsOptional, IsUUID } from 'class-validator';
 
-export class GetFoldersQuery {
+export class GetFoldersInFolderQuery {
   @IsUUID()
   @IsOptional()
   folderId?: string;
