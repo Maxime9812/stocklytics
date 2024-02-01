@@ -16,6 +16,8 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 import { DatabaseModule } from '@app/shared';
+import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-item-by-id/get-item-by-id.usecase';
+import { GetItemByIdQuery } from '@app/inventory/read/hexagon/queries/get-item-by-id.query';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
@@ -120,6 +122,16 @@ import { DatabaseModule } from '@app/shared';
         return new MoveFolderUseCase(foldersRepository);
       },
     },
+    {
+      provide: GetItemByIdUseCase,
+      inject: ['GetItemByIdQuery', 'AuthGateway'],
+      useFactory: (
+        getItemByIdQuery: GetItemByIdQuery,
+        authGateway: AuthGateway,
+      ) => {
+        return new GetItemByIdUseCase(getItemByIdQuery, authGateway);
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -129,6 +141,7 @@ import { DatabaseModule } from '@app/shared';
     CreateNewTagUseCase,
     MoveItemIntoFolderUseCase,
     MoveFolderUseCase,
+    GetItemByIdUseCase,
   ],
 })
 export class WriteUseCasesModule {}

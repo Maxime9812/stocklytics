@@ -40,7 +40,7 @@ export class AuthModule implements NestModule {
           name: 'session',
           cookie: {
             httpOnly: true,
-            domain: '192.168.5.54',
+            domain: '192.168.5.61',
           },
         }),
       )

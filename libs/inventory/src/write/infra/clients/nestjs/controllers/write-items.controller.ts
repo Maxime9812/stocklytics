@@ -8,6 +8,7 @@ import { MoveItemIntoFolderParams } from '@app/inventory/write/infra/clients/nes
 import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-item-into-folder/move-item-into-folder.usecase';
 import { MoveItemIntoFolderDto } from '@app/inventory/write/infra/clients/nestjs/dtos/move-item-into-folder.dto';
 import { RemoveItemTagUseCase } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
+import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-item-by-id/get-item-by-id.usecase';
 
 @Controller('items')
 export class WriteItemsController {
@@ -16,11 +17,13 @@ export class WriteItemsController {
     private readonly addTagToItemUseCase: AddTagToItemUseCase,
     private readonly removeItemTagUseCase: RemoveItemTagUseCase,
     private readonly moveItemIntoFolderUseCase: MoveItemIntoFolderUseCase,
+    private readonly getItemByIdUseCase: GetItemByIdUseCase,
   ) {}
 
   @Post()
   async createNewItem(@Body() body: CreateNewItemDto) {
     await this.createNewItemUseCase.execute(body);
+    return this.getItemByIdUseCase.execute({ id: body.id });
   }
 
   @Post(':itemId/tags/:tagId')
