@@ -8,6 +8,7 @@ export type CreateNewItemUseCasePayload = {
   id: string;
   name: string;
   quantity: number;
+  folderId?: string;
 };
 
 export class CreateNewItemUseCase {
@@ -28,6 +29,7 @@ export class CreateNewItemUseCase {
         name: payload.name,
         quantity: payload.quantity,
         currentDate: this.dateProvider.getNow(),
+        folderId: payload.folderId,
       });
       await this.itemsRepository.save(item)(trx);
     });

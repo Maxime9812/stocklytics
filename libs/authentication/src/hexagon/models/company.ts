@@ -1,3 +1,5 @@
+import { User } from '@app/authentication/hexagon/models/user';
+
 export class Company {
   private constructor(private props: CompanyConstructorProps) {}
 
@@ -13,12 +15,29 @@ export class Company {
     };
   }
 
-  static create({ id, currentDate }: { id: string; currentDate: Date }) {
-    return new Company({
+  static create({
+    id,
+    currentDate,
+    rootUser,
+  }: {
+    id: string;
+    currentDate: Date;
+    rootUser: { id: string; email: string; password: string; fullName: string };
+  }) {
+    const company = new Company({
       id,
       name: '',
       createdAt: currentDate,
     });
+    const createdUser = User.create({
+      id: rootUser.id,
+      email: rootUser.email,
+      fullName: rootUser.fullName,
+      password: rootUser.password,
+      companyId: company.id,
+      currentDate,
+    });
+    return [company, createdUser] as const;
   }
   static fromSnapshot(snapshot: CompanySnapshot) {
     return new Company({

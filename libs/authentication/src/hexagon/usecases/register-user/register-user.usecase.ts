@@ -31,18 +31,15 @@ export class RegisterUserUseCase {
       const userAlreadyExists = !!userWithSameEmail;
       if (userAlreadyExists) return;
 
-      const company = Company.create({
+      const [company, user] = Company.create({
         id: this.uuidGenerator.generate(),
         currentDate: this.dateProvide.getNow(),
-      });
-
-      const user = User.create({
-        id: this.uuidGenerator.generate(),
-        fullName,
-        email,
-        companyId: company.id,
-        password: this.passwordHasher.hash(password),
-        currentDate: this.dateProvide.getNow(),
+        rootUser: {
+          id: this.uuidGenerator.generate(),
+          fullName,
+          email,
+          password: this.passwordHasher.hash(password),
+        },
       });
 
       await this.usersRepository.save(user)(trx);

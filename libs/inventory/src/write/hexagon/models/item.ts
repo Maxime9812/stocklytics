@@ -39,6 +39,7 @@ export class Item {
     name: string;
     quantity: number;
     currentDate: Date;
+    folderId?: string;
   }) {
     return new Item({
       id: params.id,
@@ -46,7 +47,7 @@ export class Item {
       name: params.name,
       quantity: params.quantity,
       tagIds: [],
-      folderId: undefined,
+      folderId: params.folderId,
       createdAt: params.currentDate,
     });
   }

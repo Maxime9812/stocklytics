@@ -20,24 +20,17 @@ export class WriteItemsController {
 
   @Post()
   async createNewItem(@Body() body: CreateNewItemDto) {
-    const { id, name, quantity } = body;
-    await this.createNewItemUseCase.execute({
-      id,
-      name,
-      quantity,
-    });
+    await this.createNewItemUseCase.execute(body);
   }
 
   @Post(':itemId/tags/:tagId')
   async addTagToItem(@Param() params: AddTagToItemParams) {
-    const { itemId, tagId } = params;
-    await this.addTagToItemUseCase.execute({ itemId, tagId });
+    await this.addTagToItemUseCase.execute(params);
   }
 
   @Delete(':itemId/tags/:tagId')
   async removeTagFromItem(@Param() params: RemoveTagFromItemParams) {
-    const { itemId, tagId } = params;
-    await this.removeItemTagUseCase.execute({ itemId, tagId });
+    await this.removeItemTagUseCase.execute(params);
   }
 
   @Post(':itemId/move')

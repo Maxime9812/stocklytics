@@ -31,10 +31,12 @@ describe('Feature: Create new item', () => {
       id: 'item-id',
       name: 'Iphone 13 pro max',
       quantity: 1,
+      folderId: 'folder-id',
     });
     itemsFixture.thenItemsShouldBe(
       itemBuilder()
         .withId('item-id')
+        .withFolderId('folder-id')
         .withCompanyId('company-id')
         .withName('Iphone 13 pro max')
         .createdAt(new Date('2023-12-23'))
