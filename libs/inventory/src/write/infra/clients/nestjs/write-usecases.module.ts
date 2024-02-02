@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { WriteItemsController } from '@app/inventory/write/infra/clients/nestjs/controllers/write-items.controller';
 import { CreateNewItemUseCase } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
 import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositories/items.repository';
 import { DateProvider } from '@app/inventory/write/hexagon/models/date-provider/date.provider';
@@ -16,12 +15,9 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 import { DatabaseModule } from '@app/shared';
-import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-item-by-id/get-item-by-id.usecase';
-import { GetItemByIdQuery } from '@app/inventory/read/hexagon/queries/get-item-by-id.query';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
-  controllers: [WriteItemsController],
   providers: [
     {
       provide: CreateNewItemUseCase,
@@ -122,16 +118,6 @@ import { GetItemByIdQuery } from '@app/inventory/read/hexagon/queries/get-item-b
         return new MoveFolderUseCase(foldersRepository);
       },
     },
-    {
-      provide: GetItemByIdUseCase,
-      inject: ['GetItemByIdQuery', 'AuthGateway'],
-      useFactory: (
-        getItemByIdQuery: GetItemByIdQuery,
-        authGateway: AuthGateway,
-      ) => {
-        return new GetItemByIdUseCase(getItemByIdQuery, authGateway);
-      },
-    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -141,7 +127,6 @@ import { GetItemByIdQuery } from '@app/inventory/read/hexagon/queries/get-item-b
     CreateNewTagUseCase,
     MoveItemIntoFolderUseCase,
     MoveFolderUseCase,
-    GetItemByIdUseCase,
   ],
 })
 export class WriteUseCasesModule {}

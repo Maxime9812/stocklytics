@@ -4,21 +4,21 @@ import { CreateNewFolderDto } from '@app/inventory/write/infra/clients/nestjs/dt
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 import { MoveFolderDto } from '@app/inventory/write/infra/clients/nestjs/dtos/move-folder.dto';
 import { MoveFolderParams } from '@app/inventory/write/infra/clients/nestjs/params/move-folder.params';
+import { GetFolderByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-folder-by-id/get-folder-by-id.usecase';
 
 @Controller('folders')
 export class WriteFoldersController {
   constructor(
     private readonly createNewFolderUseCase: CreateNewFolderUseCase,
     private readonly moveFolderUseCase: MoveFolderUseCase,
+    private readonly getFolderByIdUseCase: GetFolderByIdUseCase,
   ) {}
 
   @Post()
   async createNewFolder(@Body() body: CreateNewFolderDto) {
-    const { id, name } = body;
-    await this.createNewFolderUseCase.execute({
-      id,
-      name,
-    });
+    const { id } = body;
+    await this.createNewFolderUseCase.execute(body);
+    return this.getFolderByIdUseCase.execute(id);
   }
 
   @Post(':folderId/move')

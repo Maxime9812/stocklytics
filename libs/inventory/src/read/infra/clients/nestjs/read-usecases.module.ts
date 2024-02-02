@@ -8,6 +8,8 @@ import { GetItemsInFolderUseCase } from '@app/inventory/read/hexagon/usecases/ge
 import { GetItemsInFolderQuery } from '@app/inventory/read/hexagon/queries/get-items-in-folder.query';
 import { GetFoldersInFoldersUseCase } from '@app/inventory/read/hexagon/usecases/get-folders-in-folders/get-folders-in-folders.usecase';
 import { GetFoldersInFolderQuery } from '@app/inventory/read/hexagon/queries/get-folders-in-folder.query';
+import { GetFolderByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-folder-by-id/get-folder-by-id.usecase';
+import { GetFolderByIdQuery } from '@app/inventory/read/hexagon/queries/get-folder-by-id.query';
 
 @Module({
   imports: [ReadGatewaysModule, AuthGatewaysModule],
@@ -36,11 +38,20 @@ import { GetFoldersInFolderQuery } from '@app/inventory/read/hexagon/queries/get
         authGateway: AuthGateway,
       ) => new GetFoldersInFoldersUseCase(authGateway, getFoldersInFolderQuery),
     },
+    {
+      provide: GetFolderByIdUseCase,
+      inject: ['GetFolderByIdQuery', 'AuthGateway'],
+      useFactory: (
+        getFolderByIdQuery: GetFolderByIdQuery,
+        authGateway: AuthGateway,
+      ) => new GetFolderByIdUseCase(getFolderByIdQuery, authGateway),
+    },
   ],
   exports: [
     GetItemByIdUseCase,
     GetItemsInFolderUseCase,
     GetFoldersInFoldersUseCase,
+    GetFolderByIdUseCase,
   ],
 })
 export class ReadUseCasesModule {}
