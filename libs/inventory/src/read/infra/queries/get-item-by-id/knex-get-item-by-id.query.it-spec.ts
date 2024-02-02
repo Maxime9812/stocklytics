@@ -37,6 +37,10 @@ describe('KnexGetItemById', () => {
     expect(item).toEqual<GetItemByIdResponse>({
       id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
       companyId: '9706cf9d-841e-4541-9eba-a2c7c2c765e6',
+      folderId: 'd0bf789c-8788-4293-b730-cd05e9c34418',
+      name: 'Iphone 13',
+      quantity: 10,
+      createdAt: new Date('2024-01-01'),
     });
   });
 });

@@ -8,6 +8,6 @@ export class KnexGetItemByIdQuery implements GetItemByIdQuery {
   constructor(private readonly knex: Knex) {}
 
   execute(id: string): Promise<GetItemByIdResponse | undefined> {
-    return this.knex('items').select('id', 'companyId').where('id', id).first();
+    return this.knex('items').select().where('id', id).first();
   }
 }

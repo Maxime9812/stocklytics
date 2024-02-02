@@ -28,7 +28,10 @@ describe('Feature: Get item by id', () => {
       const getItemByIdQuery = new StubGetItemByIdQuery();
       getItemByIdQuery.givenItem('502150e0-65db-4189-941a-a679f5ec0845', {
         id: '502150e0-65db-4189-941a-a679f5ec0845',
+        name: 'item-name',
+        quantity: 10,
         companyId: 'company-id',
+        createdAt: new Date('2024-01-01'),
       });
       const item = await new GetItemByIdUseCase(
         getItemByIdQuery,
@@ -38,7 +41,11 @@ describe('Feature: Get item by id', () => {
       });
       expect(item).toEqual({
         id: '502150e0-65db-4189-941a-a679f5ec0845',
+        name: 'item-name',
+        quantity: 10,
+        folderId: undefined,
         companyId: 'company-id',
+        createdAt: new Date('2024-01-01'),
       });
     });
     test('Nothing is return when item is not hold by user company', async () => {
@@ -50,7 +57,11 @@ describe('Feature: Get item by id', () => {
       const getItemByIdQuery = new StubGetItemByIdQuery();
       getItemByIdQuery.givenItem('502150e0-65db-4189-941a-a679f5ec0845', {
         id: '502150e0-65db-4189-941a-a679f5ec0845',
-        companyId: 'another-company-id',
+        name: 'item-name',
+        quantity: 10,
+        folderId: undefined,
+        companyId: 'company-id-2',
+        createdAt: new Date('2024-01-01'),
       });
 
       const item = await new GetItemByIdUseCase(
