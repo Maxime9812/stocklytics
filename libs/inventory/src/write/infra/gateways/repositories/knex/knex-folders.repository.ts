@@ -43,7 +43,7 @@ export class KnexFoldersRepository implements FoldersRepository {
   ): Promise<boolean> {
     const { name, parentId, companyId } = params;
     const folderPm = await this.knex<FolderPm>('folders')
-      .where({ name, parentId, companyId })
+      .where({ name, parentId: parentId ?? null, companyId })
       .first();
 
     return !!folderPm;

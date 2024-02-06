@@ -104,6 +104,16 @@ describe('KnexFoldersRepository', () => {
       expect(folderExists).toBe(false);
     });
 
+    it('should handle root folder', async () => {
+      const folderExists = await new KnexFoldersRepository(
+        sqlConnection,
+      ).folderWithNameInParentFolderExists({
+        name: 'Electronics',
+        companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
+      });
+      expect(folderExists).toBe(false);
+    });
+
     it('should return true if folder exists', async () => {
       const folder = folderBuilder()
         .withId('349b8b68-109a-486f-bdc2-daedc31a6beb')
