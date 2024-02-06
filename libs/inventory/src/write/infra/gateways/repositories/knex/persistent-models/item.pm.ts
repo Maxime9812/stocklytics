@@ -4,5 +4,6 @@ export type ItemPm = {
   quantity: number;
   companyId: string;
   folderId?: string;
+  note: string;
   createdAt: Date;
 };

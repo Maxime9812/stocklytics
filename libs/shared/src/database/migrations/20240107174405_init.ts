@@ -12,6 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     .createTable('items', (table) => {
       table.uuid('id').primary();
       table.string('name').notNullable();
+      table.string('note').notNullable();
       table.integer('quantity').notNullable();
       table.uuid('companyId').notNullable();
       table.uuid('folderId').nullable();

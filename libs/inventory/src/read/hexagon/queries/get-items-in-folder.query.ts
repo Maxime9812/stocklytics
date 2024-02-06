@@ -3,6 +3,7 @@ export type GetItemsInFolderResponse = {
   name: string;
   folderId?: string;
   createdAt: Date;
+  note: string;
   quantity: number;
 }[];
 

@@ -30,6 +30,7 @@ describe('Feature: Get item by id', () => {
         id: '502150e0-65db-4189-941a-a679f5ec0845',
         name: 'item-name',
         quantity: 10,
+        note: 'This is a note',
         companyId: 'company-id',
         createdAt: new Date('2024-01-01'),
       });
@@ -44,6 +45,7 @@ describe('Feature: Get item by id', () => {
         name: 'item-name',
         quantity: 10,
         folderId: undefined,
+        note: 'This is a note',
         companyId: 'company-id',
         createdAt: new Date('2024-01-01'),
       });
@@ -60,6 +62,7 @@ describe('Feature: Get item by id', () => {
         name: 'item-name',
         quantity: 10,
         folderId: undefined,
+        note: 'This is a note',
         companyId: 'company-id-2',
         createdAt: new Date('2024-01-01'),
       });

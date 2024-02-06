@@ -4,6 +4,7 @@ export type GetItemByIdResponse = {
   quantity: number;
   folderId?: string;
   companyId: string;
+  note: string;
   createdAt: Date;
 };
 

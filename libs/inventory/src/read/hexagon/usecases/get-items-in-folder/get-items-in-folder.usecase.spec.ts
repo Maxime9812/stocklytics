@@ -21,6 +21,7 @@ describe('Feature: Get items in folder', () => {
           {
             id: '502150e0-65db-4189-941a-a679f5ec0845',
             name: 'item-name',
+            note: 'This is a note',
             createdAt: new Date('2024-01-01'),
             folderId: 'e0a5e0a5-65db-4189-941a-a679f5ec0845',
             quantity: 10,
@@ -37,6 +38,7 @@ describe('Feature: Get items in folder', () => {
         {
           id: '502150e0-65db-4189-941a-a679f5ec0845',
           name: 'item-name',
+          note: 'This is a note',
           createdAt: new Date('2024-01-01'),
           folderId: 'e0a5e0a5-65db-4189-941a-a679f5ec0845',
           quantity: 10,
@@ -58,6 +60,7 @@ describe('Feature: Get items in folder', () => {
           {
             id: '502150e0-65db-4189-941a-a679f5ec0845',
             name: 'item-name',
+            note: 'This is a note',
             createdAt: new Date('2024-01-01'),
             folderId: 'e0a5e0a5-65db-4189-941a-a679f5ec0845',
             quantity: 10,
@@ -72,6 +75,7 @@ describe('Feature: Get items in folder', () => {
         {
           id: '502150e0-65db-4189-941a-a679f5ec0845',
           name: 'item-name',
+          note: 'This is a note',
           createdAt: new Date('2024-01-01'),
           folderId: 'e0a5e0a5-65db-4189-941a-a679f5ec0845',
           quantity: 10,

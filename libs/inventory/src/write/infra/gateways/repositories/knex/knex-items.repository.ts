@@ -9,7 +9,7 @@ export class KnexItemsRepository implements ItemsRepository {
 
   save(item: Item): TransactionalAsync {
     return async (trx) => {
-      const { id, name, quantity, companyId, createdAt, folderId } =
+      const { id, name, quantity, companyId, createdAt, folderId, note } =
         item.snapshot;
       await this.knex('items')
         .transacting(trx as Knex.Transaction)
@@ -18,6 +18,7 @@ export class KnexItemsRepository implements ItemsRepository {
           name,
           quantity,
           companyId,
+          note,
           folderId,
           createdAt,
         })
@@ -37,7 +38,7 @@ export class KnexItemsRepository implements ItemsRepository {
 
     if (!itemPm) return;
 
-    const { name, quantity, companyId, createdAt, folderId } = itemPm;
+    const { name, quantity, companyId, createdAt, folderId, note } = itemPm;
     return Item.fromSnapshot({
       id: itemPm.id,
       name,
@@ -45,6 +46,7 @@ export class KnexItemsRepository implements ItemsRepository {
       companyId,
       createdAt,
       folderId,
+      note,
       tagIds: tagIds.map((tagId) => tagId.tagId),
     });
   }

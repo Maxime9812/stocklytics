@@ -31,13 +31,14 @@ describe('KnexGetItemsInFolder', () => {
         createdAt: new Date('2024-01-01'),
       });
 
-      await sqlConnection<ItemPm>('items').insert([
+      await insertItems([
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
           quantity: 10,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf2',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          note: '',
           createdAt: new Date('2024-01-01'),
         },
         {
@@ -46,6 +47,7 @@ describe('KnexGetItemsInFolder', () => {
           quantity: 2,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf2',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          note: '',
           createdAt: new Date('2024-01-01'),
         },
       ]);
@@ -82,13 +84,14 @@ describe('KnexGetItemsInFolder', () => {
         createdAt: new Date('2024-01-01'),
       });
 
-      await sqlConnection<ItemPm>('items').insert([
+      await insertItems([
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
           quantity: 10,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          note: '',
           createdAt: new Date('2024-01-01'),
         },
         {
@@ -97,6 +100,7 @@ describe('KnexGetItemsInFolder', () => {
           quantity: 2,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          note: 'This is a note',
           createdAt: new Date('2024-01-01'),
         },
       ]);
@@ -110,6 +114,7 @@ describe('KnexGetItemsInFolder', () => {
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
+          note: '',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
           createdAt: new Date('2024-01-01'),
           quantity: 10,
@@ -117,6 +122,7 @@ describe('KnexGetItemsInFolder', () => {
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
           name: 'Macbook Pro M3',
+          note: 'This is a note',
           createdAt: new Date('2024-01-01'),
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
           quantity: 2,
@@ -132,19 +138,21 @@ describe('KnexGetItemsInFolder', () => {
         createdAt: new Date('2024-01-01'),
       });
 
-      await sqlConnection<ItemPm>('items').insert([
+      await insertItems([
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
           quantity: 10,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
           folderId: null,
+          note: '',
           createdAt: new Date('2024-01-01'),
         },
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e76',
           name: 'Macbook Pro M3',
           quantity: 2,
+          note: '',
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
           folderId: null,
           createdAt: new Date('2024-01-01'),
@@ -160,6 +168,7 @@ describe('KnexGetItemsInFolder', () => {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
           folderId: null,
+          note: '',
           createdAt: new Date('2024-01-01'),
           quantity: 10,
         },
@@ -168,9 +177,14 @@ describe('KnexGetItemsInFolder', () => {
           name: 'Macbook Pro M3',
           createdAt: new Date('2024-01-01'),
           folderId: null,
+          note: '',
           quantity: 2,
         },
       ]);
     });
   });
+
+  const insertItems = async (items: ItemPm[]) => {
+    await sqlConnection('items').insert(items);
+  };
 });

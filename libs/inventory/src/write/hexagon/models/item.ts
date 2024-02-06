@@ -14,6 +14,7 @@ export class Item {
       name: this.props.name,
       quantity: this.props.quantity,
       tagIds: this.props.tagIds,
+      note: this.props.note,
       folderId: this.props.folderId,
       createdAt: this.props.createdAt,
     };
@@ -47,6 +48,7 @@ export class Item {
       name: params.name,
       quantity: params.quantity,
       tagIds: [],
+      note: '',
       folderId: params.folderId,
       createdAt: params.currentDate,
     });
@@ -60,6 +62,7 @@ export class Item {
       quantity: snapshot.quantity,
       tagIds: [...snapshot.tagIds],
       folderId: snapshot.folderId,
+      note: snapshot.note,
       createdAt: snapshot.createdAt,
     });
   }
@@ -72,6 +75,7 @@ type ItemConstructorProps = {
   quantity: number;
   tagIds: string[];
   folderId?: string;
+  note: string;
   createdAt: Date;
 };
 export type ItemSnapshot = {
@@ -81,5 +85,6 @@ export type ItemSnapshot = {
   quantity: number;
   tagIds: string[];
   folderId?: string;
+  note: string;
   createdAt: Date;
 };

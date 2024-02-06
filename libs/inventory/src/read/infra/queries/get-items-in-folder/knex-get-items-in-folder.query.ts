@@ -13,7 +13,7 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
     payload: GetItemsInFolderPayload,
   ): Promise<GetItemsInFolderResponse> {
     return this.knex<ItemPm>('items')
-      .select('id', 'name', 'quantity', 'folderId', 'createdAt')
+      .select('id', 'name', 'quantity', 'folderId', 'createdAt', 'note')
       .where({
         folderId: payload.folderId ?? null,
         companyId: payload.companyId,

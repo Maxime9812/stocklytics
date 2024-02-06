@@ -32,6 +32,7 @@ describe('KnexItemsRepository', () => {
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
         .withQuantity(1)
+        .withNote('This is a note')
         .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
         .createdAt(new Date('2024-01-01T00:00:00.000Z'))
         .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
@@ -46,6 +47,7 @@ describe('KnexItemsRepository', () => {
           id: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
           name: 'Iphone 13 pro max',
           quantity: 1,
+          note: 'This is a note',
           companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
           folderId: '349b8b68-109a-486f-bdc2-daedc31a6beb',
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
@@ -58,6 +60,7 @@ describe('KnexItemsRepository', () => {
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
         .withQuantity(1)
+        .withNote('This is a note')
         .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
         .createdAt(new Date('2024-01-01T00:00:00.000Z'));
       const initialItem = initialItemBuilder.build();
@@ -76,6 +79,7 @@ describe('KnexItemsRepository', () => {
           quantity: 2,
           companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
           folderId: null,
+          note: 'This is a note',
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
         },
       ]);
@@ -211,7 +215,7 @@ describe('KnexItemsRepository', () => {
   };
 
   const insertItem = async (item: Item) => {
-    const { id, name, quantity, companyId, createdAt, folderId, tagIds } =
+    const { id, name, quantity, companyId, createdAt, folderId, tagIds, note } =
       item.snapshot;
     await sqlConnection('items').insert({
       id,
@@ -219,6 +223,7 @@ describe('KnexItemsRepository', () => {
       quantity,
       companyId,
       folderId,
+      note,
       createdAt,
     });
 

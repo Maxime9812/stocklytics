@@ -7,6 +7,7 @@ export const itemBuilder = (
     name: 'item-name',
     createdAt: new Date('2024-01-01'),
     quantity: 1,
+    note: '',
     tagIds: [],
     folderId: undefined,
   },
@@ -20,6 +21,7 @@ export const itemBuilder = (
     withQuantity: (quantity: number) => itemBuilder({ ...snapshot, quantity }),
     whitTagIds: (...tagIds: string[]) => itemBuilder({ ...snapshot, tagIds }),
     withFolderId: (folderId: string) => itemBuilder({ ...snapshot, folderId }),
+    withNote: (note: string) => itemBuilder({ ...snapshot, note }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };
