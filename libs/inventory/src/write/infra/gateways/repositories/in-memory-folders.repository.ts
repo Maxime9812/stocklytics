@@ -40,4 +40,8 @@ export class InMemoryFoldersRepository implements FoldersRepository {
   givenFolders(...folders: Folder[]) {
     folders.forEach((folder) => this._folders.set(folder.id, folder.snapshot));
   }
+
+  async delete(folder: Folder): Promise<void> {
+    this._folders.delete(folder.id);
+  }
 }

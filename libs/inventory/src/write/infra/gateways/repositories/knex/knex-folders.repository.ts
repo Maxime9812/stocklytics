@@ -48,4 +48,8 @@ export class KnexFoldersRepository implements FoldersRepository {
 
     return !!folderPm;
   }
+
+  async delete(folder: Folder): Promise<void> {
+    await this.knex.delete().from('folders').where({ id: folder.id });
+  }
 }

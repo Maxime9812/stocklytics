@@ -18,6 +18,7 @@ import { DatabaseModule } from '@app/shared';
 import { LinkBarcodeToItemUseCase } from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
 import { EditItemNoteUseCase } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-item/delete-item.usecase';
+import { DeleteFolderUseCase } from '@app/inventory/write/hexagon/usecases/delete-folder/delete-folder.usecase';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
@@ -154,6 +155,13 @@ import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-
         return new DeleteItemUseCase(itemsRepository, transactionPerformer);
       },
     },
+    {
+      provide: DeleteFolderUseCase,
+      inject: ['FoldersRepository'],
+      useFactory: (foldersRepository: FoldersRepository) => {
+        return new DeleteFolderUseCase(foldersRepository);
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -166,6 +174,7 @@ import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-
     LinkBarcodeToItemUseCase,
     EditItemNoteUseCase,
     DeleteItemUseCase,
+    DeleteFolderUseCase,
   ],
 })
 export class WriteUseCasesModule {}

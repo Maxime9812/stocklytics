@@ -135,6 +135,19 @@ describe('KnexFoldersRepository', () => {
     });
   });
 
+  describe('delete', () => {
+    it('should delete folder', async () => {
+      const folder = folderBuilder()
+        .withId('349b8b68-109a-486f-bdc2-daedc31a6beb')
+        .build();
+      await insertFolder(folder);
+
+      await new KnexFoldersRepository(sqlConnection).delete(folder);
+
+      expect(await findExistingFolders()).toEqual<FolderPm[]>([]);
+    });
+  });
+
   const insertFolder = async (folder: Folder) => {
     const { id, name, companyId, parentId, createdAt } = folder.snapshot;
     await sqlConnection('folders').insert({

@@ -10,6 +10,10 @@ import {
   MoveFolderUseCase,
   MoveFolderUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
+import {
+  DeleteFolderUseCase,
+  DeleteFolderUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/delete-folder/delete-folder.usecase';
 
 export const createFoldersFixture = ({
   authGateway = new InMemoryAuthGateway(),
@@ -37,10 +41,16 @@ export const createFoldersFixture = ({
     whenMoveFolder(payload: MoveFolderUseCasePayload) {
       return new MoveFolderUseCase(foldersRepository).execute(payload);
     },
+    whenDeleteFolder(payload: DeleteFolderUseCasePayload) {
+      return new DeleteFolderUseCase(foldersRepository).execute(payload);
+    },
     thenFoldersShouldBe(...folders: Folder[]) {
       expect(foldersRepository.folders.map((t) => t.snapshot)).toEqual(
         folders.map((t) => t.snapshot),
       );
+    },
+    thenFoldersShouldBeEmpty() {
+      expect(foldersRepository.folders).toEqual([]);
     },
   };
 };

@@ -12,4 +12,5 @@ export interface FoldersRepository {
     params: FolderExistParams,
   ): Promise<boolean>;
   getById(id: string): Promise<Folder | undefined>;
+  delete(folder: Folder): Promise<void>;
 }
