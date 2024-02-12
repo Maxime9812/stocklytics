@@ -1,4 +1,5 @@
 import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
+import { Barcode } from '@app/inventory/write/hexagon/models/barcode';
 
 export const itemBuilder = (
   snapshot: ItemSnapshot = {
@@ -10,6 +11,7 @@ export const itemBuilder = (
     note: '',
     tagIds: [],
     folderId: undefined,
+    barcode: undefined,
   },
 ) => {
   return {
@@ -22,6 +24,7 @@ export const itemBuilder = (
     whitTagIds: (...tagIds: string[]) => itemBuilder({ ...snapshot, tagIds }),
     withFolderId: (folderId: string) => itemBuilder({ ...snapshot, folderId }),
     withNote: (note: string) => itemBuilder({ ...snapshot, note }),
+    withBarcode: (barcode: Barcode) => itemBuilder({ ...snapshot, barcode }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };

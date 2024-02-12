@@ -9,6 +9,8 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
 import { MoveItemIntoFolderDto } from '@app/inventory/write/infra/clients/nestjs/dtos/move-item-into-folder.dto';
 import { RemoveItemTagUseCase } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
 import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-item-by-id/get-item-by-id.usecase';
+import { LinkBarcodeToItemUseCase } from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
+import { LinkBarcodeToItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/link-barcode-to-item.dto';
 
 @Controller('items')
 export class WriteItemsController {
@@ -18,6 +20,7 @@ export class WriteItemsController {
     private readonly removeItemTagUseCase: RemoveItemTagUseCase,
     private readonly moveItemIntoFolderUseCase: MoveItemIntoFolderUseCase,
     private readonly getItemByIdUseCase: GetItemByIdUseCase,
+    private readonly linkBarcodeToItemUseCase: LinkBarcodeToItemUseCase,
   ) {}
 
   @Post()
@@ -44,5 +47,10 @@ export class WriteItemsController {
     const { itemId } = params;
     const { folderId } = body;
     await this.moveItemIntoFolderUseCase.execute({ itemId, folderId });
+  }
+
+  @Post(':itemId/barcode/link')
+  async linkBarcodeToItem(@Body() body: LinkBarcodeToItemDto) {
+    await this.linkBarcodeToItemUseCase.execute(body);
   }
 }

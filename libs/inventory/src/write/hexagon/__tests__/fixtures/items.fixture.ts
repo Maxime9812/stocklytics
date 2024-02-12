@@ -22,6 +22,10 @@ import {
 } from '@app/inventory/write/hexagon/usecases/remove-item-tag/remove-item-tag.usecase';
 import { NullTransformationPerformer } from '@app/shared/transaction-performing/null-transaction-performer';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
+import {
+  LinkBarcodeToItemUseCase,
+  LinkBarcodeToItemUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -71,6 +75,12 @@ export const createItemsFixture = ({
     },
     whenRemoveItemTag(payload: RemoveItemTagUseCasePayload) {
       return new RemoveItemTagUseCase(
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
+    },
+    whenLinkBarcodeToItem(payload: LinkBarcodeToItemUseCasePayload) {
+      return new LinkBarcodeToItemUseCase(
         itemsRepository,
         transactionPerformer,
       ).execute(payload);

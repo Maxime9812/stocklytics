@@ -1,4 +1,5 @@
 import { Tag } from '@app/inventory/write/hexagon/models/tag';
+import { Barcode } from '@app/inventory/write/hexagon/models/barcode';
 
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
@@ -16,6 +17,7 @@ export class Item {
       tagIds: this.props.tagIds,
       note: this.props.note,
       folderId: this.props.folderId,
+      barcode: this.props.barcode,
       createdAt: this.props.createdAt,
     };
   }
@@ -32,6 +34,10 @@ export class Item {
 
   moveIntoFolder(folderId: string) {
     this.props.folderId = folderId;
+  }
+
+  linkBarcode(barcode: Barcode) {
+    this.props.barcode = barcode;
   }
 
   static create(params: {
@@ -63,6 +69,7 @@ export class Item {
       tagIds: [...snapshot.tagIds],
       folderId: snapshot.folderId,
       note: snapshot.note,
+      barcode: snapshot.barcode,
       createdAt: snapshot.createdAt,
     });
   }
@@ -76,6 +83,7 @@ type ItemConstructorProps = {
   tagIds: string[];
   folderId?: string;
   note: string;
+  barcode?: Barcode;
   createdAt: Date;
 };
 export type ItemSnapshot = {
@@ -86,5 +94,6 @@ export type ItemSnapshot = {
   tagIds: string[];
   folderId?: string;
   note: string;
+  barcode?: Barcode;
   createdAt: Date;
 };

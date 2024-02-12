@@ -36,6 +36,10 @@ describe('KnexItemsRepository', () => {
         .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
         .createdAt(new Date('2024-01-01T00:00:00.000Z'))
         .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
+        .withBarcode({
+          type: 'ean13',
+          value: '123456789012',
+        })
         .build();
 
       await transactionPerformer.perform(async (trx) => {
@@ -49,6 +53,8 @@ describe('KnexItemsRepository', () => {
           quantity: 1,
           note: 'This is a note',
           companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
+          barcodeType: 'ean13',
+          barcodeValue: '123456789012',
           folderId: '349b8b68-109a-486f-bdc2-daedc31a6beb',
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
         },
@@ -79,6 +85,8 @@ describe('KnexItemsRepository', () => {
           quantity: 2,
           companyId: '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
           folderId: null,
+          barcodeType: null,
+          barcodeValue: null,
           note: 'This is a note',
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
         },

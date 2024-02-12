@@ -15,6 +15,8 @@ export async function up(knex: Knex): Promise<void> {
       table.string('note').notNullable();
       table.integer('quantity').notNullable();
       table.uuid('companyId').notNullable();
+      table.string('barcodeType').nullable();
+      table.string('barcodeValue').nullable();
       table.uuid('folderId').nullable();
       table.datetime('createdAt').notNullable();
     })

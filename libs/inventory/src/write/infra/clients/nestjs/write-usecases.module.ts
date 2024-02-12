@@ -15,6 +15,7 @@ import { MoveItemIntoFolderUseCase } from '@app/inventory/write/hexagon/usecases
 import { MoveFolderUseCase } from '@app/inventory/write/hexagon/usecases/move-folder/move-folder.usecase';
 import { TransactionPerformer } from '@app/shared/transaction-performing/transaction-performer';
 import { DatabaseModule } from '@app/shared';
+import { LinkBarcodeToItemUseCase } from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
@@ -118,6 +119,19 @@ import { DatabaseModule } from '@app/shared';
         return new MoveFolderUseCase(foldersRepository);
       },
     },
+    {
+      provide: LinkBarcodeToItemUseCase,
+      inject: ['ItemsRepository', 'TransactionPerformer'],
+      useFactory: (
+        itemsRepository: ItemsRepository,
+        transactionPerformer: TransactionPerformer,
+      ) => {
+        return new LinkBarcodeToItemUseCase(
+          itemsRepository,
+          transactionPerformer,
+        );
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -127,6 +141,7 @@ import { DatabaseModule } from '@app/shared';
     CreateNewTagUseCase,
     MoveItemIntoFolderUseCase,
     MoveFolderUseCase,
+    LinkBarcodeToItemUseCase,
   ],
 })
 export class WriteUseCasesModule {}

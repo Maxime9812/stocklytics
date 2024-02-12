@@ -9,8 +9,16 @@ export class KnexItemsRepository implements ItemsRepository {
 
   save(item: Item): TransactionalAsync {
     return async (trx) => {
-      const { id, name, quantity, companyId, createdAt, folderId, note } =
-        item.snapshot;
+      const {
+        id,
+        name,
+        quantity,
+        companyId,
+        createdAt,
+        folderId,
+        note,
+        barcode,
+      } = item.snapshot;
       await this.knex('items')
         .transacting(trx as Knex.Transaction)
         .insert({
@@ -20,6 +28,8 @@ export class KnexItemsRepository implements ItemsRepository {
           companyId,
           note,
           folderId,
+          barcodeType: barcode?.type,
+          barcodeValue: barcode?.value,
           createdAt,
         })
         .onConflict('id')
