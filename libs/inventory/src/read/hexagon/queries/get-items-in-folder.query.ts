@@ -8,6 +8,10 @@ export type GetItemsInFolderResponse = {
     type: string;
     value: string;
   };
+  tags: {
+    id: string;
+    label: string;
+  }[];
   quantity: number;
 }[];
 

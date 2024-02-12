@@ -41,6 +41,7 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
       return {
         ...item,
         barcode,
+        tags: [],
       };
     });
   }

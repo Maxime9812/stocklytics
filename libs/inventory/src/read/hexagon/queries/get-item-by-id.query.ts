@@ -9,6 +9,10 @@ export type GetItemByIdResponse = {
     type: string;
     value: string;
   };
+  tags: {
+    id: string;
+    label: string;
+  }[];
   createdAt: Date;
 };
 

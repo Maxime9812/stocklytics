@@ -36,6 +36,7 @@ export class KnexGetItemByIdQuery implements GetItemByIdQuery {
     return {
       ...item,
       barcode,
+      tags: [],
     };
   }
 }

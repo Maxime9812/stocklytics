@@ -45,6 +45,7 @@ describe('KnexGetItemById', () => {
       folderId: 'd0bf789c-8788-4293-b730-cd05e9c34418',
       name: 'Iphone 13',
       quantity: 10,
+      tags: [],
       createdAt: new Date('2024-01-01'),
     });
   });
@@ -79,6 +80,7 @@ describe('KnexGetItemById', () => {
         type: 'ean13',
         value: 'Barcode Value',
       },
+      tags: [],
       createdAt: new Date('2024-01-01'),
     });
   });
