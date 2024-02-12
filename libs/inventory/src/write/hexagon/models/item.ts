@@ -40,6 +40,10 @@ export class Item {
     this.props.barcode = barcode;
   }
 
+  editNote(note: string) {
+    this.props.note = note;
+  }
+
   static create(params: {
     id: string;
     companyId: string;

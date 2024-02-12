@@ -11,6 +11,9 @@ import { RemoveItemTagUseCase } from '@app/inventory/write/hexagon/usecases/remo
 import { GetItemByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-item-by-id/get-item-by-id.usecase';
 import { LinkBarcodeToItemUseCase } from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
 import { LinkBarcodeToItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/link-barcode-to-item.dto';
+import { ItemParams } from '@app/inventory/write/infra/clients/nestjs/params/item.params';
+import { EditItemNoteDto } from '@app/inventory/write/infra/clients/nestjs/dtos/edit-item-note.dto';
+import { EditItemNoteUseCase } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 
 @Controller('items')
 export class WriteItemsController {
@@ -21,6 +24,7 @@ export class WriteItemsController {
     private readonly moveItemIntoFolderUseCase: MoveItemIntoFolderUseCase,
     private readonly getItemByIdUseCase: GetItemByIdUseCase,
     private readonly linkBarcodeToItemUseCase: LinkBarcodeToItemUseCase,
+    private readonly editItemNoteUseCase: EditItemNoteUseCase,
   ) {}
 
   @Post()
@@ -50,7 +54,30 @@ export class WriteItemsController {
   }
 
   @Post(':itemId/barcode/link')
-  async linkBarcodeToItem(@Body() body: LinkBarcodeToItemDto) {
-    await this.linkBarcodeToItemUseCase.execute(body);
+  async linkBarcodeToItem(
+    @Param() params: ItemParams,
+    @Body() body: LinkBarcodeToItemDto,
+  ) {
+    const { barcode } = body;
+    const { itemId } = params;
+
+    await this.linkBarcodeToItemUseCase.execute({
+      itemId,
+      barcode,
+    });
+  }
+
+  @Post(':itemId/note')
+  async editItemNote(
+    @Param() params: ItemParams,
+    @Body() body: EditItemNoteDto,
+  ) {
+    const { note } = body;
+    const { itemId } = params;
+
+    await this.editItemNoteUseCase.execute({
+      itemId,
+      note,
+    });
   }
 }

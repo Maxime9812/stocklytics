@@ -26,6 +26,10 @@ import {
   LinkBarcodeToItemUseCase,
   LinkBarcodeToItemUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/link-barcode-to-item/link-barcode-to-item.usecase';
+import {
+  EditItemNoteUseCase,
+  EditItemNoteUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -81,6 +85,12 @@ export const createItemsFixture = ({
     },
     whenLinkBarcodeToItem(payload: LinkBarcodeToItemUseCasePayload) {
       return new LinkBarcodeToItemUseCase(
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
+    },
+    whenEditNote(payload: EditItemNoteUseCasePayload) {
+      return new EditItemNoteUseCase(
         itemsRepository,
         transactionPerformer,
       ).execute(payload);
