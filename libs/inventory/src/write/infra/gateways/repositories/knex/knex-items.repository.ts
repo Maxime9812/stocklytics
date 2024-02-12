@@ -68,6 +68,12 @@ export class KnexItemsRepository implements ItemsRepository {
         .from('items')
         .where({ id: item.id })
         .transacting(trx as Knex.Transaction);
+
+      await this.knex
+        .delete()
+        .from('items_tags')
+        .where({ itemId: item.id })
+        .transacting(trx as Knex.Transaction);
     };
   }
 

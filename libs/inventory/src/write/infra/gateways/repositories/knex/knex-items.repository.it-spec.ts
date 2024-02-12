@@ -228,6 +228,19 @@ describe('KnexItemsRepository', () => {
 
       expect(await findExistingItems()).toEqual([]);
     });
+    it('Should delete item tags', async () => {
+      const item = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .whitTagIds('f262a4be-f09d-4370-a2a7-698df42f135f')
+        .build();
+      await insertItem(item);
+
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.delete(item)(trx);
+      });
+
+      expect(await findExistingItemsTag()).toEqual([]);
+    });
   });
 
   const findExistingItems = async () => {
