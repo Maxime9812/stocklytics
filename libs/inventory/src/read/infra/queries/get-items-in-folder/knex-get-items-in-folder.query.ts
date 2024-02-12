@@ -12,11 +12,36 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
   async execute(
     payload: GetItemsInFolderPayload,
   ): Promise<GetItemsInFolderResponse> {
-    return this.knex<ItemPm>('items')
-      .select('id', 'name', 'quantity', 'folderId', 'createdAt', 'note')
+    const items = await this.knex<ItemPm>('items')
+      .select(
+        'id',
+        'name',
+        'quantity',
+        'folderId',
+        'createdAt',
+        'note',
+        'barcodeValue',
+        'barcodeType',
+      )
       .where({
         folderId: payload.folderId ?? null,
         companyId: payload.companyId,
       });
+
+    return items.map((i) => {
+      const { barcodeValue, barcodeType, ...item } = i;
+
+      const barcode = barcodeValue
+        ? {
+            type: barcodeType,
+            value: barcodeValue,
+          }
+        : undefined;
+
+      return {
+        ...item,
+        barcode,
+      };
+    });
   }
 }

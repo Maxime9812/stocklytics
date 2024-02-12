@@ -5,6 +5,10 @@ export type GetItemByIdResponse = {
   folderId?: string;
   companyId: string;
   note: string;
+  barcode?: {
+    type: string;
+    value: string;
+  };
   createdAt: Date;
 };
 

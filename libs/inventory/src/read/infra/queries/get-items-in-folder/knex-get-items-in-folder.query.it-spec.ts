@@ -4,6 +4,7 @@ import { resetDB } from '../../../../../../../test/docker-manager';
 import { KnexGetItemsInFolderQuery } from '@app/inventory/read/infra/queries/get-items-in-folder/knex-get-items-in-folder.query';
 import { FolderPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/folder.pm';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
+import { GetItemsInFolderResponse } from '@app/inventory/read/hexagon/queries/get-items-in-folder.query';
 
 describe('KnexGetItemsInFolder', () => {
   let sqlConnection: Knex;
@@ -100,6 +101,8 @@ describe('KnexGetItemsInFolder', () => {
           quantity: 2,
           companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          barcodeType: 'ean13',
+          barcodeValue: '1234567890',
           note: 'This is a note',
           createdAt: new Date('2024-01-01'),
         },
@@ -110,7 +113,7 @@ describe('KnexGetItemsInFolder', () => {
         companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
       });
 
-      expect(items).toEqual([
+      expect(items).toEqual<GetItemsInFolderResponse>([
         {
           id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
           name: 'Iphone 13',
@@ -124,6 +127,10 @@ describe('KnexGetItemsInFolder', () => {
           name: 'Macbook Pro M3',
           note: 'This is a note',
           createdAt: new Date('2024-01-01'),
+          barcode: {
+            type: 'ean13',
+            value: '1234567890',
+          },
           folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
           quantity: 2,
         },

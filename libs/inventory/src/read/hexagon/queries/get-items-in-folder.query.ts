@@ -4,6 +4,10 @@ export type GetItemsInFolderResponse = {
   folderId?: string;
   createdAt: Date;
   note: string;
+  barcode?: {
+    type: string;
+    value: string;
+  };
   quantity: number;
 }[];
 
