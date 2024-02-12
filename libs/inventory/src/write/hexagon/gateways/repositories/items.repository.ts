@@ -4,4 +4,5 @@ import { TransactionalAsync } from '@app/shared/transaction-performing/transacti
 export interface ItemsRepository {
   save(item: Item): TransactionalAsync;
   getById(id: string): Promise<Item | undefined>;
+  delete(item: Item): TransactionalAsync;
 }

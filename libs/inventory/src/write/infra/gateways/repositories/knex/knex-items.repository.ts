@@ -61,6 +61,16 @@ export class KnexItemsRepository implements ItemsRepository {
     });
   }
 
+  delete(item: Item): TransactionalAsync {
+    return async (trx) => {
+      await this.knex
+        .delete()
+        .from('items')
+        .where({ id: item.id })
+        .transacting(trx as Knex.Transaction);
+    };
+  }
+
   private saveItemTags(item: Item): TransactionalAsync {
     return async (trx) => {
       const { tagIds } = item.snapshot;

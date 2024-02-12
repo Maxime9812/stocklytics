@@ -215,6 +215,21 @@ describe('KnexItemsRepository', () => {
     });
   });
 
+  describe('Delete', () => {
+    it('Should delete item', async () => {
+      const item = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .build();
+      await insertItem(item);
+
+      await transactionPerformer.perform(async (trx) => {
+        await itemsRepository.delete(item)(trx);
+      });
+
+      expect(await findExistingItems()).toEqual([]);
+    });
+  });
+
   const findExistingItems = async () => {
     return sqlConnection('items').select<ItemPm[]>('*');
   };

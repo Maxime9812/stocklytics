@@ -30,6 +30,10 @@ import {
   EditItemNoteUseCase,
   EditItemNoteUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
+import {
+  DeleteItemUseCase,
+  DeleteItemUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/delete-item/delete-item.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -91,6 +95,12 @@ export const createItemsFixture = ({
     },
     whenEditNote(payload: EditItemNoteUseCasePayload) {
       return new EditItemNoteUseCase(
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
+    },
+    whenDeleteItem(payload: DeleteItemUseCasePayload) {
+      return new DeleteItemUseCase(
         itemsRepository,
         transactionPerformer,
       ).execute(payload);
