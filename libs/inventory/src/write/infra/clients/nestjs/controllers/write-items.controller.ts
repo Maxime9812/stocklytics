@@ -15,6 +15,7 @@ import { ItemParams } from '@app/inventory/write/infra/clients/nestjs/params/ite
 import { EditItemNoteDto } from '@app/inventory/write/infra/clients/nestjs/dtos/edit-item-note.dto';
 import { EditItemNoteUseCase } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-item/delete-item.usecase';
+import { UnlinkItemBarcodeUseCase } from '@app/inventory/write/hexagon/usecases/unlink-item-barcode/unlink-item-barcode-use.case';
 
 @Controller('items')
 export class WriteItemsController {
@@ -27,6 +28,7 @@ export class WriteItemsController {
     private readonly linkBarcodeToItemUseCase: LinkBarcodeToItemUseCase,
     private readonly editItemNoteUseCase: EditItemNoteUseCase,
     private readonly deleteItemUseCase: DeleteItemUseCase,
+    private readonly unlinkItemBarcodeUseCase: UnlinkItemBarcodeUseCase,
   ) {}
 
   @Post()
@@ -56,7 +58,7 @@ export class WriteItemsController {
   }
 
   @Post(':itemId/barcode')
-  async linkBarcodeToItem(
+  async linkBarcode(
     @Param() params: ItemParams,
     @Body() body: LinkBarcodeToItemDto,
   ) {
@@ -66,6 +68,15 @@ export class WriteItemsController {
     await this.linkBarcodeToItemUseCase.execute({
       itemId,
       barcode,
+    });
+  }
+
+  @Delete(':itemId/barcode')
+  async unlinkBarcode(@Param() params: ItemParams) {
+    const { itemId } = params;
+
+    await this.unlinkItemBarcodeUseCase.execute({
+      itemId,
     });
   }
 

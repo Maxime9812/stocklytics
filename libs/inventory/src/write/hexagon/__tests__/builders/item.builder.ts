@@ -25,6 +25,7 @@ export const itemBuilder = (
     withFolderId: (folderId: string) => itemBuilder({ ...snapshot, folderId }),
     withNote: (note: string) => itemBuilder({ ...snapshot, note }),
     withBarcode: (barcode: Barcode) => itemBuilder({ ...snapshot, barcode }),
+    withoutBarcode: () => itemBuilder({ ...snapshot, barcode: undefined }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };

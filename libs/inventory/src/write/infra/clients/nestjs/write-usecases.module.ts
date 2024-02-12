@@ -19,6 +19,7 @@ import { LinkBarcodeToItemUseCase } from '@app/inventory/write/hexagon/usecases/
 import { EditItemNoteUseCase } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-item/delete-item.usecase';
 import { DeleteFolderUseCase } from '@app/inventory/write/hexagon/usecases/delete-folder/delete-folder.usecase';
+import { UnlinkItemBarcodeUseCase } from '@app/inventory/write/hexagon/usecases/unlink-item-barcode/unlink-item-barcode-use.case';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
@@ -162,6 +163,19 @@ import { DeleteFolderUseCase } from '@app/inventory/write/hexagon/usecases/delet
         return new DeleteFolderUseCase(foldersRepository);
       },
     },
+    {
+      provide: UnlinkItemBarcodeUseCase,
+      inject: ['ItemsRepository', 'TransactionPerformer'],
+      useFactory: (
+        itemsRepository: ItemsRepository,
+        transactionPerformer: TransactionPerformer,
+      ) => {
+        return new UnlinkItemBarcodeUseCase(
+          itemsRepository,
+          transactionPerformer,
+        );
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -175,6 +189,7 @@ import { DeleteFolderUseCase } from '@app/inventory/write/hexagon/usecases/delet
     EditItemNoteUseCase,
     DeleteItemUseCase,
     DeleteFolderUseCase,
+    UnlinkItemBarcodeUseCase,
   ],
 })
 export class WriteUseCasesModule {}

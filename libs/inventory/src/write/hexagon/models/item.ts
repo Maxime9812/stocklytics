@@ -40,6 +40,10 @@ export class Item {
     this.props.barcode = barcode;
   }
 
+  unlinkBarcode() {
+    this.props.barcode = undefined;
+  }
+
   editNote(note: string) {
     this.props.note = note;
   }
