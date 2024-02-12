@@ -53,7 +53,7 @@ export class WriteItemsController {
     await this.moveItemIntoFolderUseCase.execute({ itemId, folderId });
   }
 
-  @Post(':itemId/barcode/link')
+  @Post(':itemId/barcode')
   async linkBarcodeToItem(
     @Param() params: ItemParams,
     @Body() body: LinkBarcodeToItemDto,
