@@ -1,13 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ScanBarcodeUseCase } from '@app/inventory/read/hexagon/usecases/scan-barcode/scan-barcode.usecase';
-import { ScanBarcodeParams } from '@app/inventory/read/infra/clients/nestjs/params/scan-barcode.params';
+import { ScanBarcodeQuery } from '@app/inventory/read/infra/clients/nestjs/queries/scan-barcode.query';
+import { Response } from 'express';
 
 @Controller('scan')
 export class ReadScanController {
   constructor(private readonly scanBarcodeUseCase: ScanBarcodeUseCase) {}
 
   @Get()
-  async scan(@Param() params: ScanBarcodeParams) {
-    return await this.scanBarcodeUseCase.execute(params);
+  async scan(@Query() query: ScanBarcodeQuery, @Res() res: Response) {
+    const result = await this.scanBarcodeUseCase.execute(query);
+    if (result) return res.status(200).send(result);
+    return res.status(404).send();
   }
 }

@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class ScanBarcodeParams {
+export class ScanBarcodeQuery {
   @IsString()
   type: string;
   @IsString()
