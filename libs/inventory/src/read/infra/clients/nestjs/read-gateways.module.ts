@@ -5,6 +5,7 @@ import { DatabaseModule } from '@app/shared';
 import { KnexGetItemsInFolderQuery } from '@app/inventory/read/infra/queries/get-items-in-folder/knex-get-items-in-folder.query';
 import { KnexGetFoldersInFolderQuery } from '@app/inventory/read/infra/queries/get-folders-in-folder/knex-get-folders-in-folder.query';
 import { KnexGetFolderByIdQuery } from '@app/inventory/read/infra/queries/get-folder-by-id/knex-get-folder-by-id.query';
+import { KnexScanBarcodeQuery } from '@app/inventory/read/infra/queries/scan-barcode/knex-scan-barcode.query';
 
 @Module({
   imports: [DatabaseModule],
@@ -29,12 +30,18 @@ import { KnexGetFolderByIdQuery } from '@app/inventory/read/infra/queries/get-fo
       inject: ['SqlConnection'],
       useFactory: (knex: Knex) => new KnexGetFolderByIdQuery(knex),
     },
+    {
+      provide: 'ScanBarcodeQuery',
+      inject: ['SqlConnection'],
+      useFactory: (knex: Knex) => new KnexScanBarcodeQuery(knex),
+    },
   ],
   exports: [
     'GetItemByIdQuery',
     'GetFoldersInFolderQuery',
     'GetItemsInFolderQuery',
     'GetFolderByIdQuery',
+    'ScanBarcodeQuery',
   ],
 })
 export class ReadGatewaysModule {}

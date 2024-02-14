@@ -10,6 +10,8 @@ import { GetFoldersInFoldersUseCase } from '@app/inventory/read/hexagon/usecases
 import { GetFoldersInFolderQuery } from '@app/inventory/read/hexagon/queries/get-folders-in-folder.query';
 import { GetFolderByIdUseCase } from '@app/inventory/read/hexagon/usecases/get-folder-by-id/get-folder-by-id.usecase';
 import { GetFolderByIdQuery } from '@app/inventory/read/hexagon/queries/get-folder-by-id.query';
+import { ScanBarcodeUseCase } from '@app/inventory/read/hexagon/usecases/scan-barcode/scan-barcode.usecase';
+import { ScanBarcodeQuery } from '@app/inventory/read/hexagon/queries/scan-barcode.query';
 
 @Module({
   imports: [ReadGatewaysModule, AuthGatewaysModule],
@@ -46,12 +48,21 @@ import { GetFolderByIdQuery } from '@app/inventory/read/hexagon/queries/get-fold
         authGateway: AuthGateway,
       ) => new GetFolderByIdUseCase(getFolderByIdQuery, authGateway),
     },
+    {
+      provide: ScanBarcodeUseCase,
+      inject: ['ScanBarcodeQuery', 'AuthGateway'],
+      useFactory: (
+        scanBarcodeQuery: ScanBarcodeQuery,
+        authGateway: AuthGateway,
+      ) => new ScanBarcodeUseCase(authGateway, scanBarcodeQuery),
+    },
   ],
   exports: [
     GetItemByIdUseCase,
     GetItemsInFolderUseCase,
     GetFoldersInFoldersUseCase,
     GetFolderByIdUseCase,
+    ScanBarcodeUseCase,
   ],
 })
 export class ReadUseCasesModule {}
