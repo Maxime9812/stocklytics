@@ -3,6 +3,7 @@ import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositor
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { TransactionalAsync } from '@app/shared/transaction-performing/transaction-performer';
+import { BarcodeType } from '@app/inventory/write/hexagon/models/barcode';
 
 export class KnexItemsRepository implements ItemsRepository {
   constructor(private readonly knex: Knex) {}
@@ -48,7 +49,16 @@ export class KnexItemsRepository implements ItemsRepository {
 
     if (!itemPm) return;
 
-    const { name, quantity, companyId, createdAt, folderId, note } = itemPm;
+    const {
+      name,
+      quantity,
+      companyId,
+      createdAt,
+      folderId,
+      note,
+      barcodeType,
+      barcodeValue,
+    } = itemPm;
     return Item.fromSnapshot({
       id: itemPm.id,
       name,
@@ -57,6 +67,9 @@ export class KnexItemsRepository implements ItemsRepository {
       createdAt,
       folderId,
       note,
+      barcode: barcodeType
+        ? { type: barcodeType as BarcodeType, value: barcodeValue }
+        : undefined,
       tagIds: tagIds.map((tagId) => tagId.tagId),
     });
   }

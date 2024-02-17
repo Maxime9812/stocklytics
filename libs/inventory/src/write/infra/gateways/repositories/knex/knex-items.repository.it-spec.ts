@@ -213,6 +213,28 @@ describe('KnexItemsRepository', () => {
 
       expect(result?.snapshot).toEqual(item.snapshot);
     });
+
+    it('Should return item with barcode', async () => {
+      const item = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .withName('Iphone 13 pro max')
+        .withQuantity(1)
+        .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
+        .createdAt(new Date('2024-01-01T00:00:00.000Z'))
+        .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
+        .withBarcode({
+          type: 'ean13',
+          value: '123456789012',
+        })
+        .build();
+      await insertItem(item);
+
+      const result = await itemsRepository.getById(
+        'b33adf7e-3ae7-4f17-9560-3388251c266f',
+      );
+
+      expect(result?.snapshot).toEqual(item.snapshot);
+    });
   });
 
   describe('Delete', () => {
@@ -251,8 +273,17 @@ describe('KnexItemsRepository', () => {
   };
 
   const insertItem = async (item: Item) => {
-    const { id, name, quantity, companyId, createdAt, folderId, tagIds, note } =
-      item.snapshot;
+    const {
+      id,
+      name,
+      quantity,
+      companyId,
+      createdAt,
+      folderId,
+      tagIds,
+      note,
+      barcode,
+    } = item.snapshot;
     await sqlConnection('items').insert({
       id,
       name,
@@ -261,6 +292,8 @@ describe('KnexItemsRepository', () => {
       folderId,
       note,
       createdAt,
+      barcodeType: barcode?.type,
+      barcodeValue: barcode?.value,
     });
 
     if (!tagIds.length) return;
