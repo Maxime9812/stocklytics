@@ -12,11 +12,11 @@ export class ChangeItemNameUseCase {
     private readonly transactionPerformer: TransactionPerformer,
   ) {}
 
-  async execute({ itemId }: ChangeItemNameUseCasePayload) {
+  async execute({ itemId, name }: ChangeItemNameUseCasePayload) {
     await this.transactionPerformer.perform(async (trx) => {
       const item = await this.itemRepository.getById(itemId);
 
-      item.changeName('new name');
+      item.changeName(name);
 
       await this.itemRepository.save(item)(trx);
     });
