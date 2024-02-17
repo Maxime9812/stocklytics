@@ -10,18 +10,45 @@ export class KnexGetFoldersInFolderQuery implements GetFoldersInFolderQuery {
   async execute(
     payload: GetFoldersInFolderPayload,
   ): Promise<GetFoldersInFolderResponse> {
-    const values = await this.knex('folders')
+    const idRef = this.knex.ref('RecursiveFolders.id');
+
+    const folders = await this.knex('folders')
       .select('id', 'name', 'parentId', 'createdAt')
       .where({
         parentId: payload.folderId ?? null,
         companyId: payload.companyId,
       });
-    return values.map((v) => ({
-      id: v.id,
-      name: v.name,
-      parentId: v.parentId,
-      createdAt: v.createdAt,
-      itemQuantity: 0,
-    }));
+
+    return await Promise.all(
+      folders.map(async (folder) => {
+        const response = await this.knex
+          .withRecursive('RecursiveFolders', (qb) => {
+            qb.select('id', 'parentId')
+              .from('folders')
+              .where({
+                parentId: folder.id,
+              })
+              .union((qb) => {
+                qb.select('f.id', 'f.parentId')
+                  .from('folders as f')
+                  .join('RecursiveFolders as rf', 'f.parentId', 'rf.id');
+              });
+          })
+          .from('items')
+          .sum('quantity')
+          .leftOuterJoin(
+            'RecursiveFolders',
+            'items.folderId',
+            'RecursiveFolders.id',
+          )
+          .where('folderId', idRef)
+          .orWhere('folderId', folder.id);
+
+        return {
+          ...folder,
+          itemQuantity: Number(response[0].sum),
+        };
+      }),
+    );
   }
 }
