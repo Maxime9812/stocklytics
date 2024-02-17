@@ -48,6 +48,10 @@ export class Item {
     this.props.note = note;
   }
 
+  changeName(name: string) {
+    this.props.name = name;
+  }
+
   static create(params: {
     id: string;
     companyId: string;

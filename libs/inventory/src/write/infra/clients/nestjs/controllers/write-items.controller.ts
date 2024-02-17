@@ -16,6 +16,8 @@ import { EditItemNoteDto } from '@app/inventory/write/infra/clients/nestjs/dtos/
 import { EditItemNoteUseCase } from '@app/inventory/write/hexagon/usecases/edit-item-note/edit-item-note.usecase';
 import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-item/delete-item.usecase';
 import { UnlinkItemBarcodeUseCase } from '@app/inventory/write/hexagon/usecases/unlink-item-barcode/unlink-item-barcode-use.case';
+import { ChangeItemNameUseCase } from '@app/inventory/write/hexagon/usecases/change-item-name/change-item-name.usecase';
+import { ChangeItemNameDto } from '@app/inventory/write/infra/clients/nestjs/dtos/change-item-name.dto';
 
 @Controller('items')
 export class WriteItemsController {
@@ -29,6 +31,7 @@ export class WriteItemsController {
     private readonly editItemNoteUseCase: EditItemNoteUseCase,
     private readonly deleteItemUseCase: DeleteItemUseCase,
     private readonly unlinkItemBarcodeUseCase: UnlinkItemBarcodeUseCase,
+    private readonly changeItemNameUseCase: ChangeItemNameUseCase,
   ) {}
 
   @Post()
@@ -92,6 +95,16 @@ export class WriteItemsController {
       itemId,
       note,
     });
+  }
+
+  @Post(':itemId/name')
+  async changeItemName(
+    @Param() params: ItemParams,
+    @Body() body: ChangeItemNameDto,
+  ) {
+    const { name } = body;
+    const { itemId } = params;
+    await this.changeItemNameUseCase.execute({ itemId, name });
   }
 
   @Delete(':itemId')

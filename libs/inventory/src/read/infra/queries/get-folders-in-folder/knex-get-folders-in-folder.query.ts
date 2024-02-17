@@ -35,7 +35,7 @@ export class KnexGetFoldersInFolderQuery implements GetFoldersInFolderQuery {
               });
           })
           .from('items')
-          .sum('quantity')
+          .sum('quantity as itemQuantity')
           .leftOuterJoin(
             'RecursiveFolders',
             'items.folderId',
@@ -46,7 +46,7 @@ export class KnexGetFoldersInFolderQuery implements GetFoldersInFolderQuery {
 
         return {
           ...folder,
-          itemQuantity: Number(response[0].sum),
+          itemQuantity: Number(response[0].itemQuantity),
         };
       }),
     );
