@@ -43,6 +43,7 @@ import {
   ChangeItemNameUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/change-item-name/change-item-name.usecase';
 import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
+import { isLeft } from 'fp-ts/Either';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -57,6 +58,7 @@ export const createItemsFixture = ({
   const dateProvider = new StubDateProvider();
   let transactionPerformer: TransactionPerformer =
     new NullTransformationPerformer();
+  let error: any;
 
   return {
     givenNowIs(date: Date) {
@@ -99,11 +101,17 @@ export const createItemsFixture = ({
         transactionPerformer,
       ).execute(payload);
     },
-    whenLinkBarcodeToItem(payload: LinkBarcodeToItemUseCasePayload) {
-      return new LinkBarcodeToItemUseCase(
+    async whenLinkBarcodeToItem(payload: LinkBarcodeToItemUseCasePayload) {
+      const result = await new LinkBarcodeToItemUseCase(
         itemsRepository,
         transactionPerformer,
+        authGateway,
       ).execute(payload);
+
+      if (isLeft(result)) {
+        error = result.left;
+      }
+      return;
     },
     whenUnlinkBarcode(payload: UnLinkItemBarcodeUseCasePayload) {
       return new UnlinkItemBarcodeUseCase(
@@ -136,6 +144,9 @@ export const createItemsFixture = ({
     },
     thenItemsShouldBeEmpty() {
       expect(itemsRepository.items).toEqual([]);
+    },
+    thenErrorShouldBe(expectedError: any) {
+      expect({ ...error }).toEqual({ ...expectedError });
     },
   };
 };

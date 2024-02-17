@@ -14,15 +14,19 @@ export class KnexTransactionPerformer implements TransactionPerformer {
   async perform<T>(
     useCase: (trx: GenericTransaction) => Promise<T>,
   ): Promise<T> {
-    return this.sqlConnection.transaction<T>(async (trx) => {
-      let result;
-      try {
-        result = await useCase(trx);
-        await trx.commit();
-      } catch (e) {
-        await trx.rollback(e);
-      }
-      return result;
+    return new Promise((resolve, reject) => {
+      this.sqlConnection.transaction<T>(async (trx) => {
+        let result;
+        try {
+          result = await useCase(trx);
+          await trx.commit();
+          resolve(result);
+        } catch (e) {
+          await trx.rollback(e);
+          reject(e);
+        }
+        return result;
+      });
     });
   }
 }

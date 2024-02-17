@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { CreateNewItemUseCase } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
 import { CreateNewItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/create-new-item.dto';
 import { AddTagToItemUseCase } from '@app/inventory/write/hexagon/usecases/add-tag-to-item/add-tag-to-item.usecase';
@@ -18,6 +26,8 @@ import { DeleteItemUseCase } from '@app/inventory/write/hexagon/usecases/delete-
 import { UnlinkItemBarcodeUseCase } from '@app/inventory/write/hexagon/usecases/unlink-item-barcode/unlink-item-barcode-use.case';
 import { ChangeItemNameUseCase } from '@app/inventory/write/hexagon/usecases/change-item-name/change-item-name.usecase';
 import { ChangeItemNameDto } from '@app/inventory/write/infra/clients/nestjs/dtos/change-item-name.dto';
+import { Response } from 'express';
+import { isLeft } from 'fp-ts/Either';
 
 @Controller('items')
 export class WriteItemsController {
@@ -64,14 +74,21 @@ export class WriteItemsController {
   async linkBarcode(
     @Param() params: ItemParams,
     @Body() body: LinkBarcodeToItemDto,
+    @Res() res: Response,
   ) {
     const { barcode } = body;
     const { itemId } = params;
 
-    await this.linkBarcodeToItemUseCase.execute({
+    const result = await this.linkBarcodeToItemUseCase.execute({
       itemId,
       barcode,
     });
+
+    if (isLeft(result)) {
+      return res.status(HttpStatus.CONFLICT).send(result.left);
+    }
+
+    res.status(HttpStatus.OK).send(result);
   }
 
   @Delete(':itemId/barcode')

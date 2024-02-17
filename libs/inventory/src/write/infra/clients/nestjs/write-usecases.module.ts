@@ -126,14 +126,16 @@ import { ChangeItemNameUseCase } from '@app/inventory/write/hexagon/usecases/cha
     },
     {
       provide: LinkBarcodeToItemUseCase,
-      inject: ['ItemsRepository', 'TransactionPerformer'],
+      inject: ['ItemsRepository', 'TransactionPerformer', 'AuthGateway'],
       useFactory: (
         itemsRepository: ItemsRepository,
         transactionPerformer: TransactionPerformer,
+        authGateway: AuthGateway,
       ) => {
         return new LinkBarcodeToItemUseCase(
           itemsRepository,
           transactionPerformer,
+          authGateway,
         );
       },
     },

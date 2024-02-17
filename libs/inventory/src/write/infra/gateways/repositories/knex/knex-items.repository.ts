@@ -3,7 +3,10 @@ import { ItemsRepository } from '@app/inventory/write/hexagon/gateways/repositor
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { TransactionalAsync } from '@app/shared/transaction-performing/transaction-performer';
-import { BarcodeType } from '@app/inventory/write/hexagon/models/barcode';
+import {
+  Barcode,
+  BarcodeType,
+} from '@app/inventory/write/hexagon/models/barcode';
 
 export class KnexItemsRepository implements ItemsRepository {
   constructor(private readonly knex: Knex) {}
@@ -88,6 +91,18 @@ export class KnexItemsRepository implements ItemsRepository {
         .where({ itemId: item.id })
         .transacting(trx as Knex.Transaction);
     };
+  }
+
+  async getItemIdByBarcode(
+    barcode: Barcode,
+    companyId: string,
+  ): Promise<string | undefined> {
+    const query = await this.knex<ItemPm>('items').first('id').where({
+      companyId,
+      barcodeType: barcode.type,
+      barcodeValue: barcode.value,
+    });
+    return query?.id;
   }
 
   private saveItemTags(item: Item): TransactionalAsync {
