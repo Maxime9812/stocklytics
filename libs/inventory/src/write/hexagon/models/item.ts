@@ -1,5 +1,10 @@
 import { Tag } from '@app/inventory/write/hexagon/models/tag';
 import { Barcode } from '@app/inventory/write/hexagon/models/barcode';
+import { Either, left, right } from 'fp-ts/Either';
+
+export class ItemQuantityCannotBeNegativeError {
+  readonly type = 'ItemQuantityCannotBeNegativeError';
+}
 
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
@@ -50,6 +55,15 @@ export class Item {
 
   changeName(name: string) {
     this.props.name = name;
+  }
+
+  adjustQuantity(
+    quantity: number,
+  ): Either<ItemQuantityCannotBeNegativeError, void> {
+    if (this.props.quantity + quantity < 0)
+      return left(new ItemQuantityCannotBeNegativeError());
+    this.props.quantity += quantity;
+    return right(undefined);
   }
 
   static create(params: {

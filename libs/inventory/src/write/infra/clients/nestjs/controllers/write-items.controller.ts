@@ -28,6 +28,8 @@ import { ChangeItemNameUseCase } from '@app/inventory/write/hexagon/usecases/cha
 import { ChangeItemNameDto } from '@app/inventory/write/infra/clients/nestjs/dtos/change-item-name.dto';
 import { Response } from 'express';
 import { isLeft } from 'fp-ts/Either';
+import { AdjustItemQuantityDto } from '@app/inventory/write/infra/clients/nestjs/dtos/adjust-item-quantity.dto';
+import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
 
 @Controller('items')
 export class WriteItemsController {
@@ -42,6 +44,7 @@ export class WriteItemsController {
     private readonly deleteItemUseCase: DeleteItemUseCase,
     private readonly unlinkItemBarcodeUseCase: UnlinkItemBarcodeUseCase,
     private readonly changeItemNameUseCase: ChangeItemNameUseCase,
+    private readonly adjustItemQuantityUseCase: AdjustItemQuantityUseCase,
   ) {}
 
   @Post()
@@ -122,6 +125,24 @@ export class WriteItemsController {
     const { name } = body;
     const { itemId } = params;
     await this.changeItemNameUseCase.execute({ itemId, name });
+  }
+
+  @Post(':itemId/quantity/adjust')
+  async adjustItemQuantity(
+    @Param() params: ItemParams,
+    @Body() body: AdjustItemQuantityDto,
+    @Res() res: Response,
+  ) {
+    const { itemId } = params;
+    const { quantity } = body;
+    const result = await this.adjustItemQuantityUseCase.execute({
+      itemId,
+      quantity,
+    });
+
+    if (isLeft(result)) {
+      return res.status(HttpStatus.NOT_MODIFIED).send(result.left);
+    }
   }
 
   @Delete(':itemId')

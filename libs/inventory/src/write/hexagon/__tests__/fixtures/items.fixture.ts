@@ -44,6 +44,10 @@ import {
 } from '@app/inventory/write/hexagon/usecases/change-item-name/change-item-name.usecase';
 import { DroppingTransactionPerformer } from '@app/shared/transaction-performing/dropping-transaction-performer';
 import { isLeft } from 'fp-ts/Either';
+import {
+  AdjustItemQuantityUseCase,
+  AdjustItemQuantityUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -136,6 +140,16 @@ export const createItemsFixture = ({
         itemsRepository,
         transactionPerformer,
       ).execute(payload);
+    },
+    async whenAdjustItemQuantity(payload: AdjustItemQuantityUseCasePayload) {
+      const result = await new AdjustItemQuantityUseCase(
+        itemsRepository,
+        transactionPerformer,
+      ).execute(payload);
+
+      if (isLeft(result)) {
+        error = result.left;
+      }
     },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(
