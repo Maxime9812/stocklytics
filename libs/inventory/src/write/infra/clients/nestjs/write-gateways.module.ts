@@ -5,6 +5,7 @@ import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/reposit
 import { Knex } from 'knex';
 import { KnexTagsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-tags.repository';
 import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-folders.repository';
+import { LocalDiskStorageImageUploaderGateway } from '@app/inventory/write/infra/gateways/image-uploader/local-disk-storage-image-uploader.gateway';
 
 @Module({
   imports: [DatabaseModule],
@@ -31,12 +32,21 @@ import { KnexFoldersRepository } from '@app/inventory/write/infra/gateways/repos
       provide: 'DateProvider',
       useClass: RealDateProvider,
     },
+    {
+      provide: 'ImageUploaderGateway',
+      useFactory: () =>
+        new LocalDiskStorageImageUploaderGateway(
+          'http://localhost:3000/assets/',
+          '.assets/images',
+        ),
+    },
   ],
   exports: [
     'ItemsRepository',
     'DateProvider',
     'TagsRepository',
     'FoldersRepository',
+    'ImageUploaderGateway',
   ],
 })
 export class WriteGatewaysModule {}

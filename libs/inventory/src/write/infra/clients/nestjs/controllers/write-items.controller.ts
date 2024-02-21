@@ -30,6 +30,7 @@ import { Response } from 'express';
 import { isLeft } from 'fp-ts/Either';
 import { AdjustItemQuantityDto } from '@app/inventory/write/infra/clients/nestjs/dtos/adjust-item-quantity.dto';
 import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
+import { AddImageToItemUseCase } from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
 
 @Controller('items')
 export class WriteItemsController {
@@ -45,6 +46,7 @@ export class WriteItemsController {
     private readonly unlinkItemBarcodeUseCase: UnlinkItemBarcodeUseCase,
     private readonly changeItemNameUseCase: ChangeItemNameUseCase,
     private readonly adjustItemQuantityUseCase: AdjustItemQuantityUseCase,
+    private readonly addImageToItemUseCase: AddImageToItemUseCase,
   ) {}
 
   @Post()
@@ -149,5 +151,10 @@ export class WriteItemsController {
   async deleteItem(@Param() params: ItemParams) {
     const { itemId } = params;
     await this.deleteItemUseCase.execute({ itemId });
+  }
+
+  @Post(':itemId/images')
+  async addImageToItem(@Param() params: ItemParams) {
+    const { itemId } = params;
   }
 }

@@ -48,6 +48,11 @@ import {
   AdjustItemQuantityUseCase,
   AdjustItemQuantityUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
+import {
+  AddImageToItemUseCase,
+  AddImageToItemUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
+import { StubImageUploaderGateway } from '@app/inventory/write/infra/gateways/image-uploader/stub-image-uploader.gateway';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -60,6 +65,7 @@ export const createItemsFixture = ({
 }> = {}) => {
   const itemsRepository = new InMemoryItemsRepository();
   const dateProvider = new StubDateProvider();
+  const imageUploader = new StubImageUploaderGateway();
   let transactionPerformer: TransactionPerformer =
     new NullTransformationPerformer();
   let error: any;
@@ -76,6 +82,13 @@ export const createItemsFixture = ({
     },
     givenDroppingTransactionPerformer() {
       transactionPerformer = new DroppingTransactionPerformer();
+    },
+    givenUploadedImage(params: {
+      imageId: string;
+      imagePath: string;
+      returnedUrl: string;
+    }) {
+      imageUploader.givenUploadedImage(params);
     },
     whenCreateNewItem(payload: CreateNewItemUseCasePayload) {
       return new CreateNewItemUseCase(
@@ -150,6 +163,13 @@ export const createItemsFixture = ({
       if (isLeft(result)) {
         error = result.left;
       }
+    },
+    whenAddImageToItem(payload: AddImageToItemUseCasePayload) {
+      return new AddImageToItemUseCase(
+        itemsRepository,
+        transactionPerformer,
+        imageUploader,
+      ).execute(payload);
     },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(

@@ -22,6 +22,8 @@ import { DeleteFolderUseCase } from '@app/inventory/write/hexagon/usecases/delet
 import { UnlinkItemBarcodeUseCase } from '@app/inventory/write/hexagon/usecases/unlink-item-barcode/unlink-item-barcode-use.case';
 import { ChangeItemNameUseCase } from '@app/inventory/write/hexagon/usecases/change-item-name/change-item-name.usecase';
 import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
+import { AddImageToItemUseCase } from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
+import { ImageUploaderGateway } from '@app/inventory/write/hexagon/gateways/image-uploader.gateway';
 
 @Module({
   imports: [WriteGatewaysModule, AuthGatewaysModule, DatabaseModule],
@@ -203,6 +205,25 @@ import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases
         );
       },
     },
+    {
+      provide: AddImageToItemUseCase,
+      inject: [
+        'ItemsRepository',
+        'TransactionPerformer',
+        'ImageUploaderGateway',
+      ],
+      useFactory: (
+        itemsRepository: ItemsRepository,
+        transactionPerformer: TransactionPerformer,
+        imageUploader: ImageUploaderGateway,
+      ) => {
+        return new AddImageToItemUseCase(
+          itemsRepository,
+          transactionPerformer,
+          imageUploader,
+        );
+      },
+    },
   ],
   exports: [
     CreateNewItemUseCase,
@@ -219,6 +240,7 @@ import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases
     UnlinkItemBarcodeUseCase,
     ChangeItemNameUseCase,
     AdjustItemQuantityUseCase,
+    AddImageToItemUseCase,
   ],
 })
 export class WriteUseCasesModule {}

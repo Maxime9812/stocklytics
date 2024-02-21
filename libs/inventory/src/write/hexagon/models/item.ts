@@ -6,6 +6,12 @@ export class ItemQuantityCannotBeNegativeError {
   readonly type = 'ItemQuantityCannotBeNegativeError';
 }
 
+export type ItemImage = {
+  id: string;
+  itemId: string;
+  url: string;
+};
+
 export class Item {
   private constructor(private props: ItemConstructorProps) {}
 
@@ -23,6 +29,7 @@ export class Item {
       note: this.props.note,
       folderId: this.props.folderId,
       barcode: this.props.barcode,
+      image: this.props.image,
       createdAt: this.props.createdAt,
     };
   }
@@ -66,6 +73,14 @@ export class Item {
     return right(undefined);
   }
 
+  addImage(image: { id: string; url: string }) {
+    this.props.image = {
+      id: image.id,
+      itemId: this.id,
+      url: image.url,
+    };
+  }
+
   static create(params: {
     id: string;
     companyId: string;
@@ -96,6 +111,7 @@ export class Item {
       folderId: snapshot.folderId,
       note: snapshot.note,
       barcode: snapshot.barcode,
+      image: snapshot.image,
       createdAt: snapshot.createdAt,
     });
   }
@@ -110,6 +126,7 @@ type ItemConstructorProps = {
   folderId?: string;
   note: string;
   barcode?: Barcode;
+  image?: ItemImage;
   createdAt: Date;
 };
 export type ItemSnapshot = {
@@ -121,5 +138,6 @@ export type ItemSnapshot = {
   folderId?: string;
   note: string;
   barcode?: Barcode;
+  image?: ItemImage;
   createdAt: Date;
 };

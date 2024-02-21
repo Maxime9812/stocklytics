@@ -1,4 +1,8 @@
-import { Item, ItemSnapshot } from '@app/inventory/write/hexagon/models/item';
+import {
+  Item,
+  ItemImage,
+  ItemSnapshot,
+} from '@app/inventory/write/hexagon/models/item';
 import { Barcode } from '@app/inventory/write/hexagon/models/barcode';
 
 export const itemBuilder = (
@@ -26,6 +30,7 @@ export const itemBuilder = (
     withNote: (note: string) => itemBuilder({ ...snapshot, note }),
     withBarcode: (barcode: Barcode) => itemBuilder({ ...snapshot, barcode }),
     withoutBarcode: () => itemBuilder({ ...snapshot, barcode: undefined }),
+    withImage: (image: ItemImage) => itemBuilder({ ...snapshot, image }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };
