@@ -4,7 +4,7 @@ import {
   GetItemsInFolderResponse,
 } from '@app/inventory/read/hexagon/queries/get-items-in-folder.query';
 import { Knex } from 'knex';
-import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
+import { ItemImagePm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item-image.pm';
 
 export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
   constructor(private readonly knex: Knex) {}
@@ -12,7 +12,14 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
   async execute(
     payload: GetItemsInFolderPayload,
   ): Promise<GetItemsInFolderResponse> {
-    const items = await this.knex<ItemPm>('items')
+    const ref = this.knex.ref('items.id');
+    const imageUrlQuery = this.knex<ItemImagePm>('item_images')
+      .select('url')
+      .where('itemId', ref)
+      .first()
+      .as('imageUrl');
+
+    const items = await this.knex('items')
       .select(
         'id',
         'name',
@@ -22,6 +29,7 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
         'note',
         'barcodeValue',
         'barcodeType',
+        imageUrlQuery,
       )
       .where({
         folderId: payload.folderId ?? null,
@@ -40,6 +48,7 @@ export class KnexGetItemsInFolderQuery implements GetItemsInFolderQuery {
 
       return {
         ...item,
+        imageUrl: i.imageUrl ?? undefined,
         barcode,
         tags: [],
       };

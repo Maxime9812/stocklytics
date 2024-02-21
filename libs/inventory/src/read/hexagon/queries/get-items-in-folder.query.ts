@@ -12,6 +12,7 @@ export type GetItemsInFolderResponse = {
     id: string;
     label: string;
   }[];
+  imageUrl?: string;
   quantity: number;
 }[];
 

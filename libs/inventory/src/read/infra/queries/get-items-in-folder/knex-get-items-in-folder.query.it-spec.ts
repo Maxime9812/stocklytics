@@ -5,6 +5,7 @@ import { KnexGetItemsInFolderQuery } from '@app/inventory/read/infra/queries/get
 import { FolderPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/folder.pm';
 import { ItemPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item.pm';
 import { GetItemsInFolderResponse } from '@app/inventory/read/hexagon/queries/get-items-in-folder.query';
+import { ItemImagePm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item-image.pm';
 
 describe('KnexGetItemsInFolder', () => {
   let sqlConnection: Knex;
@@ -139,6 +140,44 @@ describe('KnexGetItemsInFolder', () => {
       ]);
     });
 
+    test('Items have image', async () => {
+      await sqlConnection<FolderPm>('folders').insert({
+        id: '6634d3ab-478a-4681-88cf-add760278f8f',
+        name: 'Electronics',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+        createdAt: new Date('2024-01-01'),
+      });
+
+      await insertItems([
+        {
+          id: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+          name: 'Iphone 13',
+          quantity: 10,
+          companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+          folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+          note: '',
+          createdAt: new Date('2024-01-01'),
+        },
+      ]);
+
+      await insertImage({
+        id: 'a2dea07f-6a2c-48a1-9c20-5d4905598e73',
+        itemId: 'e2dea07f-6a2c-48a1-9c20-5d4905598e75',
+        url: 'http://localhost:3000/image.jpg',
+      });
+
+      const items = await knexGetItemsInFolder.execute({
+        folderId: '6634d3ab-478a-4681-88cf-add760278f8f',
+        companyId: '5ba60c41-f3e8-4bad-9c09-6f813e94cbf1',
+      });
+
+      expect(items).toEqual<GetItemsInFolderResponse>([
+        expect.objectContaining({
+          imageUrl: 'http://localhost:3000/image.jpg',
+        }),
+      ]);
+    });
+
     test('Folder is root', async () => {
       await sqlConnection<FolderPm>('folders').insert({
         id: '6634d3ab-478a-4681-88cf-add760278f8f',
@@ -197,5 +236,9 @@ describe('KnexGetItemsInFolder', () => {
 
   const insertItems = async (items: ItemPm[]) => {
     await sqlConnection('items').insert(items);
+  };
+
+  const insertImage = (image: ItemImagePm) => {
+    return sqlConnection<ItemPm>('item_images').insert(image);
   };
 });

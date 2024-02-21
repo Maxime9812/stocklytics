@@ -13,6 +13,7 @@ export type GetItemByIdResponse = {
     id: string;
     label: string;
   }[];
+  imageUrl?: string;
   createdAt: Date;
 };
 
