@@ -91,6 +91,14 @@ describe('LocalDiskStorageImageUploaderGateway', () => {
         ).toEqual(false);
       },
     );
+
+    it('Should not delete if not found', async () => {
+      const imageId = 'image-id';
+
+      await expect(imageUploaderGateway.deleteImage(imageId)).resolves.toEqual(
+        undefined,
+      );
+    });
   });
 
   const deletesFilesInUploadsFolder = () => {

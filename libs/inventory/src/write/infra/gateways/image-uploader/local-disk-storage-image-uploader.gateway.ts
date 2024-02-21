@@ -41,6 +41,7 @@ export class LocalDiskStorageImageUploaderGateway
     const imagePath = fs.readdirSync(this.uploadFolderPath).find((file) => {
       return file.includes(imageId);
     });
+    if (!imagePath) return;
     fs.unlinkSync(path.join(this.uploadFolderPath, imagePath));
   }
 }
