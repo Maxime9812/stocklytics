@@ -77,6 +77,22 @@ describe('LocalDiskStorageImageUploaderGateway', () => {
     expect(imageUrl).toEqual(`${apiUploadUrl}${imageId}.${type}`);
   });
 
+  describe('deleteImage', () => {
+    it.each([{ type: 'png' }, { type: 'jpg' }])(
+      'Should delete image with type $type',
+      async ({ type }) => {
+        fs.writeFileSync(path.join(uploadFolderPath, `image-id.${type}`), '');
+        const imageId = 'image-id';
+
+        await imageUploaderGateway.deleteImage(imageId);
+
+        expect(
+          fs.existsSync(path.join(uploadFolderPath, `${imageId}.${type}`)),
+        ).toEqual(false);
+      },
+    );
+  });
+
   const deletesFilesInUploadsFolder = () => {
     const files = fs
       .readdirSync(uploadFolderPath)

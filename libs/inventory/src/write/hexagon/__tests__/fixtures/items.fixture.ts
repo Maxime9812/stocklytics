@@ -171,6 +171,9 @@ export const createItemsFixture = ({
         imageUploader,
       ).execute(payload);
     },
+    thenImageShouldBeDeleted(imageId: string) {
+      expect(imageUploader.deletedImage).toEqual(imageId);
+    },
     thenItemsShouldBe(...items: Item[]) {
       expect(itemsRepository.items.map((t) => t.snapshot)).toEqual(
         items.map((t) => t.snapshot),

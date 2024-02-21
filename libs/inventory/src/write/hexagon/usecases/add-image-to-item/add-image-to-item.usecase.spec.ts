@@ -37,6 +37,28 @@ describe('Feature: Add Image to Item', () => {
     );
   });
 
+  test('Delete old image when adding a new one', async () => {
+    const initialItemBuilder = itemBuilder().withId('item-id').withImage({
+      id: 'old-image-id',
+      itemId: 'item-id',
+      url: 'old-image-url',
+    });
+    fixture.givenItems(initialItemBuilder.build());
+    fixture.givenUploadedImage({
+      imageId: 'new-image-id',
+      imagePath: 'new-image-path',
+      returnedUrl: 'new-image-url',
+    });
+
+    await fixture.whenAddImageToItem({
+      itemId: 'item-id',
+      imageId: 'new-image-id',
+      imagePath: 'new-image-path',
+    });
+
+    fixture.thenImageShouldBeDeleted('old-image-id');
+  });
+
   it('Should make the process of adding an image to an item transactional', async () => {
     const initialItemBuilder = itemBuilder().withId('item-id');
     fixture.givenItems(initialItemBuilder.build());

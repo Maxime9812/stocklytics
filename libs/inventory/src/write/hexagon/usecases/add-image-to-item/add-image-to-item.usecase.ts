@@ -18,6 +18,11 @@ export class AddImageToItemUseCase {
   async execute(payload: AddImageToItemUseCasePayload): Promise<void> {
     return this.transactionPerformer.perform(async (trx) => {
       const item = await this.itemsRepository.getById(payload.itemId);
+      const oldImage = item.image;
+
+      if (oldImage) {
+        await this.imageUploader.deleteImage(oldImage.id);
+      }
 
       const imageUrl = await this.imageUploader.uploadImage({
         imageId: payload.imageId,

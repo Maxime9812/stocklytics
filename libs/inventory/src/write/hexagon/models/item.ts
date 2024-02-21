@@ -19,6 +19,10 @@ export class Item {
     return this.props.id;
   }
 
+  get image() {
+    return this.props.image;
+  }
+
   get snapshot(): ItemSnapshot {
     return {
       id: this.props.id,

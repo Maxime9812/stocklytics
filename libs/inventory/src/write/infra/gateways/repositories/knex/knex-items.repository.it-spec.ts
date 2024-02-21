@@ -6,6 +6,7 @@ import { itemBuilder } from '@app/inventory/write/hexagon/__tests__/builders/ite
 import { KnexItemsRepository } from '@app/inventory/write/infra/gateways/repositories/knex/knex-items.repository';
 import { Item } from '@app/inventory/write/hexagon/models/item';
 import { KnexTransactionPerformer } from '@app/shared/transaction-performing/knex-transacrion-performer';
+import { ItemImagePm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item-image.pm';
 
 describe('KnexItemsRepository', () => {
   let sqlConnection: Knex;
@@ -174,6 +175,69 @@ describe('KnexItemsRepository', () => {
 
       expect(await findExistingItemsTag()).toEqual([]);
     });
+
+    describe('image', () => {
+      it('Should save item with image', async () => {
+        const item = itemBuilder()
+          .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+          .withName('Iphone 13 pro max')
+          .withQuantity(1)
+          .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
+          .createdAt(new Date('2024-01-01T00:00:00.000Z'))
+          .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
+          .withImage({
+            id: '66f15e04-d1ef-4e15-abc8-eeee065e9a11',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'image-url',
+          })
+          .build();
+
+        await transactionPerformer.perform(async (trx) => {
+          await itemsRepository.save(item)(trx);
+        });
+
+        expect(await findExistingItemImages()).toEqual([
+          {
+            id: '66f15e04-d1ef-4e15-abc8-eeee065e9a11',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'image-url',
+          },
+        ]);
+      });
+
+      it('Should remove old image when adding a new one', async () => {
+        const initialItem = itemBuilder()
+          .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+          .withImage({
+            id: '66f15e04-d1ef-4e15-abc8-eeee065e9a11',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'old-image-url',
+          })
+          .build();
+        await insertItem(initialItem);
+
+        const item = itemBuilder()
+          .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+          .withImage({
+            id: '56f15e04-d1ef-4e15-abc8-eeee065e9a12',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'new-image-url',
+          })
+          .build();
+
+        await transactionPerformer.perform(async (trx) => {
+          await itemsRepository.save(item)(trx);
+        });
+
+        expect(await findExistingItemImages()).toEqual([
+          {
+            id: '56f15e04-d1ef-4e15-abc8-eeee065e9a12',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'new-image-url',
+          },
+        ]);
+      });
+    });
   });
 
   describe('getById', () => {
@@ -195,7 +259,7 @@ describe('KnexItemsRepository', () => {
       expect(result?.snapshot).toEqual(item.snapshot);
     });
 
-    it('should return a id with tags', async () => {
+    it('should return a item by id with tags', async () => {
       const item = itemBuilder()
         .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
         .withName('Iphone 13 pro max')
@@ -225,6 +289,25 @@ describe('KnexItemsRepository', () => {
         .withBarcode({
           type: 'ean13',
           value: '123456789012',
+        })
+        .build();
+      await insertItem(item);
+
+      const result = await itemsRepository.getById(
+        'b33adf7e-3ae7-4f17-9560-3388251c266f',
+      );
+
+      expect(result?.snapshot).toEqual(item.snapshot);
+    });
+
+    it('Should return item image', async () => {
+      const item = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .withFolderId(null)
+        .withImage({
+          id: '66f15e04-d1ef-4e15-abc8-eeee065e9a11',
+          itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+          url: 'image-url',
         })
         .build();
       await insertItem(item);
@@ -265,11 +348,43 @@ describe('KnexItemsRepository', () => {
     });
   });
 
+  describe('GetItemIdByBarcode', () => {
+    it('Should return item id by barcode', async () => {
+      const item = itemBuilder()
+        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+        .withName('Iphone 13 pro max')
+        .withQuantity(1)
+        .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
+        .createdAt(new Date('2024-01-01T00:00:00.000Z'))
+        .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
+        .withBarcode({
+          type: 'ean13',
+          value: '123456789012',
+        })
+        .build();
+      await insertItem(item);
+
+      expect(
+        await itemsRepository.getItemIdByBarcode(
+          {
+            type: 'ean13',
+            value: '123456789012',
+          },
+          '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
+        ),
+      ).toEqual(item.id);
+    });
+  });
+
   const findExistingItems = async () => {
     return sqlConnection('items').select<ItemPm[]>('*');
   };
   const findExistingItemsTag = async () => {
     return sqlConnection('items_tags').select('*');
+  };
+
+  const findExistingItemImages = async () => {
+    return sqlConnection('item_images').select<ItemImagePm>('*');
   };
 
   const insertItem = async (item: Item) => {
@@ -296,38 +411,14 @@ describe('KnexItemsRepository', () => {
       barcodeValue: barcode?.value,
     });
 
-    if (!tagIds.length) return;
+    if (tagIds.length) {
+      await sqlConnection('items_tags').insert(
+        tagIds.map((tagId) => ({ itemId: id, tagId })),
+      );
+    }
 
-    await sqlConnection('items_tags').insert(
-      tagIds.map((tagId) => ({ itemId: id, tagId })),
-    );
+    if (item.snapshot.image) {
+      await sqlConnection('item_images').insert(item.snapshot.image);
+    }
   };
-
-  describe('GetItemByBarcode', () => {
-    it('Should return item by barcode', async () => {
-      const item = itemBuilder()
-        .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
-        .withName('Iphone 13 pro max')
-        .withQuantity(1)
-        .withCompanyId('60dfbc60-1594-4a0c-9397-7f6e70cf25af')
-        .createdAt(new Date('2024-01-01T00:00:00.000Z'))
-        .withFolderId('349b8b68-109a-486f-bdc2-daedc31a6beb')
-        .withBarcode({
-          type: 'ean13',
-          value: '123456789012',
-        })
-        .build();
-      await insertItem(item);
-
-      expect(
-        await itemsRepository.getItemIdByBarcode(
-          {
-            type: 'ean13',
-            value: '123456789012',
-          },
-          '60dfbc60-1594-4a0c-9397-7f6e70cf25af',
-        ),
-      ).toEqual(item.id);
-    });
-  });
 });

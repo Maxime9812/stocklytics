@@ -4,8 +4,11 @@ import {
   Delete,
   HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateNewItemUseCase } from '@app/inventory/write/hexagon/usecases/create-new-item/create-new-item.usecase';
 import { CreateNewItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/create-new-item.dto';
@@ -31,6 +34,8 @@ import { isLeft } from 'fp-ts/Either';
 import { AdjustItemQuantityDto } from '@app/inventory/write/infra/clients/nestjs/dtos/adjust-item-quantity.dto';
 import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases/adjust-item-quantity/adjust-item-quantity.usecase';
 import { AddImageToItemUseCase } from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
+import { AddImageToItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/add-image-to-item.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('items')
 export class WriteItemsController {
@@ -154,7 +159,23 @@ export class WriteItemsController {
   }
 
   @Post(':itemId/images')
-  async addImageToItem(@Param() params: ItemParams) {
-    const { itemId } = params;
+  @UseInterceptors(FileInterceptor('image'))
+  async addImageToItem(
+    @Param() params: ItemParams,
+    @Body() body: AddImageToItemDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: '.(png|jpeg|jpg)' })
+        .addMaxSizeValidator({ maxSize: 800000 })
+        .build(),
+    )
+    file: Express.Multer.File,
+  ) {
+    await this.addImageToItemUseCase.execute({
+      itemId: params.itemId,
+      imagePath: file.path,
+      imageId: body.imageId,
+    });
+    return this.getItemByIdUseCase.execute({ id: params.itemId });
   }
 }

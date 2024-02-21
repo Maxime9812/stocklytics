@@ -2,6 +2,7 @@ import { ImageUploaderGateway } from '@app/inventory/write/hexagon/gateways/imag
 
 export class StubImageUploaderGateway implements ImageUploaderGateway {
   private uploadedImages: Map<string, string> = new Map();
+  deletedImage: string | undefined;
   async uploadImage({
     imageId,
     imagePath,
@@ -35,5 +36,9 @@ export class StubImageUploaderGateway implements ImageUploaderGateway {
       this.getImageKey({ imageId, imagePath }),
       returnedUrl,
     );
+  }
+
+  async deleteImage(imageId: string): Promise<void> {
+    this.deletedImage = imageId;
   }
 }

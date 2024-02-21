@@ -1,6 +1,6 @@
 import { ImageUploaderGateway } from '@app/inventory/write/hexagon/gateways/image-uploader.gateway';
-import * as fs from 'fs';
 import * as path from 'path';
+import * as fs from 'fs';
 
 export class LocalDiskStorageImageUploaderGateway
   implements ImageUploaderGateway
@@ -35,5 +35,12 @@ export class LocalDiskStorageImageUploaderGateway
 
   private getImageUrl(imageId: string, imageType: string) {
     return `${this.apiUploadUrl}${imageId}${imageType}`;
+  }
+
+  async deleteImage(imageId: string): Promise<void> {
+    const imagePath = fs.readdirSync(this.uploadFolderPath).find((file) => {
+      return file.includes(imageId);
+    });
+    fs.unlinkSync(path.join(this.uploadFolderPath, imagePath));
   }
 }

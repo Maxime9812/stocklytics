@@ -7,6 +7,7 @@ import {
   Barcode,
   BarcodeType,
 } from '@app/inventory/write/hexagon/models/barcode';
+import { ItemImagePm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item-image.pm';
 
 export class KnexItemsRepository implements ItemsRepository {
   constructor(private readonly knex: Knex) {}
@@ -40,11 +41,17 @@ export class KnexItemsRepository implements ItemsRepository {
         .merge();
 
       await this.saveItemTags(item)(trx);
+      await this.saveItemImage(item)(trx);
     };
   }
 
   async getById(id: string): Promise<Item | undefined> {
     const itemPm = await this.knex<ItemPm>('items').where({ id }).first();
+
+    const image = await this.knex<ItemImagePm>('item_images')
+      .select('*')
+      .where({ itemId: id })
+      .first();
 
     const tagIds = await this.knex('items_tags')
       .select<{ tagId: string }[]>('tagId')
@@ -74,6 +81,7 @@ export class KnexItemsRepository implements ItemsRepository {
         ? { type: barcodeType as BarcodeType, value: barcodeValue }
         : undefined,
       tagIds: tagIds.map((tagId) => tagId.tagId),
+      image: image ? image : undefined,
     });
   }
 
@@ -120,6 +128,26 @@ export class KnexItemsRepository implements ItemsRepository {
             itemId: item.id,
           })),
         );
+    };
+  }
+
+  private saveItemImage(item: Item): TransactionalAsync {
+    return async (trx) => {
+      const { image } = item.snapshot;
+      if (!image) return;
+
+      await this.knex('item_images')
+        .where({ itemId: item.id })
+        .del()
+        .transacting(trx as Knex.Transaction);
+
+      await this.knex('item_images')
+        .transacting(trx as Knex.Transaction)
+        .insert({
+          id: image.id,
+          itemId: item.id,
+          url: image.url,
+        });
     };
   }
 }
