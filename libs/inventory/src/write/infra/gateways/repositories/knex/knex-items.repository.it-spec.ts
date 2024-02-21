@@ -237,6 +237,29 @@ describe('KnexItemsRepository', () => {
           },
         ]);
       });
+
+      it('Should remove old image when image is removed', async () => {
+        const initialItem = itemBuilder()
+          .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+          .withImage({
+            id: '66f15e04-d1ef-4e15-abc8-eeee065e9a11',
+            itemId: 'b33adf7e-3ae7-4f17-9560-3388251c266f',
+            url: 'old-image-url',
+          })
+          .build();
+        await insertItem(initialItem);
+
+        const item = itemBuilder()
+          .withId('b33adf7e-3ae7-4f17-9560-3388251c266f')
+          .withoutImage()
+          .build();
+
+        await transactionPerformer.perform(async (trx) => {
+          await itemsRepository.save(item)(trx);
+        });
+
+        expect(await findExistingItemImages()).toEqual([]);
+      });
     });
   });
 

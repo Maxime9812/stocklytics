@@ -36,6 +36,7 @@ import { AdjustItemQuantityUseCase } from '@app/inventory/write/hexagon/usecases
 import { AddImageToItemUseCase } from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
 import { AddImageToItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/add-image-to-item.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { DeleteItemImageUseCase } from '@app/inventory/write/hexagon/usecases/delete-item-image/delete-item-image.usecase';
 
 @Controller('items')
 export class WriteItemsController {
@@ -52,6 +53,7 @@ export class WriteItemsController {
     private readonly changeItemNameUseCase: ChangeItemNameUseCase,
     private readonly adjustItemQuantityUseCase: AdjustItemQuantityUseCase,
     private readonly addImageToItemUseCase: AddImageToItemUseCase,
+    private readonly deleteItemImageUseCase: DeleteItemImageUseCase,
   ) {}
 
   @Post()
@@ -177,5 +179,10 @@ export class WriteItemsController {
       imageId: body.imageId,
     });
     return this.getItemByIdUseCase.execute({ id: params.itemId });
+  }
+
+  @Delete(':itemId/image')
+  async deleteImage(@Param() params: ItemParams) {
+    await this.deleteItemImageUseCase.execute({ itemId: params.itemId });
   }
 }

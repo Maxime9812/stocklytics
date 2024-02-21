@@ -134,12 +134,13 @@ export class KnexItemsRepository implements ItemsRepository {
   private saveItemImage(item: Item): TransactionalAsync {
     return async (trx) => {
       const { image } = item.snapshot;
-      if (!image) return;
 
       await this.knex('item_images')
         .where({ itemId: item.id })
         .del()
         .transacting(trx as Knex.Transaction);
+
+      if (!image) return;
 
       await this.knex('item_images')
         .transacting(trx as Knex.Transaction)

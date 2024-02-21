@@ -85,6 +85,10 @@ export class Item {
     };
   }
 
+  deleteImage() {
+    this.props.image = undefined;
+  }
+
   static create(params: {
     id: string;
     companyId: string;

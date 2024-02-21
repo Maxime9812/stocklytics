@@ -31,6 +31,7 @@ export const itemBuilder = (
     withBarcode: (barcode: Barcode) => itemBuilder({ ...snapshot, barcode }),
     withoutBarcode: () => itemBuilder({ ...snapshot, barcode: undefined }),
     withImage: (image: ItemImage) => itemBuilder({ ...snapshot, image }),
+    withoutImage: () => itemBuilder({ ...snapshot, image: undefined }),
     build: () => Item.fromSnapshot(snapshot),
   };
 };

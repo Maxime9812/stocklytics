@@ -53,6 +53,10 @@ import {
   AddImageToItemUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/add-image-to-item/add-image-to-item.usecase';
 import { StubImageUploaderGateway } from '@app/inventory/write/infra/gateways/image-uploader/stub-image-uploader.gateway';
+import {
+  DeleteItemImageUseCase,
+  DeleteItemImageUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/delete-item-image/delete-item-image.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -166,6 +170,13 @@ export const createItemsFixture = ({
     },
     whenAddImageToItem(payload: AddImageToItemUseCasePayload) {
       return new AddImageToItemUseCase(
+        itemsRepository,
+        transactionPerformer,
+        imageUploader,
+      ).execute(payload);
+    },
+    whenDeleteItemImage(payload: DeleteItemImageUseCasePayload) {
+      return new DeleteItemImageUseCase(
         itemsRepository,
         transactionPerformer,
         imageUploader,
