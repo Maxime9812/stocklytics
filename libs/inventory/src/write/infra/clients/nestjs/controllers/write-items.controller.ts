@@ -168,7 +168,7 @@ export class WriteItemsController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: '.(png|jpeg|jpg)' })
-        .addMaxSizeValidator({ maxSize: 800000 })
+        .addMaxSizeValidator({ maxSize: 20000000 })
         .build(),
     )
     file: Express.Multer.File,
