@@ -36,3 +36,7 @@ lerna-debug.log*
 
 # Volumes
 docker-postgresql-data-for-dev/
+
+# Assets
+
+assets/images/
