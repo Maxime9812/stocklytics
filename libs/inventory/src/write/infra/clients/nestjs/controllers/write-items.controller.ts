@@ -152,6 +152,8 @@ export class WriteItemsController {
     if (isLeft(result)) {
       return res.status(HttpStatus.NOT_MODIFIED).send(result.left);
     }
+
+    return res.send(await this.getItemByIdUseCase.execute({ id: itemId }));
   }
 
   @Delete(':itemId')

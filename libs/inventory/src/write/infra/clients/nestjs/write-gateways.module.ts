@@ -36,7 +36,7 @@ import { LocalDiskStorageImageUploaderGateway } from '@app/inventory/write/infra
       provide: 'ImageUploaderGateway',
       useFactory: () =>
         new LocalDiskStorageImageUploaderGateway(
-          'http://192.168.5.74:3000/images/',
+          'http://192.168.5.61:3000/images/',
           `public/images`,
         ),
     },
