@@ -57,6 +57,10 @@ import {
   DeleteItemImageUseCase,
   DeleteItemImageUseCasePayload,
 } from '@app/inventory/write/hexagon/usecases/delete-item-image/delete-item-image.usecase';
+import {
+  SetItemTagsUseCase,
+  SetItemTagsUseCasePayload,
+} from '@app/inventory/write/hexagon/usecases/set-item-tags/set-item-tags.usecase';
 
 export const createItemsFixture = ({
   tagsRepository = new InMemoryTagsRepository(),
@@ -180,6 +184,12 @@ export const createItemsFixture = ({
         itemsRepository,
         transactionPerformer,
         imageUploader,
+      ).execute(payload);
+    },
+    whenSetTags(payload: SetItemTagsUseCasePayload) {
+      return new SetItemTagsUseCase(
+        itemsRepository,
+        transactionPerformer,
       ).execute(payload);
     },
     thenImageShouldBeDeleted(imageId: string) {

@@ -48,6 +48,10 @@ export class Item {
     this.props.tagIds = this.props.tagIds.filter((id) => id !== tagId);
   }
 
+  setTags(tagIds: string[]) {
+    this.props.tagIds = tagIds;
+  }
+
   moveIntoFolder(folderId: string) {
     this.props.folderId = folderId;
   }

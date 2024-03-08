@@ -37,6 +37,8 @@ import { AddImageToItemUseCase } from '@app/inventory/write/hexagon/usecases/add
 import { AddImageToItemDto } from '@app/inventory/write/infra/clients/nestjs/dtos/add-image-to-item.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DeleteItemImageUseCase } from '@app/inventory/write/hexagon/usecases/delete-item-image/delete-item-image.usecase';
+import { SetItemTagsUseCase } from '@app/inventory/write/hexagon/usecases/set-item-tags/set-item-tags.usecase';
+import { SetItemTagsDTO } from '@app/inventory/write/infra/clients/nestjs/dtos/set-item-tags.dto';
 
 @Controller('items')
 export class WriteItemsController {
@@ -54,6 +56,7 @@ export class WriteItemsController {
     private readonly adjustItemQuantityUseCase: AdjustItemQuantityUseCase,
     private readonly addImageToItemUseCase: AddImageToItemUseCase,
     private readonly deleteItemImageUseCase: DeleteItemImageUseCase,
+    private readonly setItemTagsUseCase: SetItemTagsUseCase,
   ) {}
 
   @Post()
@@ -70,6 +73,12 @@ export class WriteItemsController {
   @Delete(':itemId/tags/:tagId')
   async removeTagFromItem(@Param() params: RemoveTagFromItemParams) {
     await this.removeItemTagUseCase.execute(params);
+  }
+
+  @Post(':itemId/tags')
+  async setTags(@Param() params: ItemParams, @Body() body: SetItemTagsDTO) {
+    const { itemId } = params;
+    await this.setItemTagsUseCase.execute({ itemId, tagIds: body.tagIds });
   }
 
   @Post(':itemId/move')
