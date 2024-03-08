@@ -5,7 +5,11 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('id').primary();
     table.uuid('itemId').notNullable();
     table.string('url').notNullable();
-    table.foreign('itemId').references('id').inTable('items');
+    table
+      .foreign('itemId')
+      .references('id')
+      .inTable('items')
+      .onDelete('CASCADE');
   });
 }
 

@@ -30,7 +30,15 @@ export const startDockerPostgresql = async (): Promise<void> => {
   }
 };
 
-const tables = ['tags', 'items', 'folders', 'items_tags', 'users', 'companies'];
+const tables = [
+  'tags',
+  'item_images',
+  'items',
+  'folders',
+  'items_tags',
+  'users',
+  'companies',
+];
 
 export const resetDB = async (sqlConnection: Knex) => {
   return Promise.all(
