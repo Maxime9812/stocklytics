@@ -6,6 +6,7 @@ import { KnexGetItemsInFolderQuery } from '@app/inventory/read/infra/queries/get
 import { KnexGetFoldersInFolderQuery } from '@app/inventory/read/infra/queries/get-folders-in-folder/knex-get-folders-in-folder.query';
 import { KnexGetFolderByIdQuery } from '@app/inventory/read/infra/queries/get-folder-by-id/knex-get-folder-by-id.query';
 import { KnexScanBarcodeQuery } from '@app/inventory/read/infra/queries/scan-barcode/knex-scan-barcode.query';
+import { KnexGetTagsQuery } from '@app/inventory/read/infra/queries/get-tags/knex-get-tags.query';
 
 @Module({
   imports: [DatabaseModule],
@@ -35,6 +36,11 @@ import { KnexScanBarcodeQuery } from '@app/inventory/read/infra/queries/scan-bar
       inject: ['SqlConnection'],
       useFactory: (knex: Knex) => new KnexScanBarcodeQuery(knex),
     },
+    {
+      provide: 'GetTagsQuery',
+      inject: ['SqlConnection'],
+      useFactory: (knex: Knex) => new KnexGetTagsQuery(knex),
+    },
   ],
   exports: [
     'GetItemByIdQuery',
@@ -42,6 +48,7 @@ import { KnexScanBarcodeQuery } from '@app/inventory/read/infra/queries/scan-bar
     'GetItemsInFolderQuery',
     'GetFolderByIdQuery',
     'ScanBarcodeQuery',
+    'GetTagsQuery',
   ],
 })
 export class ReadGatewaysModule {}

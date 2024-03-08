@@ -4,6 +4,7 @@ import {
 } from '@app/inventory/read/hexagon/queries/get-item-by-id.query';
 import { Knex } from 'knex';
 import { ItemImagePm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/item-image.pm';
+import { TagPm } from '@app/inventory/write/infra/gateways/repositories/knex/persistent-models/tag.pm';
 
 export class KnexGetItemByIdQuery implements GetItemByIdQuery {
   constructor(private readonly knex: Knex) {}
@@ -40,11 +41,16 @@ export class KnexGetItemByIdQuery implements GetItemByIdQuery {
         }
       : undefined;
 
+    const tags = await this.knex<TagPm>('items_tags')
+      .where('itemId', id)
+      .innerJoin('tags', 'items_tags.tagId', 'tags.id')
+      .select('tags.name', 'tags.id');
+
     return {
       ...item,
       imageUrl: imageUrl ?? undefined,
       barcode,
-      tags: [],
+      tags,
     };
   }
 }
